@@ -15,21 +15,23 @@ data class ArticleUi(
     val urlToImage: String
 )
 
-fun getMockArticleUiList(): List<Unit> {
+fun getMockArticleUiList(): List<ArticleUi> {
     val faker = faker { }
-    return listOf(
-        repeat(10){
+    val articles = mutableListOf<ArticleUi>()
+    repeat(100) {
+        articles.add(
             ArticleUi(
                 id = Random.nextInt().toString(),
                 name = faker.app.name(),
                 author = faker.name.name(),
                 content = faker.elderScrolls.region(),
                 description = faker.warhammerFantasy.heroes(),
-                publishedAt = "2022-01-01T00:00:00Z",
+                publishedAt = "2022-01-01",
                 title = faker.app.name(),
                 url = faker.dog.name(),
                 urlToImage = faker.cat.name(),
             )
-        }
-    )
+        )
+    }
+    return articles
 }
