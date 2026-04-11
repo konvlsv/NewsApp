@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -34,6 +35,7 @@ import com.example.newsapp.ui.theme.NewsAppTheme
 fun ArticleCardCollapsed(
     articleUi: ArticleUi,
     onCardClick: () -> Unit,
+    onShareClick: () -> Unit,
     modifier: Modifier = Modifier,
 ){
     Card(
@@ -74,10 +76,14 @@ fun ArticleCardCollapsed(
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.weight(1f),
                     )
-                    Icon(
-                        Icons.Default.Share,
-                        contentDescription = "Share"
-                    )
+                    IconButton(
+                        onClick = { onShareClick() },
+                    ) {
+                        Icon(
+                            Icons.Default.Share,
+                            contentDescription = "Share",
+                        )
+                    }
                 }
                 Text(
                     text = articleUi.description,
@@ -116,6 +122,7 @@ fun ArticleCardCollapsedPreview(){
         ArticleCardCollapsed(
             articleUi = getMockArticleUiList().first(),
             onCardClick = {},
+            onShareClick = {},
         )
     }
 }
