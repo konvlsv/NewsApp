@@ -58,6 +58,8 @@ dependencies {
 
     implementation(libs.androidx.compose.material.icons.extended)
 
+    implementation("io.github.serpro69:kotlin-faker:1.16.1")
+
     // Для сетевого запроса и JSON
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
     implementation("com.squareup.retrofit2:converter-gson:3.0.0")
