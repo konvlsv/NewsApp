@@ -28,8 +28,8 @@ fun getMockArticleUiList(): List<ArticleUi> {
                 description = faker.warhammerFantasy.heroes(),
                 publishedAt = "2022-01-01",
                 title = faker.app.name(),
-                url = faker.dog.name(),
-                urlToImage = faker.cat.name(),
+                url = "https://www.google.com",
+                urlToImage = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Android_Studio_Logo_%282023%29.svg/1920px-Android_Studio_Logo_%282023%29.svg.png",
             )
         )
     }
