@@ -20,9 +20,16 @@ fun getMockArticleUiList(): List<ArticleUi> {
         articles.add(
             ArticleUi(
                 id = index.toString(),
-                name = "Канал ${generateRandomText(1).removeSuffix(".")}",
-                author = "Автор №${index + 1}",
-                content = (1..5).joinToString("\n\n") { generateRandomText(Random.nextInt(10, 20)) },
+                name = "Chanel ${generateRandomText(1).removeSuffix(".")}",
+                author = "Author №${index + 1}",
+                content = (1..5).joinToString("\n\n") {
+                    generateRandomText(
+                        Random.nextInt(
+                            10,
+                            20
+                        )
+                    )
+                },
                 description = generateRandomText(Random.nextInt(15, 25)),
                 publishedAt = "12.04.2024",
                 title = generateRandomText(Random.nextInt(3, 7)),
@@ -36,9 +43,9 @@ fun getMockArticleUiList(): List<ArticleUi> {
 
 private fun generateRandomText(wordCount: Int): String {
     val sourceWords = listOf(
-        "новости", "разработка", "технологии", "андроид", "приложение", "дизайн",
-        "архитектура", "программирование", "код", "интерфейс", "пользователь",
-        "система", "обновление", "функция", "смартфон", "мир", "событие", "рынок"
+        "news", "development", "technology", "android", "application", "design",
+        "architecture", "programming", "code", "interface", "user",
+        "system", "update", "function", "smartphone", "world", "event", "market"
     )
 
     return (1..wordCount)
