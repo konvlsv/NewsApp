@@ -31,7 +31,7 @@ val typography = Typography(
         letterSpacing = 0.25.sp
     ),
     labelMedium = TextStyle(
-        fontWeight = FontWeight.SemiBold,
+        fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp
