@@ -1,15 +1,17 @@
 package com.example.newsapp.ui.components
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
@@ -18,12 +20,12 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,9 +41,12 @@ fun ArticleCardCollapsed(
     modifier: Modifier = Modifier,
 ){
     Card(
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         onClick = onCardClick,
-        shape = RoundedCornerShape(4.dp),
+        shape = RoundedCornerShape(8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+        ),
         modifier = modifier.fillMaxWidth(),
     ) {
         Row(
@@ -49,7 +54,8 @@ fun ArticleCardCollapsed(
             // и передать это значение для fillMaxHeight у Image
             modifier = Modifier
                 .fillMaxWidth()
-                .height(IntrinsicSize.Min)
+                .height(IntrinsicSize.Min),
+            horizontalArrangement = Arrangement.spacedBy(0.dp)
         ) {
             Image(
                 imageVector = Icons.Default.Person,
@@ -60,24 +66,23 @@ fun ArticleCardCollapsed(
                 contentScale = ContentScale.Crop // Чтобы картинка не искажалась
             )
 
-            Spacer(modifier = Modifier.width(16.dp))
-
             Column(
                 modifier = Modifier
                     .weight(4f) // Занимает 4 части из 5 (80% ширины)
-                    .padding(end = 8.dp, top = 8.dp, bottom = 8.dp) // Небольшие отступы
+                    .padding(12.dp) // Небольшие отступы
             ) {
-                Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = articleUi.name,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        color = Color.Blue,
-                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         modifier = Modifier.weight(1f),
                     )
                     IconButton(
                         onClick = { onShareClick() },
+                        modifier = Modifier.size(24.dp)
                     ) {
                         Icon(
                             Icons.Default.Share,
@@ -89,25 +94,27 @@ fun ArticleCardCollapsed(
                     text = articleUi.description,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.fillMaxWidth(),
                 )
-                Row {
+                Row(
+                    verticalAlignment = Alignment.Bottom,
+                    modifier = Modifier.padding(top = 4.dp)
+                ) {
                     Text(
                         text = articleUi.author,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        color = Color.Gray,
-                        fontWeight = FontWeight.Normal,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.weight(1f),
                     )
                     Text(
                         text = articleUi.publishedAt,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        color = Color.Gray,
-                        fontWeight = FontWeight.Normal,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.labelMedium,
                     )
                 }
             }
@@ -115,7 +122,16 @@ fun ArticleCardCollapsed(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = false)
+@Preview(
+    showBackground = true,
+    uiMode = UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+)
+@Preview(
+    showBackground = true,
+    uiMode = UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+)
 @Composable
 fun ArticleCardCollapsedPreview(){
     NewsAppTheme(){
