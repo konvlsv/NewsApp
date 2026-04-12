@@ -39,7 +39,7 @@ fun ArticleCardCollapsed(
     onCardClick: (ArticleUi) -> Unit,
     onShareClick: (ArticleUi) -> Unit,
     modifier: Modifier = Modifier,
-){
+) {
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         onClick = { onCardClick(articleUi) },
@@ -134,8 +134,8 @@ fun ArticleCardCollapsed(
     name = "DefaultPreviewLight",
 )
 @Composable
-fun ArticleCardCollapsedPreview(){
-    NewsAppTheme(){
+fun ArticleCardCollapsedPreview() {
+    NewsAppTheme() {
         ArticleCardCollapsed(
             articleUi = getMockArticleUiList().random(),
             onCardClick = {},
