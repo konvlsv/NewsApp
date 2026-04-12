@@ -137,7 +137,7 @@ fun ArticleCardCollapsed(
 fun ArticleCardCollapsedPreview(){
     NewsAppTheme(){
         ArticleCardCollapsed(
-            articleUi = getMockArticleUiList().first(),
+            articleUi = getMockArticleUiList().random(),
             onCardClick = {},
             onShareClick = {},
         )
