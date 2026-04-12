@@ -1,6 +1,5 @@
 package com.example.newsapp.ui.models
 
-import io.github.serpro69.kfaker.faker
 import kotlin.random.Random
 
 data class ArticleUi(
@@ -16,22 +15,34 @@ data class ArticleUi(
 )
 
 fun getMockArticleUiList(): List<ArticleUi> {
-    val faker = faker { }
     val articles = mutableListOf<ArticleUi>()
-    repeat(100) {
+    repeat(100) { index ->
         articles.add(
             ArticleUi(
-                id = Random.nextInt().toString(),
-                name = faker.app.name(),
-                author = faker.name.name(),
-                content = faker.elderScrolls.region(),
-                description = faker.warhammerFantasy.heroes(),
-                publishedAt = "2022-01-01",
-                title = faker.app.name(),
-                url = "https://www.google.com",
-                urlToImage = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Android_Studio_Logo_%282023%29.svg/1920px-Android_Studio_Logo_%282023%29.svg.png",
+                id = index.toString(),
+                name = "Канал ${generateRandomText(1).removeSuffix(".")}",
+                author = "Автор №${index + 1}",
+                content = (1..5).joinToString("\n\n") { generateRandomText(Random.nextInt(10, 20)) },
+                description = generateRandomText(Random.nextInt(15, 25)),
+                publishedAt = "12.04.2024",
+                title = generateRandomText(Random.nextInt(3, 7)),
+                url = "https://example.com",
+                urlToImage = "https://picsum.photos/seed/${index}/400/300"
             )
         )
     }
     return articles
+}
+
+private fun generateRandomText(wordCount: Int): String {
+    val sourceWords = listOf(
+        "новости", "разработка", "технологии", "андроид", "приложение", "дизайн",
+        "архитектура", "программирование", "код", "интерфейс", "пользователь",
+        "система", "обновление", "функция", "смартфон", "мир", "событие", "рынок"
+    )
+
+    return (1..wordCount)
+        .map { sourceWords.random() }
+        .joinToString(" ")
+        .replaceFirstChar { it.uppercase() } + "."
 }
