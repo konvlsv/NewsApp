@@ -36,13 +36,13 @@ import com.example.newsapp.ui.theme.NewsAppTheme
 @Composable
 fun ArticleCardCollapsed(
     articleUi: ArticleUi,
-    onCardClick: () -> Unit,
-    onShareClick: () -> Unit,
+    onCardClick: (ArticleUi) -> Unit,
+    onShareClick: (ArticleUi) -> Unit,
     modifier: Modifier = Modifier,
 ){
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        onClick = onCardClick,
+        onClick = { onCardClick(articleUi) },
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
@@ -81,7 +81,7 @@ fun ArticleCardCollapsed(
                         modifier = Modifier.weight(1f),
                     )
                     IconButton(
-                        onClick = { onShareClick() },
+                        onClick = { onShareClick(articleUi) },
                         modifier = Modifier.size(24.dp)
                     ) {
                         Icon(
