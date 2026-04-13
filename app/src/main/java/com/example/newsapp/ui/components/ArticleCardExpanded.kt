@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Share
@@ -30,9 +28,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.newsapp.ui.models.ArticleUi
 import com.example.newsapp.ui.models.getMockArticleUiList
+import com.example.newsapp.ui.theme.AppTheme
 import com.example.newsapp.ui.theme.NewsAppTheme
 
 @Composable
@@ -44,7 +42,9 @@ fun ArticleCardExpanded(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = AppTheme.dimens.cardElevation
+        ),
         onClick = { onCardClick(articleUi) },
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
@@ -55,7 +55,7 @@ fun ArticleCardExpanded(
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(12.dp)
+            modifier = Modifier.padding(AppTheme.dimens.paddingLarge)
         ) {
             Box {
                 // 1. Сначала картинка (нижний слой)
@@ -76,7 +76,7 @@ fun ArticleCardExpanded(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier
                         .fillMaxWidth() // Обязательно, чтобы занять всю ширину картинки
-                        .padding(12.dp)
+                        .padding(AppTheme.dimens.paddingLarge)
                         .align(Alignment.TopStart)
                 ) {
                     Text(
@@ -87,27 +87,26 @@ fun ArticleCardExpanded(
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         modifier = Modifier
                             // weight с fill = false позволяет фону облегать только текст
-                            .weight(1f, fill = false)
+                            .weight(
+                                weight = 1f,
+                                fill = false
+                            )
                             .background(
                                 color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f), // Можно добавить прозрачности
                                 shape = MaterialTheme.shapes.medium
                             )
-                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                            .padding(
+                                horizontal = AppTheme.dimens.paddingLarge,
+                                vertical = AppTheme.dimens.paddingSmall
+                            )
                     )
 
                     IconButton(
                         onClick = { onShareClick(articleUi) },
-                        modifier = Modifier
-                            .background(
-                                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.3f),
-                                shape = CircleShape
-                            )
                     ) {
                         Icon(
                             Icons.Default.Share,
                             contentDescription = "Share",
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(20.dp)
                         )
                     }
                 }
@@ -119,12 +118,12 @@ fun ArticleCardExpanded(
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier
-                    .padding(top = 12.dp)
+                    .padding(top = AppTheme.dimens.paddingLarge)
                     .fillMaxWidth(),
             )
             Row(
                 verticalAlignment = Alignment.Bottom,
-                modifier = Modifier.padding(top = 12.dp)
+                modifier = Modifier.padding(top = AppTheme.dimens.paddingLarge)
             ) {
                 Text(
                     text = articleUi.author,
@@ -150,13 +149,13 @@ fun ArticleCardExpanded(
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 12.dp),
+                    .padding(top = AppTheme.dimens.paddingLarge),
             )
             Button(
                 onClick = { onOpenInBrowserClick(articleUi) },
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier
-                    .padding(top = 12.dp)
+                    .padding(top = AppTheme.dimens.paddingLarge)
             ) {
                 Text(
                     text = "Open in browser",

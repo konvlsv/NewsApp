@@ -3,7 +3,6 @@ package com.example.newsapp.ui.components
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Share
@@ -27,9 +25,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.newsapp.ui.models.ArticleUi
 import com.example.newsapp.ui.models.getMockArticleUiList
+import com.example.newsapp.ui.theme.AppTheme
 import com.example.newsapp.ui.theme.NewsAppTheme
 
 @Composable
@@ -40,7 +38,9 @@ fun ArticleCardCollapsed(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = AppTheme.dimens.cardElevation
+        ),
         onClick = { onCardClick(articleUi) },
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
@@ -54,7 +54,6 @@ fun ArticleCardCollapsed(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(IntrinsicSize.Min),
-            horizontalArrangement = Arrangement.spacedBy(0.dp)
         ) {
             Image(
                 imageVector = Icons.Default.Person,
@@ -68,7 +67,7 @@ fun ArticleCardCollapsed(
             Column(
                 modifier = Modifier
                     .weight(4f) // Занимает 4 части из 5 (80% ширины)
-                    .padding(12.dp) // Небольшие отступы
+                    .padding(AppTheme.dimens.paddingLarge) // Небольшие отступы
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
@@ -81,7 +80,6 @@ fun ArticleCardCollapsed(
                     )
                     IconButton(
                         onClick = { onShareClick(articleUi) },
-                        modifier = Modifier.size(24.dp)
                     ) {
                         Icon(
                             Icons.Default.Share,
@@ -99,7 +97,7 @@ fun ArticleCardCollapsed(
                 )
                 Row(
                     verticalAlignment = Alignment.Bottom,
-                    modifier = Modifier.padding(top = 4.dp)
+                    modifier = Modifier.padding(top = AppTheme.dimens.paddingSmall)
                 ) {
                     Text(
                         text = articleUi.author,

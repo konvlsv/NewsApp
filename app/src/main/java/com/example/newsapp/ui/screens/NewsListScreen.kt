@@ -7,11 +7,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.newsapp.ui.components.ArticleCardCollapsed
 import com.example.newsapp.ui.components.ArticleCardExpanded
 import com.example.newsapp.ui.models.ArticleUi
 import com.example.newsapp.ui.models.getMockArticleUiList
+import com.example.newsapp.ui.theme.AppTheme
 import com.example.newsapp.ui.theme.NewsAppTheme
 import kotlin.random.Random
 
@@ -25,8 +25,8 @@ fun NewsListScreen(
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        contentPadding = PaddingValues(AppTheme.dimens.paddingExtraLarge),
+        verticalArrangement = Arrangement.spacedBy(AppTheme.dimens.lazyColumnItemsSpacing)
     ) {
         items(
             count = articleList.size,
@@ -39,7 +39,7 @@ fun NewsListScreen(
                     onShareClick = onShareClick,
                     onOpenInBrowserClick = onOpenInBrowserClick
                 )
-            }else{
+            } else {
                 ArticleCardCollapsed(
                     articleUi = articleList[it],
                     onCardClick = onCardClick,
