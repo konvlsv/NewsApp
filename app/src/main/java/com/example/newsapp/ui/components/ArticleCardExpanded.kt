@@ -50,7 +50,7 @@ fun ArticleCardExpanded(
         onClick = { onCardClick(articleUi) },
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
         modifier = modifier
             .fillMaxWidth()

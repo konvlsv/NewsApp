@@ -26,7 +26,6 @@ class MainActivity : ComponentActivity() {
                     NewsListScreen(
                         modifier = Modifier.padding(innerPadding),
                         articleList = getMockArticleUiList(),
-                        onCardClick = {},
                         onShareClick = {},
                         onOpenInBrowserClick = {}
                     )
