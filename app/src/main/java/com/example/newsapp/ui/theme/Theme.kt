@@ -113,3 +113,10 @@ fun NewsAppTheme(
         content = content
     )
 }
+
+// Удобный объект для доступа
+object AppTheme {
+    val dimens: AppDimens
+        @Composable
+        get() = LocalDimens.current
+}
