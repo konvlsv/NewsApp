@@ -59,14 +59,14 @@ fun ArticleCardCollapsed(
                 imageVector = Icons.Default.Person,
                 contentDescription = "Article picture",
                 modifier = Modifier
-                    .weight(1f) // Занимает 1 часть из 5 (20% ширины)
+                    .weight(AppTheme.dimens.imageWeight) // Занимает 1 часть из 5 (20% ширины)
                     .fillMaxHeight(), // Растягивается на всю высоту колонки рядом
                 contentScale = ContentScale.Crop // Чтобы картинка не искажалась
             )
 
             Column(
                 modifier = Modifier
-                    .weight(4f) // Занимает 4 части из 5 (80% ширины)
+                    .weight(AppTheme.dimens.contentWeight) // Занимает 4 части из 5 (80% ширины)
                     .padding(AppTheme.dimens.paddingLarge) // Небольшие отступы
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {

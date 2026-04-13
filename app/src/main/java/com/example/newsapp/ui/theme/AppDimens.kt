@@ -11,6 +11,8 @@ data class AppDimens(
     val paddingExtraLarge: Dp = 16.dp,
     val cardElevation: Dp = 2.dp,
     val lazyColumnItemsSpacing: Dp = 12.dp,
+    val imageWeight: Float = 1f,
+    val contentWeight: Float = 4f,
 )
 
 val LocalDimens = staticCompositionLocalOf { AppDimens() }

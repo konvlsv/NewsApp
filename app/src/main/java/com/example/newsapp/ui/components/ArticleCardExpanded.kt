@@ -7,8 +7,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
@@ -23,7 +26,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
@@ -50,32 +52,31 @@ fun ArticleCardExpanded(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
         ),
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min),
     ) {
         Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(AppTheme.dimens.paddingLarge)
+            modifier = Modifier.fillMaxSize()
         ) {
-            Box {
-                // 1. Сначала картинка (нижний слой)
+            Box(
+                modifier = Modifier
+                    .weight(AppTheme.dimens.imageWeight)
+                    .fillMaxWidth()
+            ) {
                 Image(
                     imageVector = Icons.Default.Person,
                     contentDescription = "Article picture",
                     modifier = Modifier
-                        .clip(MaterialTheme.shapes.medium)
-                        .background(Color.Gray) // todo удалить
-                        .fillMaxWidth(),
+                        .fillMaxSize()
+                        .background(Color.Gray),
                     contentScale = ContentScale.Crop
                 )
-
-                // 2. Затем Row с контентом (верхний слой)
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    // Расталкивает элементы в разные стороны
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier
-                        .fillMaxWidth() // Обязательно, чтобы занять всю ширину картинки
+                        .fillMaxWidth()
                         .padding(AppTheme.dimens.paddingLarge)
                         .align(Alignment.TopStart)
                 ) {
@@ -86,13 +87,9 @@ fun ArticleCardExpanded(
                         style = MaterialTheme.typography.headlineSmall,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         modifier = Modifier
-                            // weight с fill = false позволяет фону облегать только текст
-                            .weight(
-                                weight = 1f,
-                                fill = false
-                            )
+                            .weight(1f, fill = false)
                             .background(
-                                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f), // Можно добавить прозрачности
+                                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f),
                                 shape = MaterialTheme.shapes.medium
                             )
                             .padding(
@@ -100,67 +97,65 @@ fun ArticleCardExpanded(
                                 vertical = AppTheme.dimens.paddingSmall
                             )
                     )
-
-                    IconButton(
-                        onClick = { onShareClick(articleUi) },
-                    ) {
-                        Icon(
-                            Icons.Default.Share,
-                            contentDescription = "Share",
-                        )
+                    IconButton(onClick = { onShareClick(articleUi) }) {
+                        Icon(Icons.Default.Share, contentDescription = "Share")
                     }
                 }
             }
-            Text(
-                text = articleUi.description,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.titleLarge,
+            Column(
                 modifier = Modifier
-                    .padding(top = AppTheme.dimens.paddingLarge)
-                    .fillMaxWidth(),
-            )
-            Row(
-                verticalAlignment = Alignment.Bottom,
-                modifier = Modifier.padding(top = AppTheme.dimens.paddingLarge)
-            ) {
-                Text(
-                    text = articleUi.author,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.weight(1f),
-                )
-                Text(
-                    text = articleUi.publishedAt,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    style = MaterialTheme.typography.labelMedium,
-                )
-            }
-            Text(
-                text = articleUi.content,
-                maxLines = 4,
-                overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier
+                    .weight(AppTheme.dimens.contentWeight)
                     .fillMaxWidth()
-                    .padding(top = AppTheme.dimens.paddingLarge),
-            )
-            Button(
-                onClick = { onOpenInBrowserClick(articleUi) },
-                shape = MaterialTheme.shapes.medium,
-                modifier = Modifier
-                    .padding(top = AppTheme.dimens.paddingLarge)
+                    .padding(AppTheme.dimens.paddingLarge)
             ) {
                 Text(
-                    text = "Open in browser",
-                    style = MaterialTheme.typography.labelMedium,
+                    text = articleUi.description,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.fillMaxWidth(),
                 )
+                Row(
+                    verticalAlignment = Alignment.Bottom,
+                    modifier = Modifier.padding(top = AppTheme.dimens.paddingLarge)
+                ) {
+                    Text(
+                        text = articleUi.author,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.weight(1f),
+                    )
+                    Text(
+                        text = articleUi.publishedAt,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                Text(
+                    text = articleUi.content,
+                    maxLines = 6,
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = AppTheme.dimens.paddingLarge)
+                )
+                Button(
+                    onClick = { onOpenInBrowserClick(articleUi) },
+                    shape = MaterialTheme.shapes.medium,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(top = AppTheme.dimens.paddingLarge)
+                ) {
+                    Text(
+                        text = "Open in browser",
+                        style = MaterialTheme.typography.labelMedium,
+                    )
+                }
             }
         }
     }
