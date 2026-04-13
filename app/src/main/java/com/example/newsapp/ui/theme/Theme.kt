@@ -8,6 +8,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
 
 private val LightColors = lightColorScheme(
@@ -92,8 +93,8 @@ private val DarkColors = darkColorScheme(
 @Composable
 fun NewsAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    // 1. По умолчанию выключаем динамические цвета, чтобы видеть свои
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -101,20 +102,24 @@ fun NewsAppTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-
         darkTheme -> DarkColors
         else -> LightColors
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = typography,
-        shapes = shapes,
-        content = content
-    )
+    // 2. Обязательно оборачиваем в CompositionLocalProvider для работы Dimens
+    CompositionLocalProvider(
+        LocalDimens provides AppDimens()
+    ) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = typography, // Убедитесь, что это ваша переменная
+            shapes = shapes,         // Убедитесь, что это ваша переменная
+            content = content
+        )
+    }
 }
 
-// Удобный объект для доступа
+// Объект для доступа к размерам
 object AppTheme {
     val dimens: AppDimens
         @Composable
