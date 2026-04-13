@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.newsapp.ui.components.ArticleCardCollapsed
 import com.example.newsapp.ui.components.ArticleCardExpanded
+import com.example.newsapp.ui.components.ArticleSearchBar
 import com.example.newsapp.ui.models.ArticleUi
 import com.example.newsapp.ui.models.getMockArticleUiList
 import com.example.newsapp.ui.theme.AppTheme
@@ -39,6 +40,13 @@ fun NewsListScreen(
         contentPadding = PaddingValues(AppTheme.dimens.paddingExtraLarge),
         verticalArrangement = Arrangement.spacedBy(AppTheme.dimens.lazyColumnItemsSpacing)
     ) {
+        item(){
+            ArticleSearchBar(
+                searchText = "", //todo прокинуть во viewmodel
+                onValueChange = {},
+                onDeleteClick = {}
+            )
+        }
         // Используем items(articleList) вместо items(count), это удобнее
         items(
             items = articleList,
@@ -81,11 +89,13 @@ fun NewsListScreen(
     showBackground = true,
     uiMode = UI_MODE_NIGHT_NO,
     name = "DefaultPreviewLight",
+    backgroundColor = 0xFFFFF9EE
 )
 @Preview(
     showBackground = true,
     uiMode = UI_MODE_NIGHT_YES,
     name = "DefaultPreviewDark",
+    backgroundColor = 0xFF15130B
 )
 @Composable
 fun NewsListScreenPreview() {
