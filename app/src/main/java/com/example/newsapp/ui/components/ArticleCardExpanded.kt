@@ -3,13 +3,14 @@ package com.example.newsapp.ui.components
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Share
@@ -23,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,94 +44,122 @@ fun ArticleCardExpanded(
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         onClick = { onCardClick(articleUi) },
-        shape = RoundedCornerShape(8.dp),
+        shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
         ),
         modifier = modifier.fillMaxWidth(),
     ) {
-        Card(
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-            onClick = { onCardClick(articleUi) },
-            shape = RoundedCornerShape(8.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface,
-            ),
-            modifier = modifier.fillMaxWidth(),
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(12.dp)
         ) {
-            Column() {
-                Box() {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = articleUi.name,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.headlineSmall,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            modifier = Modifier.weight(1f),
-                        )
-                        IconButton(
-                            onClick = { onShareClick(articleUi) },
-                            modifier = Modifier.size(24.dp)
-                        ) {
-                            Icon(
-                                Icons.Default.Share,
-                                contentDescription = "Share",
-                            )
-                        }
-                    }
-                    Image(
-                        imageVector = Icons.Default.Person,
-                        contentDescription = "Article picture",
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        contentScale = ContentScale.Crop // Чтобы картинка не искажалась
-                    )
-                }
-                Text(
-                    text = articleUi.description,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.fillMaxWidth(),
+            Box {
+                // 1. Сначала картинка (нижний слой)
+                Image(
+                    imageVector = Icons.Default.Person,
+                    contentDescription = "Article picture",
+                    modifier = Modifier
+                        .clip(MaterialTheme.shapes.medium)
+                        .fillMaxWidth(),
+                    contentScale = ContentScale.Crop
                 )
+
+                // 2. Затем Row с контентом (верхний слой)
                 Row(
-                    verticalAlignment = Alignment.Bottom,
-                    modifier = Modifier.padding(top = 4.dp)
+                    verticalAlignment = Alignment.CenterVertically,
+                    // Расталкивает элементы в разные стороны
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth() // Обязательно, чтобы занять всю ширину картинки
+                        .padding(12.dp)
+                        .align(Alignment.TopStart)
                 ) {
                     Text(
-                        text = articleUi.author,
+                        text = articleUi.name,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.weight(1f),
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier
+                            // weight с fill = false позволяет фону облегать только текст
+                            .weight(1f, fill = false)
+                            .background(
+                                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.9f), // Можно добавить прозрачности
+                                shape = MaterialTheme.shapes.medium
+                            )
+                            .padding(horizontal = 12.dp, vertical = 4.dp)
                     )
-                    Text(
-                        text = articleUi.publishedAt,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.labelMedium,
-                    )
+
+                    IconButton(
+                        onClick = { onShareClick(articleUi) },
+                        modifier = Modifier
+                            .size(32.dp)
+                            .background(
+                                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.7f),
+                                shape = androidx.compose.foundation.shape.CircleShape
+                            )
+                    ) {
+                        Icon(
+                            Icons.Default.Share,
+                            contentDescription = "Share",
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
                 }
+            }
+            Text(
+                text = articleUi.description,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier
+                    .padding(top = 12.dp)
+                    .fillMaxWidth(),
+            )
+            Row(
+                verticalAlignment = Alignment.Bottom,
+                modifier = Modifier.padding(top = 12.dp)
+            ) {
                 Text(
-                    text = articleUi.content,
-                    maxLines = 4,
+                    text = articleUi.author,
+                    maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.fillMaxWidth(),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.weight(1f),
                 )
-                Button(
-                    onClick = { onOpenInBrowserClick(articleUi) }
-                ) {
-                    Text(
-                        text = "Open in browser",
-                        style = MaterialTheme.typography.labelMedium,
-                    )
-                }
+                Text(
+                    text = articleUi.publishedAt,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.labelMedium,
+                )
+            }
+            Text(
+                text = articleUi.content,
+                maxLines = 4,
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.dp),
+            )
+            Button(
+                onClick = { onOpenInBrowserClick(articleUi) },
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier
+                    .padding(top = 12.dp)
+            ) {
+                Text(
+                    text = "Open in browser",
+                    style = MaterialTheme.typography.labelMedium,
+                )
             }
         }
     }
@@ -137,13 +167,13 @@ fun ArticleCardExpanded(
 
 @Preview(
     showBackground = true,
-    uiMode = UI_MODE_NIGHT_YES,
-    name = "DefaultPreviewDark",
+    uiMode = UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
 )
 @Preview(
     showBackground = true,
-    uiMode = UI_MODE_NIGHT_NO,
-    name = "DefaultPreviewLight",
+    uiMode = UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
 )
 @Composable
 fun ArticleCardCollapsedExpanded() {
