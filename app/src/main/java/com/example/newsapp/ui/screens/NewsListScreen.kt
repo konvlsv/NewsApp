@@ -1,5 +1,7 @@
 package com.example.newsapp.ui.screens
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -50,7 +52,16 @@ fun NewsListScreen(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(
+    showBackground = true,
+    uiMode = UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight",
+)
+@Preview(
+    showBackground = true,
+    uiMode = UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark",
+)
 @Composable
 fun NewsListScreenPreview() {
     NewsAppTheme() {
