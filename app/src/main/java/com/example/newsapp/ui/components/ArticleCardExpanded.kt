@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Share
@@ -25,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -62,6 +64,7 @@ fun ArticleCardExpanded(
                     contentDescription = "Article picture",
                     modifier = Modifier
                         .clip(MaterialTheme.shapes.medium)
+                        .background(Color.Gray) // todo удалить
                         .fillMaxWidth(),
                     contentScale = ContentScale.Crop
                 )
@@ -86,7 +89,7 @@ fun ArticleCardExpanded(
                             // weight с fill = false позволяет фону облегать только текст
                             .weight(1f, fill = false)
                             .background(
-                                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.9f), // Можно добавить прозрачности
+                                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f), // Можно добавить прозрачности
                                 shape = MaterialTheme.shapes.medium
                             )
                             .padding(horizontal = 12.dp, vertical = 4.dp)
@@ -95,10 +98,9 @@ fun ArticleCardExpanded(
                     IconButton(
                         onClick = { onShareClick(articleUi) },
                         modifier = Modifier
-                            .size(32.dp)
                             .background(
-                                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.7f),
-                                shape = androidx.compose.foundation.shape.CircleShape
+                                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.3f),
+                                shape = CircleShape
                             )
                     ) {
                         Icon(
