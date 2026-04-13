@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
             NewsAppTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    containerColor = MaterialTheme.colorScheme.background
                 ) { innerPadding ->
                     NewsListScreen(
                         modifier = Modifier.padding(innerPadding),

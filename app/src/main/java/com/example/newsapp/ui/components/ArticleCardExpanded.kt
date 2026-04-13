@@ -69,7 +69,7 @@ fun ArticleCardExpanded(
                     contentDescription = "Article picture",
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.Gray),
+                        .background(Color.Gray), //todo удалить
                     contentScale = ContentScale.Crop
                 )
                 Row(
@@ -98,7 +98,11 @@ fun ArticleCardExpanded(
                             )
                     )
                     IconButton(onClick = { onShareClick(articleUi) }) {
-                        Icon(Icons.Default.Share, contentDescription = "Share")
+                        Icon(
+                            imageVector = Icons.Default.Share,
+                            contentDescription = "Share",
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        )
                     }
                 }
             }

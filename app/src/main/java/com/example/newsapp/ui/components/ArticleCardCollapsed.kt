@@ -75,7 +75,7 @@ fun ArticleCardCollapsed(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.headlineSmall,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.weight(1f),
                     )
                     IconButton(
@@ -84,6 +84,7 @@ fun ArticleCardCollapsed(
                         Icon(
                             Icons.Default.Share,
                             contentDescription = "Share",
+                            tint = MaterialTheme.colorScheme.onSurface,
                         )
                     }
                 }
