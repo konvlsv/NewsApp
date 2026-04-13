@@ -44,7 +44,7 @@ fun ArticleCardCollapsed(
         onClick = { onCardClick(articleUi) },
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
         modifier = modifier.fillMaxWidth(),
     ) {
