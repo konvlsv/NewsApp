@@ -22,14 +22,7 @@ fun getMockArticleUiList(): List<ArticleUi> {
                 id = index.toString(),
                 name = "Chanel ${generateRandomText(1).removeSuffix(".")}",
                 author = "Author №${index + 1}",
-                content = (1..5).joinToString("\n\n") {
-                    generateRandomText(
-                        Random.nextInt(
-                            10,
-                            20
-                        )
-                    )
-                },
+                content = generateRandomText(Random.nextInt(35, 55)),
                 description = generateRandomText(Random.nextInt(15, 25)),
                 publishedAt = "12.04.2024",
                 title = generateRandomText(Random.nextInt(3, 7)),
