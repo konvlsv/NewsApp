@@ -24,6 +24,7 @@ class MainActivity : ComponentActivity() {
                         articleList = getMockArticleUiList(),
                         onCardClick = {},
                         onShareClick = {},
+                        onOpenInBrowserClick = {}
                     )
                 }
             }
