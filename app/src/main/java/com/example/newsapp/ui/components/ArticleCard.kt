@@ -14,14 +14,14 @@ import com.example.newsapp.ui.theme.NewsAppTheme
 @Composable
 fun ArticleCard(
     article: ArticleUi,
-    isCardExpanded: Boolean,
+    isCardExpanded: (ArticleUi) -> Boolean,
     onShareClick: (ArticleUi) -> Unit,
     onExpandOrCollapseCardClick: (ArticleUi) -> Unit,
     onOpenInBrowserClick: (ArticleUi) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.animateContentSize()) {
-        if (isCardExpanded) {
+        if (isCardExpanded(article)) {
             ArticleCardExpanded(
                 articleUi = article,
                 onExpandOrCollapseCardClick = onExpandOrCollapseCardClick,
@@ -58,7 +58,7 @@ fun ArticleCardPreviewCollapsed() {
             onShareClick = {},
             onOpenInBrowserClick = {},
             onExpandOrCollapseCardClick = {},
-            isCardExpanded = false,
+            isCardExpanded = {false},
 
         )
     }
@@ -84,7 +84,7 @@ fun ArticleCardPreviewExpanded() {
             onShareClick = {},
             onOpenInBrowserClick = {},
             onExpandOrCollapseCardClick = {},
-            isCardExpanded = true
+            isCardExpanded = {true}
         )
     }
 }
