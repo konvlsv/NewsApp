@@ -2,6 +2,8 @@ package com.example.newsapp.ui.components
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.FilterChip
@@ -13,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.newsapp.ui.models.ArticleCategory
+import com.example.newsapp.ui.theme.AppTheme
 import com.example.newsapp.ui.theme.NewsAppTheme
 
 @Composable
@@ -22,6 +25,8 @@ fun ArticlesCategoryLazyRow(
     modifier: Modifier = Modifier
 ) {
     LazyRow(
+        contentPadding = PaddingValues(horizontal = AppTheme.dimens.paddingLarge),
+        horizontalArrangement = Arrangement.spacedBy(AppTheme.dimens.paddingMedium),
         modifier = modifier,
     ) {
         items(ArticleCategory.entries) { category ->
