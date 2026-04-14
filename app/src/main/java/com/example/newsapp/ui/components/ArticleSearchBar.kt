@@ -16,8 +16,10 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.newsapp.R
 import com.example.newsapp.ui.theme.NewsAppTheme
 
 @Composable
@@ -31,7 +33,7 @@ fun ArticleSearchBar(
     OutlinedTextField(
         value = searchText,
         onValueChange = { onValueChange(it) },
-        placeholder = { Text("Search") },
+        placeholder = { Text(stringResource(R.string.search)) },
         singleLine = true,
         leadingIcon = {
             Icon(
@@ -43,7 +45,7 @@ fun ArticleSearchBar(
         trailingIcon = {
             if (searchText.isNotEmpty()) {
                 IconButton(onClick = { onDeleteClick() }) {
-                    Icon(Icons.Default.Clear, contentDescription = "Clear")
+                    Icon(Icons.Default.Clear, contentDescription = stringResource(R.string.clear))
                 }
             }
         },

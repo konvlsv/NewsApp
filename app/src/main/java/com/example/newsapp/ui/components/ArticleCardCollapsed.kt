@@ -23,8 +23,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.newsapp.R
 import com.example.newsapp.ui.models.ArticleUi
 import com.example.newsapp.ui.models.getMockArticleUiList
 import com.example.newsapp.ui.theme.AppTheme
@@ -57,7 +59,7 @@ fun ArticleCardCollapsed(
         ) {
             Image(
                 imageVector = Icons.Default.Person,
-                contentDescription = "Article picture",
+                contentDescription = stringResource(R.string.article_picture),
                 modifier = Modifier
                     .weight(AppTheme.dimens.imageWeight) // Занимает 1 часть из 5 (20% ширины)
                     .fillMaxHeight(), // Растягивается на всю высоту колонки рядом
@@ -83,7 +85,7 @@ fun ArticleCardCollapsed(
                     ) {
                         Icon(
                             Icons.Default.Share,
-                            contentDescription = "Share",
+                            contentDescription = stringResource(R.string.share),
                             tint = MaterialTheme.colorScheme.onSurface,
                         )
                     }

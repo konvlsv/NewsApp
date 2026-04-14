@@ -28,8 +28,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.newsapp.R
 import com.example.newsapp.ui.models.ArticleUi
 import com.example.newsapp.ui.models.getMockArticleUiList
 import com.example.newsapp.ui.theme.AppTheme
@@ -66,7 +68,7 @@ fun ArticleCardExpanded(
             ) {
                 Image(
                     imageVector = Icons.Default.Person,
-                    contentDescription = "Article picture",
+                    contentDescription = stringResource(R.string.article_picture),
                     modifier = Modifier
                         .fillMaxSize()
                         .background(Color.Gray), //todo удалить
@@ -100,7 +102,7 @@ fun ArticleCardExpanded(
                     IconButton(onClick = { onShareClick(articleUi) }) {
                         Icon(
                             imageVector = Icons.Default.Share,
-                            contentDescription = "Share",
+                            contentDescription = stringResource(R.string.share),
                             tint = MaterialTheme.colorScheme.onPrimaryContainer,
                         )
                     }
@@ -156,7 +158,7 @@ fun ArticleCardExpanded(
                         .padding(top = AppTheme.dimens.paddingLarge)
                 ) {
                     Text(
-                        text = "Open in browser",
+                        text = stringResource(R.string.open_in_browser),
                         style = MaterialTheme.typography.labelMedium,
                     )
                 }

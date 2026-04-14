@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">NewsApp</string>
+    <string name="open_in_browser">Open in browser</string>
+    <string name="share">Share</string>
+    <string name="article_picture">Article picture</string>
+    <string name="search">Search</string>
+    <string name="clear">Clear</string>
 </resources>
