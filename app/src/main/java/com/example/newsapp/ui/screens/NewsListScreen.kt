@@ -2,17 +2,14 @@ package com.example.newsapp.ui.screens
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.newsapp.ui.components.ArticleSearchBar
 import com.example.newsapp.ui.components.ArticlesLazyColumn
 import com.example.newsapp.ui.models.ArticleCategory
 import com.example.newsapp.ui.models.ArticleUi
 import com.example.newsapp.ui.models.getMockArticleUiList
-import com.example.newsapp.ui.theme.AppTheme
 import com.example.newsapp.ui.theme.NewsAppTheme
 
 @Composable
@@ -24,12 +21,10 @@ fun NewsListScreen(
         articleList = getMockArticleUiList(), //todo прокинуть во ViewModel
         onShareClick = {}, //todo прокинуть во ViewModel
         onOpenInBrowserClick = {}, //todo прокинуть во ViewModel
-        searchBarSearchText = "", //todo прокинуть во ViewModel
-        searchBarOnValueChange = {}, //todo прокинуть во ViewModel
-        searchBarOnDeleteClick = {}, //todo прокинуть во ViewModel
-        searchBarOnSearchClick = {}, //todo прокинуть во ViewModel
         articleSelectedCategory = ArticleCategory.GENERAL,
         isCardExpanded = { false },
+        isRefreshing = false,
+        onRefresh = {},
         modifier = modifier
     )
 }
@@ -39,24 +34,17 @@ fun NewsListContent(
     articleList: List<ArticleUi>,
     onShareClick: (ArticleUi) -> Unit,
     onOpenInBrowserClick: (ArticleUi) -> Unit,
-    searchBarSearchText: String,
-    searchBarOnValueChange: (String) -> Unit,
-    searchBarOnDeleteClick: () -> Unit,
-    searchBarOnSearchClick: () -> Unit,
     articleSelectedCategory: ArticleCategory,
     isCardExpanded: (ArticleUi) -> Boolean,
+    isRefreshing: Boolean,
+    onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
-        ArticleSearchBar(
-            searchText = searchBarSearchText,
-            onValueChange = searchBarOnValueChange,
-            onDeleteClick = searchBarOnDeleteClick,
-            onSearchClick = searchBarOnSearchClick,
-            modifier = Modifier.padding(
-                horizontal = AppTheme.dimens.paddingSmall,
-            )
-        )
+    PullToRefreshBox(
+        isRefreshing = isRefreshing,
+        onRefresh = onRefresh,
+        modifier = modifier
+    ) {
         ArticlesLazyColumn(
             articleList = articleList,
             onShareClick = onShareClick,
@@ -88,12 +76,10 @@ fun NewsListContentPreview() {
             articleList = getMockArticleUiList(),
             onShareClick = {},
             onOpenInBrowserClick = {},
-            searchBarSearchText = "",
-            searchBarOnValueChange = {},
-            searchBarOnDeleteClick = {},
-            searchBarOnSearchClick = {},
             articleSelectedCategory = ArticleCategory.GENERAL,
-            isCardExpanded = { false }
+            isCardExpanded = { false },
+            isRefreshing = false,
+            onRefresh = {}
         )
     }
 }
