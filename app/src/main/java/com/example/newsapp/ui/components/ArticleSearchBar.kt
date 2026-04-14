@@ -3,6 +3,7 @@ package com.example.newsapp.ui.components
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
@@ -10,8 +11,9 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
@@ -23,15 +25,20 @@ fun ArticleSearchBar(
     searchText: String,
     onValueChange: (String) -> Unit,
     onDeleteClick: () -> Unit,
+    onSearchClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    TextField(
+    OutlinedTextField(
         value = searchText,
         onValueChange = { onValueChange(it) },
-        label = { Text("Search") },
+        placeholder = { Text("Search") },
         singleLine = true,
         leadingIcon = {
-            Icon(Icons.Default.Search, contentDescription = null)
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
         },
         trailingIcon = {
             if (searchText.isNotEmpty()) {
@@ -40,9 +47,13 @@ fun ArticleSearchBar(
                 }
             }
         },
-        maxLines = 1,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+        keyboardActions = KeyboardActions(onSearch = { onSearchClick() }),
         shape = MaterialTheme.shapes.medium,
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
+        ),
         modifier = modifier.fillMaxWidth()
     )
 }
@@ -61,9 +72,10 @@ fun ArticleSearchBar(
 fun ArticleSearchBarPreview() {
     NewsAppTheme() {
         ArticleSearchBar(
-            searchText = "test test",
+            searchText = "asdasd",
             onValueChange = {},
-            onDeleteClick = {}
+            onDeleteClick = {},
+            onSearchClick = {}
         )
     }
 }
