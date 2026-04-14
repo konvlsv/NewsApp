@@ -17,8 +17,8 @@ import com.example.newsapp.ui.theme.NewsAppTheme
 
 @Composable
 fun ArticlesCategoryLazyRow(
-    selectedCategory: ArticleCategory,
-    onSelectedCategoryChange: (ArticleCategory) -> Unit,
+    articleSelectedCategory: ArticleCategory,
+    onArticleSelectedCategoryChange: (ArticleCategory) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyRow(
@@ -26,8 +26,8 @@ fun ArticlesCategoryLazyRow(
     ) {
         items(ArticleCategory.entries) { category ->
             FilterChip(
-                selected = selectedCategory == category,
-                onClick = { onSelectedCategoryChange(category) },
+                selected = articleSelectedCategory == category,
+                onClick = { onArticleSelectedCategoryChange(category) },
                 label = {
                     Text(
                         text = stringResource(id = category.label),
@@ -60,8 +60,8 @@ fun ArticlesCategoryLazyRow(
 fun ArticlesCategoryLazyRowPreview() {
     NewsAppTheme() {
         ArticlesCategoryLazyRow(
-            selectedCategory = ArticleCategory.GENERAL,
-            onSelectedCategoryChange = {},
+            articleSelectedCategory = ArticleCategory.GENERAL,
+            onArticleSelectedCategoryChange = {},
         )
     }
 }
