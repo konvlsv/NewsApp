@@ -40,7 +40,7 @@ import com.example.newsapp.ui.theme.NewsAppTheme
 @Composable
 fun ArticleCardExpanded(
     articleUi: ArticleUi,
-    onCardClick: (ArticleUi) -> Unit,
+    onExpandOrCollapseCardClick: (ArticleUi) -> Unit,
     onShareClick: (ArticleUi) -> Unit,
     onOpenInBrowserClick: (ArticleUi) -> Unit,
     modifier: Modifier = Modifier,
@@ -49,7 +49,7 @@ fun ArticleCardExpanded(
         elevation = CardDefaults.cardElevation(
             defaultElevation = AppTheme.dimens.cardElevation
         ),
-        onClick = { onCardClick(articleUi) },
+        onClick = { onExpandOrCollapseCardClick(articleUi) },
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
@@ -182,7 +182,7 @@ fun ArticleCardCollapsedExpanded() {
     NewsAppTheme() {
         ArticleCardExpanded(
             articleUi = getMockArticleUiList().random(),
-            onCardClick = {},
+            onExpandOrCollapseCardClick = {},
             onShareClick = {},
             onOpenInBrowserClick = {},
         )
