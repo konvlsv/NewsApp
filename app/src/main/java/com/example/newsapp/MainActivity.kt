@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import com.example.newsapp.ui.models.getMockArticleUiList
 import com.example.newsapp.ui.screens.NewsListScreen
 import com.example.newsapp.ui.theme.NewsAppTheme
 
@@ -25,9 +24,6 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     NewsListScreen(
                         modifier = Modifier.padding(innerPadding),
-                        articleList = getMockArticleUiList(),
-                        onShareClick = {},
-                        onOpenInBrowserClick = {}
                     )
                 }
             }

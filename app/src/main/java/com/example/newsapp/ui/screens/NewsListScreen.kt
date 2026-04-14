@@ -26,9 +26,29 @@ import com.example.newsapp.ui.theme.NewsAppTheme
 
 @Composable
 fun NewsListScreen(
+    modifier: Modifier = Modifier,
+    //todo ViewModel
+) {
+    NewsListContent(
+        articleList = getMockArticleUiList(), //todo прокинуть во ViewModel
+        onShareClick = {}, //todo прокинуть во ViewModel
+        onOpenInBrowserClick = {}, //todo прокинуть во ViewModel
+        searchBarSearchText = "", //todo прокинуть во ViewModel
+        searchBarOnValueChange = {}, //todo прокинуть во ViewModel
+        searchBarOnDeleteClick = {}, //todo прокинуть во ViewModel
+        searchBarOnSearchClick = {} //todo прокинуть во ViewModel
+    )
+}
+
+@Composable
+fun NewsListContent(
     articleList: List<ArticleUi>,
     onShareClick: (ArticleUi) -> Unit,
     onOpenInBrowserClick: (ArticleUi) -> Unit,
+    searchBarSearchText: String,
+    searchBarOnValueChange: (String) -> Unit,
+    searchBarOnDeleteClick: () -> Unit,
+    searchBarOnSearchClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     // 1. Создаем состояние для хранения ID развернутых карточек
@@ -40,11 +60,12 @@ fun NewsListScreen(
         contentPadding = PaddingValues(AppTheme.dimens.paddingExtraLarge),
         verticalArrangement = Arrangement.spacedBy(AppTheme.dimens.lazyColumnItemsSpacing)
     ) {
-        item(){
+        item() {
             ArticleSearchBar(
-                searchText = "", //todo прокинуть во viewmodel
-                onValueChange = {},
-                onDeleteClick = {}
+                searchText = searchBarSearchText,
+                onValueChange = searchBarOnValueChange,
+                onDeleteClick = searchBarOnDeleteClick,
+                onSearchClick = searchBarOnSearchClick
             )
         }
         // Используем items(articleList) вместо items(count), это удобнее
@@ -98,12 +119,16 @@ fun NewsListScreen(
     backgroundColor = 0xFF15130B
 )
 @Composable
-fun NewsListScreenPreview() {
+fun NewsListContentPreview() {
     NewsAppTheme() {
-        NewsListScreen(
+        NewsListContent(
             articleList = getMockArticleUiList(),
             onShareClick = {},
-            onOpenInBrowserClick = {}
+            onOpenInBrowserClick = {},
+            searchBarSearchText = "",
+            searchBarOnValueChange = {},
+            searchBarOnDeleteClick = {},
+            searchBarOnSearchClick = {}
         )
     }
 }
