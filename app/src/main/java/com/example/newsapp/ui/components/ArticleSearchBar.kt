@@ -24,15 +24,15 @@ import com.example.newsapp.ui.theme.NewsAppTheme
 
 @Composable
 fun ArticleSearchBar(
-    searchText: String,
-    onValueChange: (String) -> Unit,
-    onDeleteClick: () -> Unit,
-    onSearchClick: () -> Unit,
+    articleSearchBarSearchQuery: String,
+    onArticleSearchBarValueChange: (String) -> Unit,
+    onArticleSearchBarDeleteClick: () -> Unit,
+    onArticleSearchBarSearchClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     OutlinedTextField(
-        value = searchText,
-        onValueChange = { onValueChange(it) },
+        value = articleSearchBarSearchQuery,
+        onValueChange = { onArticleSearchBarValueChange(it) },
         placeholder = { Text(stringResource(R.string.search)) },
         singleLine = true,
         leadingIcon = {
@@ -43,14 +43,14 @@ fun ArticleSearchBar(
             )
         },
         trailingIcon = {
-            if (searchText.isNotEmpty()) {
-                IconButton(onClick = { onDeleteClick() }) {
+            if (articleSearchBarSearchQuery.isNotEmpty()) {
+                IconButton(onClick = { onArticleSearchBarDeleteClick() }) {
                     Icon(Icons.Default.Clear, contentDescription = stringResource(R.string.clear))
                 }
             }
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-        keyboardActions = KeyboardActions(onSearch = { onSearchClick() }),
+        keyboardActions = KeyboardActions(onSearch = { onArticleSearchBarSearchClick() }),
         shape = MaterialTheme.shapes.small,
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = MaterialTheme.colorScheme.primary,
@@ -74,10 +74,10 @@ fun ArticleSearchBar(
 fun ArticleSearchBarPreview() {
     NewsAppTheme() {
         ArticleSearchBar(
-            searchText = "asdasd",
-            onValueChange = {},
-            onDeleteClick = {},
-            onSearchClick = {}
+            articleSearchBarSearchQuery = "asdasd",
+            onArticleSearchBarValueChange = {},
+            onArticleSearchBarDeleteClick = {},
+            onArticleSearchBarSearchClick = {}
         )
     }
 }
