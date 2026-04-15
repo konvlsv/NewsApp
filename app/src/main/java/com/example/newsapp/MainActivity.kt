@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+            val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
             NewsAppTheme {
                 Scaffold(
                     modifier = Modifier
@@ -86,7 +86,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun NewsListContentPreview() {
     NewsAppTheme() {
-        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
