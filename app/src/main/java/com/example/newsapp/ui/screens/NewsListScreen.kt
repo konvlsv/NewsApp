@@ -26,6 +26,8 @@ fun NewsListScreen(
         isCardExpanded = { viewModel.isCardExpanded(it) },
         isRefreshing = viewModel.isRefreshing(),
         onRefresh = { viewModel.onRefresh() },
+        onArticleSelectedCategoryChange = { viewModel.onArticleSelectedCategoryChange(it) },
+        onExpandOrCollapseCardClick = { viewModel.onExpandOrCollapseCardClick(it) },
         modifier = modifier
     )
 }
@@ -37,6 +39,8 @@ fun NewsListContent(
     onOpenInBrowserClick: (ArticleUi) -> Unit,
     articleSelectedCategory: ArticleCategory,
     isCardExpanded: (ArticleUi) -> Boolean,
+    onArticleSelectedCategoryChange: (ArticleCategory) -> Unit,
+    onExpandOrCollapseCardClick: (ArticleUi) -> Unit,
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
@@ -52,8 +56,8 @@ fun NewsListContent(
             onOpenInBrowserClick = onOpenInBrowserClick,
             isCardExpanded = isCardExpanded,
             articleSelectedCategory = articleSelectedCategory,
-            onArticleSelectedCategoryChange = {},
-            onExpandOrCollapseCardClick = {}
+            onArticleSelectedCategoryChange = onArticleSelectedCategoryChange,
+            onExpandOrCollapseCardClick = onExpandOrCollapseCardClick
         )
     }
 }
@@ -80,7 +84,9 @@ fun NewsListContentPreview() {
             articleSelectedCategory = ArticleCategory.GENERAL,
             isCardExpanded = { false },
             isRefreshing = false,
-            onRefresh = {}
+            onRefresh = {},
+            onArticleSelectedCategoryChange = {},
+            onExpandOrCollapseCardClick = {}
         )
     }
 }

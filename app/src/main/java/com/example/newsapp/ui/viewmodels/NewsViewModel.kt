@@ -35,4 +35,12 @@ class NewsViewModel(): ViewModel() {
     fun onRefresh(){
 
     }
+
+    fun onArticleSelectedCategoryChange(category: ArticleCategory) {
+
+    }
+
+    fun onExpandOrCollapseCardClick(article: ArticleUi) {
+
+    }
 }
