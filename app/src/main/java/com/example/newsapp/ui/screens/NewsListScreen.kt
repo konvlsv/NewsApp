@@ -11,20 +11,21 @@ import com.example.newsapp.ui.models.ArticleCategory
 import com.example.newsapp.ui.models.ArticleUi
 import com.example.newsapp.ui.models.getMockArticleUiList
 import com.example.newsapp.ui.theme.NewsAppTheme
+import com.example.newsapp.ui.viewmodels.NewsViewModel
 
 @Composable
 fun NewsListScreen(
     modifier: Modifier = Modifier,
-    //todo ViewModel
+    viewModel: NewsViewModel = NewsViewModel()
 ) {
     NewsListContent(
-        articleList = getMockArticleUiList(), //todo прокинуть во ViewModel
-        onShareClick = {}, //todo прокинуть во ViewModel
-        onOpenInBrowserClick = {}, //todo прокинуть во ViewModel
-        articleSelectedCategory = ArticleCategory.GENERAL,
-        isCardExpanded = { false },
-        isRefreshing = false,
-        onRefresh = {},
+        articleList = viewModel.getArticles(),
+        onShareClick = { viewModel.onShareClick(it) },
+        onOpenInBrowserClick = { viewModel.onOpenInBrowserClick(it) },
+        articleSelectedCategory = viewModel.articleSelectedCategory(),
+        isCardExpanded = { viewModel.isCardExpanded(it) },
+        isRefreshing = viewModel.isRefreshing(),
+        onRefresh = { viewModel.onRefresh() },
         modifier = modifier
     )
 }
