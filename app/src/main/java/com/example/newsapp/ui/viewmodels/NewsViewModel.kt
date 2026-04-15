@@ -5,34 +5,34 @@ import com.example.newsapp.ui.models.ArticleCategory
 import com.example.newsapp.ui.models.ArticleUi
 import com.example.newsapp.ui.models.getMockArticleUiList
 
-class NewsViewModel(): ViewModel() {
+class NewsViewModel() : ViewModel() {
 
 
     fun getArticles(category: ArticleCategory = ArticleCategory.GENERAL): List<ArticleUi> {
         return getMockArticleUiList()
     }
 
-    fun onShareClick(article: ArticleUi){
+    fun onShareClick(article: ArticleUi) {
 
     }
 
-    fun onOpenInBrowserClick(article: ArticleUi){
+    fun onOpenInBrowserClick(article: ArticleUi) {
 
     }
 
-    fun articleSelectedCategory(): ArticleCategory{
+    fun articleSelectedCategory(): ArticleCategory {
         return ArticleCategory.GENERAL
     }
 
-    fun isCardExpanded(article: ArticleUi): Boolean{
+    fun isCardExpanded(article: ArticleUi): Boolean {
         return false
     }
 
-    fun isRefreshing(): Boolean{
+    fun isRefreshing(): Boolean {
         return false
     }
 
-    fun onRefresh(){
+    fun onRefresh() {
 
     }
 
@@ -41,6 +41,22 @@ class NewsViewModel(): ViewModel() {
     }
 
     fun onExpandOrCollapseCardClick(article: ArticleUi) {
+
+    }
+
+    fun articleSearchBarSearchQuery(): String {
+        return ""
+    }
+
+    fun onArticleSearchBarValueChange(query: String) {
+
+    }
+
+    fun onArticleSearchBarDeleteClick() {
+
+    }
+
+    fun onArticleSearchBarSearchClick(){
 
     }
 }
