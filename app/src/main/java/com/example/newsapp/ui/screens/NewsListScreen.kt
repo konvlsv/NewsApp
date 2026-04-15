@@ -6,6 +6,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.newsapp.ui.components.ArticlesLazyColumn
 import com.example.newsapp.ui.models.ArticleCategory
 import com.example.newsapp.ui.models.ArticleUi
@@ -16,7 +17,7 @@ import com.example.newsapp.ui.viewmodels.NewsViewModel
 @Composable
 fun NewsListScreen(
     modifier: Modifier = Modifier,
-    viewModel: NewsViewModel = NewsViewModel()
+    viewModel: NewsViewModel = viewModel()
 ) {
     NewsListContent(
         articleList = viewModel.getArticles(),
