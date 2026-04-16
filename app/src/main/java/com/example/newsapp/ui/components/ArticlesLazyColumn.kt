@@ -25,6 +25,10 @@ fun ArticlesLazyColumn(
     onExpandOrCollapseCardClick: (ArticleUi) -> Unit,
     articleSelectedCategory: ArticleCategory,
     isCardExpanded: (ArticleUi) -> Boolean,
+    articleSearchBarSearchQuery: String,
+    onArticleSearchBarValueChange: (String) -> Unit,
+    onArticleSearchBarDeleteClick: () -> Unit,
+    onArticleSearchBarSearchClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -32,6 +36,15 @@ fun ArticlesLazyColumn(
         verticalArrangement = Arrangement.spacedBy(AppTheme.dimens.lazyColumnItemsSpacing)
     ) {
         item {
+            ArticleSearchBar(
+                articleSearchBarSearchQuery = articleSearchBarSearchQuery,
+                onArticleSearchBarValueChange = onArticleSearchBarValueChange,
+                onArticleSearchBarDeleteClick = onArticleSearchBarDeleteClick,
+                onArticleSearchBarSearchClick = onArticleSearchBarSearchClick,
+                modifier = Modifier
+                    .padding(horizontal = AppTheme.dimens.paddingLarge)
+                    .padding(vertical = AppTheme.dimens.paddingLarge)
+            )
             ArticlesCategoryLazyRow(
                 articleSelectedCategory = articleSelectedCategory,
                 onArticleSelectedCategoryChange = onArticleSelectedCategoryChange
@@ -75,7 +88,11 @@ fun ArticlesLazyColumnPreview() {
             onArticleSelectedCategoryChange = {},
             onExpandOrCollapseCardClick = {},
             articleSelectedCategory = ArticleCategory.GENERAL,
-            isCardExpanded = { false }
+            isCardExpanded = { false },
+            articleSearchBarSearchQuery = "",
+            onArticleSearchBarValueChange = {},
+            onArticleSearchBarDeleteClick = {},
+            onArticleSearchBarSearchClick = {}
         )
     }
 }
