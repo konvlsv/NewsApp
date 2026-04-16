@@ -84,7 +84,7 @@ class MainActivity : ComponentActivity() {
     backgroundColor = 0xFF15130B
 )
 @Composable
-fun NewsListContentPreview() {
+fun MainActivityPreview() {
     NewsAppTheme() {
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
         Scaffold(
