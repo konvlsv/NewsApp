@@ -29,6 +29,10 @@ fun NewsListScreen(
         onRefresh = { viewModel.onRefresh() },
         onArticleSelectedCategoryChange = { viewModel.onArticleSelectedCategoryChange(it) },
         onExpandOrCollapseCardClick = { viewModel.onExpandOrCollapseCardClick(it) },
+        articleSearchBarSearchQuery = viewModel.articleSearchBarSearchQuery(),
+        onArticleSearchBarValueChange = { viewModel.onArticleSearchBarValueChange(it) },
+        onArticleSearchBarDeleteClick = { viewModel.onArticleSearchBarDeleteClick() },
+        onArticleSearchBarSearchClick = { viewModel.onArticleSearchBarSearchClick() },
         modifier = modifier
     )
 }
@@ -44,6 +48,10 @@ fun NewsListContent(
     onExpandOrCollapseCardClick: (ArticleUi) -> Unit,
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
+    articleSearchBarSearchQuery: String,
+    onArticleSearchBarValueChange: (String) -> Unit,
+    onArticleSearchBarDeleteClick: () -> Unit,
+    onArticleSearchBarSearchClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PullToRefreshBox(
@@ -58,7 +66,11 @@ fun NewsListContent(
             isCardExpanded = isCardExpanded,
             articleSelectedCategory = articleSelectedCategory,
             onArticleSelectedCategoryChange = onArticleSelectedCategoryChange,
-            onExpandOrCollapseCardClick = onExpandOrCollapseCardClick
+            onExpandOrCollapseCardClick = onExpandOrCollapseCardClick,
+            articleSearchBarSearchQuery = articleSearchBarSearchQuery,
+            onArticleSearchBarValueChange = onArticleSearchBarValueChange,
+            onArticleSearchBarDeleteClick = onArticleSearchBarDeleteClick,
+            onArticleSearchBarSearchClick = onArticleSearchBarSearchClick
         )
     }
 }
@@ -87,7 +99,11 @@ fun NewsListContentPreview() {
             isRefreshing = false,
             onRefresh = {},
             onArticleSelectedCategoryChange = {},
-            onExpandOrCollapseCardClick = {}
+            onExpandOrCollapseCardClick = {},
+            articleSearchBarSearchQuery = "",
+            onArticleSearchBarValueChange = {},
+            onArticleSearchBarDeleteClick = {},
+            onArticleSearchBarSearchClick = {}
         )
     }
 }
