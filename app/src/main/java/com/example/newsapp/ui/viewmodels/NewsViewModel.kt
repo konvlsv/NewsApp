@@ -5,9 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.newsapp.ui.models.ArticleCategory
 import com.example.newsapp.ui.models.ArticleUi
 import com.example.newsapp.ui.models.getMockArticleUiList
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class NewsViewModel() : ViewModel() {
 
@@ -21,6 +24,19 @@ class NewsViewModel() : ViewModel() {
         private set
 
     var expandedCardIds = mutableStateSetOf<ArticleUi>()
+        private set
+
+    var isRefreshing by mutableStateOf(false)
+        private set
+
+    private fun imitateDownload(){
+        viewModelScope.launch {
+            isRefreshing = true
+            delay(2000)
+            articleList = getMockArticleUiList()
+            isRefreshing = false
+        }
+    }
 
     fun onArticleSelectedCategoryChange(category: ArticleCategory) {
         articleSelectedCategory = category
@@ -34,28 +50,24 @@ class NewsViewModel() : ViewModel() {
         articleSearchBarSearchQuery = ""
     }
 
-    fun onArticleSearchBarSearchClick(){
-        //todo начать поиск
+    fun onArticleSearchBarSearchClick() {
+        imitateDownload()
     }
 
     fun isCardExpanded(article: ArticleUi): Boolean {
-         return expandedCardIds.contains(article)
+        return expandedCardIds.contains(article)
     }
 
     fun onExpandOrCollapseCardClick(article: ArticleUi) {
         if (expandedCardIds.contains(article)) {
             expandedCardIds.remove(article)
-        }else {
+        } else {
             expandedCardIds.add(article)
         }
     }
 
-    fun isRefreshing(): Boolean {
-        return false
-    }
-
     fun onRefresh() {
-
+        imitateDownload()
     }
 
     fun onShareClick(article: ArticleUi) {

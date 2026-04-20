@@ -22,17 +22,17 @@ fun NewsListScreen(
     NewsListContent(
         articleList = viewModel.articleList,
         articleSelectedCategory = viewModel.articleSelectedCategory,
-        onArticleSelectedCategoryChange = viewModel::onArticleSelectedCategoryChange,
-        isCardExpanded = viewModel::isCardExpanded,
-        onExpandOrCollapseCardClick = viewModel::onExpandOrCollapseCardClick,
-        onShareClick = viewModel::onShareClick,
-        onOpenInBrowserClick = viewModel::onOpenInBrowserClick,
-        isRefreshing = viewModel.isRefreshing(),
-        onRefresh = viewModel::onRefresh,
+        onArticleSelectedCategoryChange = { viewModel.onArticleSelectedCategoryChange(it) },
+        isCardExpanded = { article -> viewModel.isCardExpanded(article) },
+        onExpandOrCollapseCardClick = { viewModel.onExpandOrCollapseCardClick(it) },
+        onShareClick = { viewModel.onShareClick(it) },
+        onOpenInBrowserClick = { viewModel.onOpenInBrowserClick(it) },
+        isRefreshing = viewModel.isRefreshing,
+        onRefresh = { viewModel.onRefresh() },
         articleSearchBarSearchQuery = viewModel.articleSearchBarSearchQuery,
-        onArticleSearchBarValueChange = viewModel::onArticleSearchBarValueChange,
-        onArticleSearchBarDeleteClick = viewModel::onArticleSearchBarDeleteClick,
-        onArticleSearchBarSearchClick = viewModel::onArticleSearchBarSearchClick,
+        onArticleSearchBarValueChange = { viewModel.onArticleSearchBarValueChange(it) },
+        onArticleSearchBarDeleteClick = { viewModel.onArticleSearchBarDeleteClick() },
+        onArticleSearchBarSearchClick = { viewModel.onArticleSearchBarSearchClick() },
         modifier = modifier
     )
 }
