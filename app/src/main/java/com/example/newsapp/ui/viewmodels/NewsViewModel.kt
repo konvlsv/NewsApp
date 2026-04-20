@@ -1,5 +1,9 @@
 package com.example.newsapp.ui.viewmodels
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateSetOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.newsapp.ui.models.ArticleCategory
 import com.example.newsapp.ui.models.ArticleUi
@@ -7,25 +11,43 @@ import com.example.newsapp.ui.models.getMockArticleUiList
 
 class NewsViewModel() : ViewModel() {
 
+    var articleList by mutableStateOf(getMockArticleUiList())
+        private set
 
-    fun getArticles(category: ArticleCategory = ArticleCategory.GENERAL): List<ArticleUi> {
-        return getMockArticleUiList()
+    var articleSearchBarSearchQuery by mutableStateOf("")
+        private set
+
+    var articleSelectedCategory by mutableStateOf(ArticleCategory.GENERAL)
+        private set
+
+    var expandedCardIds = mutableStateSetOf<ArticleUi>()
+
+    fun onArticleSelectedCategoryChange(category: ArticleCategory) {
+        articleSelectedCategory = category
     }
 
-    fun onShareClick(article: ArticleUi) {
-
+    fun onArticleSearchBarValueChange(query: String) {
+        articleSearchBarSearchQuery = query
     }
 
-    fun onOpenInBrowserClick(article: ArticleUi) {
-
+    fun onArticleSearchBarDeleteClick() {
+        articleSearchBarSearchQuery = ""
     }
 
-    fun articleSelectedCategory(): ArticleCategory {
-        return ArticleCategory.GENERAL
+    fun onArticleSearchBarSearchClick(){
+        //todo начать поиск
     }
 
     fun isCardExpanded(article: ArticleUi): Boolean {
-        return false
+         return expandedCardIds.contains(article)
+    }
+
+    fun onExpandOrCollapseCardClick(article: ArticleUi) {
+        if (expandedCardIds.contains(article)) {
+            expandedCardIds.remove(article)
+        }else {
+            expandedCardIds.add(article)
+        }
     }
 
     fun isRefreshing(): Boolean {
@@ -36,27 +58,11 @@ class NewsViewModel() : ViewModel() {
 
     }
 
-    fun onArticleSelectedCategoryChange(category: ArticleCategory) {
+    fun onShareClick(article: ArticleUi) {
 
     }
 
-    fun onExpandOrCollapseCardClick(article: ArticleUi) {
-
-    }
-
-    fun articleSearchBarSearchQuery(): String {
-        return ""
-    }
-
-    fun onArticleSearchBarValueChange(query: String) {
-
-    }
-
-    fun onArticleSearchBarDeleteClick() {
-
-    }
-
-    fun onArticleSearchBarSearchClick(){
+    fun onOpenInBrowserClick(article: ArticleUi) {
 
     }
 }
