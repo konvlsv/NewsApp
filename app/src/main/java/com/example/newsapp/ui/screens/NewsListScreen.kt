@@ -20,19 +20,19 @@ fun NewsListScreen(
     viewModel: NewsViewModel = viewModel()
 ) {
     NewsListContent(
-        articleList = viewModel.getArticles(),
-        onShareClick = { viewModel.onShareClick(it) },
-        onOpenInBrowserClick = { viewModel.onOpenInBrowserClick(it) },
-        articleSelectedCategory = viewModel.articleSelectedCategory(),
-        isCardExpanded = { viewModel.isCardExpanded(it) },
+        articleList = viewModel.articleList,
+        articleSelectedCategory = viewModel.articleSelectedCategory,
+        onArticleSelectedCategoryChange = viewModel::onArticleSelectedCategoryChange,
+        isCardExpanded = viewModel::isCardExpanded,
+        onExpandOrCollapseCardClick = viewModel::onExpandOrCollapseCardClick,
+        onShareClick = viewModel::onShareClick,
+        onOpenInBrowserClick = viewModel::onOpenInBrowserClick,
         isRefreshing = viewModel.isRefreshing(),
-        onRefresh = { viewModel.onRefresh() },
-        onArticleSelectedCategoryChange = { viewModel.onArticleSelectedCategoryChange(it) },
-        onExpandOrCollapseCardClick = { viewModel.onExpandOrCollapseCardClick(it) },
-        articleSearchBarSearchQuery = viewModel.articleSearchBarSearchQuery(),
-        onArticleSearchBarValueChange = { viewModel.onArticleSearchBarValueChange(it) },
-        onArticleSearchBarDeleteClick = { viewModel.onArticleSearchBarDeleteClick() },
-        onArticleSearchBarSearchClick = { viewModel.onArticleSearchBarSearchClick() },
+        onRefresh = viewModel::onRefresh,
+        articleSearchBarSearchQuery = viewModel.articleSearchBarSearchQuery,
+        onArticleSearchBarValueChange = viewModel::onArticleSearchBarValueChange,
+        onArticleSearchBarDeleteClick = viewModel::onArticleSearchBarDeleteClick,
+        onArticleSearchBarSearchClick = viewModel::onArticleSearchBarSearchClick,
         modifier = modifier
     )
 }
