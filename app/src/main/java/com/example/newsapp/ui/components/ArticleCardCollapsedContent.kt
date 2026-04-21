@@ -13,8 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandCircleDown
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -36,7 +37,8 @@ import com.example.newsapp.ui.theme.NewsAppTheme
 @Composable
 fun ArticleCardCollapsedContent(
     articleUi: ArticleUi,
-    onShareClick: (ArticleUi) -> Unit,
+    onExpandOrCollapseCardClick: (ArticleUi) -> Unit,
+    onExpandOrCollapseCardIcon: ImageVector,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -80,10 +82,10 @@ fun ArticleCardCollapsedContent(
                             vertical = AppTheme.dimens.paddingSmall
                         )
                 )
-                IconButton(onClick = { onShareClick(articleUi) }) {
+                IconButton(onClick = { onExpandOrCollapseCardClick(articleUi) }) {
                     Icon(
-                        imageVector = Icons.Default.Share,
-                        contentDescription = stringResource(R.string.share),
+                        imageVector = onExpandOrCollapseCardIcon,
+                        contentDescription = stringResource(R.string.expand_or_collapse_card),
                         tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
                 }
@@ -141,7 +143,8 @@ fun ArticleCardCollapsedPreview() {
     NewsAppTheme() {
         ArticleCardCollapsedContent(
             articleUi = getMockArticleUiList().random(),
-            onShareClick = {},
+            onExpandOrCollapseCardClick = {},
+            onExpandOrCollapseCardIcon = Icons.Default.ExpandCircleDown,
         )
     }
 }

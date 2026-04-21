@@ -8,6 +8,9 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -32,7 +35,6 @@ fun ArticleCard(
         elevation = CardDefaults.cardElevation(
             defaultElevation = AppTheme.dimens.cardElevation
         ),
-        onClick = { onExpandOrCollapseCardClick(article) },
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
@@ -53,12 +55,15 @@ fun ArticleCard(
         Column() {
             ArticleCardCollapsedContent(
                 articleUi = article,
-                onShareClick = onShareClick,
+                onExpandOrCollapseCardClick = onExpandOrCollapseCardClick,
+                onExpandOrCollapseCardIcon = if (isCardExpanded(article)) Icons.Default.KeyboardArrowUp
+                else Icons.Default.KeyboardArrowDown
             )
             if (isCardExpanded(article)) {
                 ArticleCardExpandedContent(
                     articleUi = article,
                     onOpenInBrowserClick = onOpenInBrowserClick,
+                    onShareClick = onShareClick
                 )
             }
         }

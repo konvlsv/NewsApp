@@ -2,17 +2,22 @@ package com.example.newsapp.ui.components
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -27,6 +32,7 @@ import com.example.newsapp.ui.theme.NewsAppTheme
 fun ArticleCardExpandedContent(
     articleUi: ArticleUi,
     onOpenInBrowserClick: (ArticleUi) -> Unit,
+    onShareClick: (ArticleUi) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -44,18 +50,28 @@ fun ArticleCardExpandedContent(
             modifier = Modifier
                 .fillMaxWidth()
         )
-        Button(
-            onClick = { onOpenInBrowserClick(articleUi) },
-            shape = MaterialTheme.shapes.medium,
-            elevation = ButtonDefaults.buttonElevation(AppTheme.dimens.buttonElevation),
+        Row(
             modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(top = AppTheme.dimens.paddingLarge)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = stringResource(R.string.open_in_browser),
-                style = MaterialTheme.typography.labelMedium,
-            )
+            Button(
+                onClick = { onOpenInBrowserClick(articleUi) },
+                shape = MaterialTheme.shapes.medium,
+                elevation = ButtonDefaults.buttonElevation(AppTheme.dimens.buttonElevation),
+                ) {
+                Text(
+                    text = stringResource(R.string.open_in_browser),
+                    style = MaterialTheme.typography.labelMedium,
+                )
+            }
+            IconButton(onClick = { onShareClick(articleUi) }) {
+                Icon(
+                    imageVector = Icons.Default.Share,
+                    contentDescription = stringResource(R.string.share),
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                )
+            }
         }
     }
 }
@@ -78,6 +94,7 @@ fun ArticleCardExpandedContentPreview() {
         ArticleCardExpandedContent(
             articleUi = getMockArticleUiList().random(),
             onOpenInBrowserClick = {},
+            onShareClick = {},
         )
     }
 }
