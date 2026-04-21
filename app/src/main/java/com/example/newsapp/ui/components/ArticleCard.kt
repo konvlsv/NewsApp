@@ -4,9 +4,10 @@ import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -37,25 +38,29 @@ fun ArticleCard(
             containerColor = MaterialTheme.colorScheme.surface,
         ),
         modifier = modifier
-            .animateContentSize()
+            .animateContentSize(
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioNoBouncy,
+                    stiffness = Spring.StiffnessMedium
+                )
+            )
             .fillMaxWidth()
-            .height(IntrinsicSize.Min),
     ) {
         Crossfade(
             targetState = isCardExpanded,
             label = "CardFade"
         ) { expanded: (ArticleUi) -> Boolean ->
-            if (expanded(article)) {
-                ArticleCardExpandedContent(
-                    articleUi = article,
-                    onShareClick = onShareClick,
-                    onOpenInBrowserClick = onOpenInBrowserClick
-                )
-            } else {
+            Column() {
                 ArticleCardCollapsedContent(
                     articleUi = article,
                     onShareClick = onShareClick,
                 )
+                if (expanded(article)) {
+                    ArticleCardExpandedContent(
+                        articleUi = article,
+                        onOpenInBrowserClick = onOpenInBrowserClick,
+                    )
+                }
             }
         }
     }
