@@ -2,12 +2,12 @@ package com.example.newsapp.ui.components
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -45,22 +45,21 @@ fun ArticleCard(
                 )
             )
             .fillMaxWidth()
+            .padding(
+                horizontal = AppTheme.dimens.paddingLarge,
+                vertical = AppTheme.dimens.paddingMedium
+            )
     ) {
-        Crossfade(
-            targetState = isCardExpanded,
-            label = "CardFade"
-        ) { expanded: (ArticleUi) -> Boolean ->
-            Column() {
-                ArticleCardCollapsedContent(
+        Column() {
+            ArticleCardCollapsedContent(
+                articleUi = article,
+                onShareClick = onShareClick,
+            )
+            if (isCardExpanded(article)) {
+                ArticleCardExpandedContent(
                     articleUi = article,
-                    onShareClick = onShareClick,
+                    onOpenInBrowserClick = onOpenInBrowserClick,
                 )
-                if (expanded(article)) {
-                    ArticleCardExpandedContent(
-                        articleUi = article,
-                        onOpenInBrowserClick = onOpenInBrowserClick,
-                    )
-                }
             }
         }
     }

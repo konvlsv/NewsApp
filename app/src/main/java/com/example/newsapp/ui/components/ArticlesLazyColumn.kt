@@ -2,7 +2,6 @@ package com.example.newsapp.ui.components
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -33,7 +32,6 @@ fun ArticlesLazyColumn(
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(AppTheme.dimens.lazyColumnItemsSpacing)
     ) {
         item {
             ArticleSearchBar(
@@ -60,7 +58,6 @@ fun ArticlesLazyColumn(
                 onOpenInBrowserClick = onOpenInBrowserClick,
                 onExpandOrCollapseCardClick = onExpandOrCollapseCardClick,
                 isCardExpanded = isCardExpanded,
-                modifier = Modifier.padding(horizontal = AppTheme.dimens.paddingLarge)
             )
         }
     }

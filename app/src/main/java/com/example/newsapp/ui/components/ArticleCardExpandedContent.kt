@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,6 +47,7 @@ fun ArticleCardExpandedContent(
         Button(
             onClick = { onOpenInBrowserClick(articleUi) },
             shape = MaterialTheme.shapes.medium,
+            elevation = ButtonDefaults.buttonElevation(AppTheme.dimens.buttonElevation),
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(top = AppTheme.dimens.paddingLarge)
