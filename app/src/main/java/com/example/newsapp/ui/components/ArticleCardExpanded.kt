@@ -17,8 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -38,22 +36,13 @@ import com.example.newsapp.ui.theme.AppTheme
 import com.example.newsapp.ui.theme.NewsAppTheme
 
 @Composable
-fun ArticleCardExpanded(
+fun ArticleCardExpandedContent(
     articleUi: ArticleUi,
-    onExpandOrCollapseCardClick: (ArticleUi) -> Unit,
     onShareClick: (ArticleUi) -> Unit,
     onOpenInBrowserClick: (ArticleUi) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Card(
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = AppTheme.dimens.cardElevation
-        ),
-        onClick = { onExpandOrCollapseCardClick(articleUi) },
-        shape = MaterialTheme.shapes.medium,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-        ),
+    Column(
         modifier = modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Min),
@@ -171,18 +160,19 @@ fun ArticleCardExpanded(
     showBackground = true,
     uiMode = UI_MODE_NIGHT_NO,
     name = "DefaultPreviewLight",
+    backgroundColor = 0xFFFFF9EE
 )
 @Preview(
     showBackground = true,
     uiMode = UI_MODE_NIGHT_YES,
     name = "DefaultPreviewDark",
+    backgroundColor = 0xFF15130B
 )
 @Composable
-fun ArticleCardCollapsedExpanded() {
+fun ArticleCardExpandedContentPreview() {
     NewsAppTheme() {
-        ArticleCardExpanded(
+        ArticleCardExpandedContent(
             articleUi = getMockArticleUiList().random(),
-            onExpandOrCollapseCardClick = {},
             onShareClick = {},
             onOpenInBrowserClick = {},
         )
