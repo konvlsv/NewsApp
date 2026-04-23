@@ -4,8 +4,10 @@ import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.newsapp.ui.components.ArticlesLazyColumn
 import com.example.newsapp.ui.models.ArticleCategory
@@ -19,17 +21,19 @@ fun NewsListScreen(
     modifier: Modifier = Modifier,
     viewModel: NewsViewModel = viewModel()
 ) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
     NewsListContent(
-        articleList = viewModel.articleList,
-        articleSelectedCategory = viewModel.articleSelectedCategory,
+        articleList = state.articles,
+        articleSelectedCategory = state.selectedCategory,
+        isCardExpanded = { article -> state.expandedCards.contains(article) },
+        isRefreshing = state.isRefreshing,
+        articleSearchBarSearchQuery = state.searchQuery,
         onArticleSelectedCategoryChange = { viewModel.onArticleSelectedCategoryChange(it) },
-        isCardExpanded = { article -> viewModel.isCardExpanded(article) },
         onExpandOrCollapseCardClick = { viewModel.onExpandOrCollapseCardClick(it) },
         onShareClick = { viewModel.onShareClick(it) },
         onOpenInBrowserClick = { viewModel.onOpenInBrowserClick(it) },
-        isRefreshing = viewModel.isRefreshing,
         onRefresh = { viewModel.onRefresh() },
-        articleSearchBarSearchQuery = viewModel.articleSearchBarSearchQuery,
         onArticleSearchBarValueChange = { viewModel.onArticleSearchBarValueChange(it) },
         onArticleSearchBarDeleteClick = { viewModel.onArticleSearchBarDeleteClick() },
         onArticleSearchBarSearchClick = { viewModel.onArticleSearchBarSearchClick() },

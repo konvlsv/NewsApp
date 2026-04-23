@@ -1,72 +1,65 @@
 package com.example.newsapp.ui.viewmodels
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.mutableStateSetOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.ui.models.ArticleCategory
 import com.example.newsapp.ui.models.ArticleUi
 import com.example.newsapp.ui.models.getMockArticleUiList
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class NewsViewModel() : ViewModel() {
 
-    var articleList: List<ArticleUi> by mutableStateOf(listOf())
-        private set
-
-    var articleSearchBarSearchQuery by mutableStateOf("")
-        private set
-
-    var articleSelectedCategory by mutableStateOf(ArticleCategory.GENERAL)
-        private set
-
-    var expandedCardIds = mutableStateSetOf<ArticleUi>()
-        private set
-
-    var isRefreshing by mutableStateOf(false)
-        private set
+    private val _uiState = MutableStateFlow(NewsUiState())
+    val uiState: StateFlow<NewsUiState> = _uiState.asStateFlow()
 
     init {
         imitateDownload()
     }
 
-    private fun imitateDownload(){
+    private fun imitateDownload() {
         viewModelScope.launch {
-            isRefreshing = true
+            _uiState.update { it.copy(isRefreshing = true) }
             delay(2000)
-            articleList = getMockArticleUiList()
-            isRefreshing = false
+            val mockArticles = getMockArticleUiList()
+            _uiState.update {
+                it.copy(
+                    articles = mockArticles,
+                    isRefreshing = false
+                )
+            }
         }
     }
 
     fun onArticleSelectedCategoryChange(category: ArticleCategory) {
-        articleSelectedCategory = category
+        _uiState.update { it.copy(selectedCategory = category) }
     }
 
     fun onArticleSearchBarValueChange(query: String) {
-        articleSearchBarSearchQuery = query
+        _uiState.update { it.copy(searchQuery = query) }
     }
 
     fun onArticleSearchBarDeleteClick() {
-        articleSearchBarSearchQuery = ""
+        _uiState.update { it.copy(searchQuery = "") }
     }
 
     fun onArticleSearchBarSearchClick() {
         imitateDownload()
     }
 
-    fun isCardExpanded(article: ArticleUi): Boolean {
-        return expandedCardIds.contains(article)
-    }
-
     fun onExpandOrCollapseCardClick(article: ArticleUi) {
-        if (expandedCardIds.contains(article)) {
-            expandedCardIds.remove(article)
-        } else {
-            expandedCardIds.add(article)
+        _uiState.update { currentState ->
+            val newCards = currentState.expandedCards.toMutableSet()
+            if (newCards.contains(article)) {
+                newCards.remove(article)
+            } else {
+                newCards.add(article)
+            }
+            currentState.copy(expandedCards = newCards)
         }
     }
 
@@ -82,3 +75,12 @@ class NewsViewModel() : ViewModel() {
 
     }
 }
+
+data class NewsUiState(
+    val articles: List<ArticleUi> = emptyList(),
+    val searchQuery: String = "",
+    val selectedCategory: ArticleCategory = ArticleCategory.GENERAL,
+    val expandedCards: Set<ArticleUi> = emptySet(),
+    val isRefreshing: Boolean = false,
+    val isError: Boolean = false
+)
