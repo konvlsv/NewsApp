@@ -2,7 +2,7 @@ package com.example.newsapp.ui.models
 
 import kotlin.random.Random
 
-data class ArticleUi(
+data class ArticleDisplayModel(
     val id: String,
     val name: String,
     val author: String,
@@ -14,11 +14,11 @@ data class ArticleUi(
     val urlToImage: String
 )
 
-fun getMockArticleUiList(): List<ArticleUi> {
-    val articles = mutableListOf<ArticleUi>()
+fun getMockArticleUiList(): List<ArticleDisplayModel> {
+    val articles = mutableListOf<ArticleDisplayModel>()
     repeat(100) { index ->
         articles.add(
-            ArticleUi(
+            ArticleDisplayModel(
                 id = index.toString(),
                 name = "Chanel ${generateRandomText(1).removeSuffix(".")}",
                 author = "Author №${index + 1}",

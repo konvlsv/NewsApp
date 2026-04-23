@@ -3,7 +3,7 @@ package com.example.newsapp.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.ui.models.ArticleCategory
-import com.example.newsapp.ui.models.ArticleUi
+import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.models.getMockArticleUiList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -51,7 +51,7 @@ class NewsViewModel() : ViewModel() {
         imitateDownload()
     }
 
-    fun onExpandOrCollapseCardClick(article: ArticleUi) {
+    fun onExpandOrCollapseCardClick(article: ArticleDisplayModel) {
         _uiState.update { currentState ->
             val newCards = currentState.expandedCards.toMutableSet()
             if (newCards.contains(article)) {
@@ -67,20 +67,20 @@ class NewsViewModel() : ViewModel() {
         imitateDownload()
     }
 
-    fun onShareClick(article: ArticleUi) {
+    fun onShareClick(article: ArticleDisplayModel) {
 
     }
 
-    fun onOpenInBrowserClick(article: ArticleUi) {
+    fun onOpenInBrowserClick(article: ArticleDisplayModel) {
 
     }
 }
 
 data class NewsUiState(
-    val articles: List<ArticleUi> = emptyList(),
+    val articles: List<ArticleDisplayModel> = emptyList(),
     val searchQuery: String = "",
     val selectedCategory: ArticleCategory = ArticleCategory.GENERAL,
-    val expandedCards: Set<ArticleUi> = emptySet(),
+    val expandedCards: Set<ArticleDisplayModel> = emptySet(),
     val isRefreshing: Boolean = false,
     val isError: Boolean = false
 )

@@ -10,20 +10,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.newsapp.ui.models.ArticleCategory
-import com.example.newsapp.ui.models.ArticleUi
+import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.models.getMockArticleUiList
 import com.example.newsapp.ui.theme.AppTheme
 import com.example.newsapp.ui.theme.NewsAppTheme
 
 @Composable
 fun ArticlesLazyColumn(
-    articleList: List<ArticleUi>,
-    onShareClick: (ArticleUi) -> Unit,
-    onOpenInBrowserClick: (ArticleUi) -> Unit,
+    articleList: List<ArticleDisplayModel>,
+    onShareClick: (ArticleDisplayModel) -> Unit,
+    onOpenInBrowserClick: (ArticleDisplayModel) -> Unit,
     onArticleSelectedCategoryChange: (ArticleCategory) -> Unit,
-    onExpandOrCollapseCardClick: (ArticleUi) -> Unit,
+    onExpandOrCollapseCardClick: (ArticleDisplayModel) -> Unit,
     articleSelectedCategory: ArticleCategory,
-    isCardExpanded: (ArticleUi) -> Boolean,
+    isCardExpanded: (ArticleDisplayModel) -> Boolean,
     articleSearchBarSearchQuery: String,
     onArticleSearchBarValueChange: (String) -> Unit,
     onArticleSearchBarDeleteClick: () -> Unit,

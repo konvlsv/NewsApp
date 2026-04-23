@@ -29,15 +29,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.newsapp.R
-import com.example.newsapp.ui.models.ArticleUi
+import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.models.getMockArticleUiList
 import com.example.newsapp.ui.theme.AppTheme
 import com.example.newsapp.ui.theme.NewsAppTheme
 
 @Composable
 fun ArticleCardCollapsedContent(
-    articleUi: ArticleUi,
-    onExpandOrCollapseCardClick: (ArticleUi) -> Unit,
+    articleDisplayModel: ArticleDisplayModel,
+    onExpandOrCollapseCardClick: (ArticleDisplayModel) -> Unit,
     onExpandOrCollapseCardIcon: ImageVector,
     modifier: Modifier = Modifier,
 ) {
@@ -67,7 +67,7 @@ fun ArticleCardCollapsedContent(
                     .align(Alignment.TopStart)
             ) {
                 Text(
-                    text = articleUi.name,
+                    text = articleDisplayModel.name,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.headlineSmall,
@@ -82,7 +82,7 @@ fun ArticleCardCollapsedContent(
                             vertical = AppTheme.dimens.paddingSmall
                         )
                 )
-                IconButton(onClick = { onExpandOrCollapseCardClick(articleUi) }) {
+                IconButton(onClick = { onExpandOrCollapseCardClick(articleDisplayModel) }) {
                     Icon(
                         imageVector = onExpandOrCollapseCardIcon,
                         contentDescription = stringResource(R.string.expand_or_collapse_card),
@@ -97,7 +97,7 @@ fun ArticleCardCollapsedContent(
                 .padding(AppTheme.dimens.paddingLarge)
         ) {
             Text(
-                text = articleUi.description,
+                text = articleDisplayModel.description,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -109,7 +109,7 @@ fun ArticleCardCollapsedContent(
                 modifier = Modifier.padding(top = AppTheme.dimens.paddingLarge)
             ) {
                 Text(
-                    text = articleUi.author,
+                    text = articleDisplayModel.author,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.labelMedium,
@@ -117,7 +117,7 @@ fun ArticleCardCollapsedContent(
                     modifier = Modifier.weight(1f),
                 )
                 Text(
-                    text = articleUi.publishedAt,
+                    text = articleDisplayModel.publishedAt,
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -142,7 +142,7 @@ fun ArticleCardCollapsedContent(
 fun ArticleCardCollapsedPreview() {
     NewsAppTheme() {
         ArticleCardCollapsedContent(
-            articleUi = getMockArticleUiList().random(),
+            articleDisplayModel = getMockArticleUiList().random(),
             onExpandOrCollapseCardClick = {},
             onExpandOrCollapseCardIcon = Icons.Default.ExpandCircleDown,
         )

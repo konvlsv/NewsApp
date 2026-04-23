@@ -17,18 +17,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.newsapp.ui.models.ArticleUi
+import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.models.getMockArticleUiList
 import com.example.newsapp.ui.theme.AppTheme
 import com.example.newsapp.ui.theme.NewsAppTheme
 
 @Composable
 fun ArticleCard(
-    article: ArticleUi,
-    isCardExpanded: (ArticleUi) -> Boolean,
-    onShareClick: (ArticleUi) -> Unit,
-    onExpandOrCollapseCardClick: (ArticleUi) -> Unit,
-    onOpenInBrowserClick: (ArticleUi) -> Unit,
+    article: ArticleDisplayModel,
+    isCardExpanded: (ArticleDisplayModel) -> Boolean,
+    onShareClick: (ArticleDisplayModel) -> Unit,
+    onExpandOrCollapseCardClick: (ArticleDisplayModel) -> Unit,
+    onOpenInBrowserClick: (ArticleDisplayModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -54,14 +54,14 @@ fun ArticleCard(
     ) {
         Column() {
             ArticleCardCollapsedContent(
-                articleUi = article,
+                articleDisplayModel = article,
                 onExpandOrCollapseCardClick = onExpandOrCollapseCardClick,
                 onExpandOrCollapseCardIcon = if (isCardExpanded(article)) Icons.Default.KeyboardArrowUp
                 else Icons.Default.KeyboardArrowDown
             )
             if (isCardExpanded(article)) {
                 ArticleCardExpandedContent(
-                    articleUi = article,
+                    articleDisplayModel = article,
                     onOpenInBrowserClick = onOpenInBrowserClick,
                     onShareClick = onShareClick
                 )

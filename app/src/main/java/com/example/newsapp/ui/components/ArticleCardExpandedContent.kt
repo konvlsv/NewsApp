@@ -23,16 +23,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.newsapp.R
-import com.example.newsapp.ui.models.ArticleUi
+import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.models.getMockArticleUiList
 import com.example.newsapp.ui.theme.AppTheme
 import com.example.newsapp.ui.theme.NewsAppTheme
 
 @Composable
 fun ArticleCardExpandedContent(
-    articleUi: ArticleUi,
-    onOpenInBrowserClick: (ArticleUi) -> Unit,
-    onShareClick: (ArticleUi) -> Unit,
+    articleDisplayModel: ArticleDisplayModel,
+    onOpenInBrowserClick: (ArticleDisplayModel) -> Unit,
+    onShareClick: (ArticleDisplayModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -42,7 +42,7 @@ fun ArticleCardExpandedContent(
             .height(IntrinsicSize.Min),
     ) {
         Text(
-            text = articleUi.content,
+            text = articleDisplayModel.content,
             maxLines = 6,
             overflow = TextOverflow.Ellipsis,
             color = MaterialTheme.colorScheme.onSurface,
@@ -56,7 +56,7 @@ fun ArticleCardExpandedContent(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Button(
-                onClick = { onOpenInBrowserClick(articleUi) },
+                onClick = { onOpenInBrowserClick(articleDisplayModel) },
                 shape = MaterialTheme.shapes.medium,
                 elevation = ButtonDefaults.buttonElevation(AppTheme.dimens.buttonElevation),
                 ) {
@@ -65,7 +65,7 @@ fun ArticleCardExpandedContent(
                     style = MaterialTheme.typography.labelMedium,
                 )
             }
-            IconButton(onClick = { onShareClick(articleUi) }) {
+            IconButton(onClick = { onShareClick(articleDisplayModel) }) {
                 Icon(
                     imageVector = Icons.Default.Share,
                     contentDescription = stringResource(R.string.share),
@@ -92,7 +92,7 @@ fun ArticleCardExpandedContent(
 fun ArticleCardExpandedContentPreview() {
     NewsAppTheme() {
         ArticleCardExpandedContent(
-            articleUi = getMockArticleUiList().random(),
+            articleDisplayModel = getMockArticleUiList().random(),
             onOpenInBrowserClick = {},
             onShareClick = {},
         )

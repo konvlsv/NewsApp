@@ -11,7 +11,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.newsapp.ui.components.ArticlesLazyColumn
 import com.example.newsapp.ui.models.ArticleCategory
-import com.example.newsapp.ui.models.ArticleUi
+import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.models.getMockArticleUiList
 import com.example.newsapp.ui.theme.NewsAppTheme
 import com.example.newsapp.ui.viewmodels.NewsViewModel
@@ -43,13 +43,13 @@ fun NewsListScreen(
 
 @Composable
 fun NewsListContent(
-    articleList: List<ArticleUi>,
-    onShareClick: (ArticleUi) -> Unit,
-    onOpenInBrowserClick: (ArticleUi) -> Unit,
+    articleList: List<ArticleDisplayModel>,
+    onShareClick: (ArticleDisplayModel) -> Unit,
+    onOpenInBrowserClick: (ArticleDisplayModel) -> Unit,
     articleSelectedCategory: ArticleCategory,
-    isCardExpanded: (ArticleUi) -> Boolean,
+    isCardExpanded: (ArticleDisplayModel) -> Boolean,
     onArticleSelectedCategoryChange: (ArticleCategory) -> Unit,
-    onExpandOrCollapseCardClick: (ArticleUi) -> Unit,
+    onExpandOrCollapseCardClick: (ArticleDisplayModel) -> Unit,
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
     articleSearchBarSearchQuery: String,
