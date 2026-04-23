@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class NewsViewModel() : ViewModel() {
 
-    var articleList by mutableStateOf(getMockArticleUiList())
+    var articleList: List<ArticleUi> by mutableStateOf(listOf())
         private set
 
     var articleSearchBarSearchQuery by mutableStateOf("")
@@ -28,6 +28,10 @@ class NewsViewModel() : ViewModel() {
 
     var isRefreshing by mutableStateOf(false)
         private set
+
+    init {
+        imitateDownload()
+    }
 
     private fun imitateDownload(){
         viewModelScope.launch {
