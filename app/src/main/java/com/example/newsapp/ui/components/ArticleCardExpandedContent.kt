@@ -30,8 +30,8 @@ import com.example.newsapp.ui.theme.NewsAppTheme
 
 @Composable
 fun ArticleCardExpandedContent(
+    onNavigateToArticleDetails: (ArticleDisplayModel) -> Unit,
     articleDisplayModel: ArticleDisplayModel,
-    onOpenInBrowserClick: (ArticleDisplayModel) -> Unit,
     onShareClick: (ArticleDisplayModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -56,12 +56,12 @@ fun ArticleCardExpandedContent(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Button(
-                onClick = { onOpenInBrowserClick(articleDisplayModel) },
+                onClick = { onNavigateToArticleDetails(articleDisplayModel) },
                 shape = MaterialTheme.shapes.medium,
                 elevation = ButtonDefaults.buttonElevation(AppTheme.dimens.buttonElevation),
-                ) {
+            ) {
                 Text(
-                    text = stringResource(R.string.open_in_browser),
+                    text = stringResource(R.string.open_details),
                     style = MaterialTheme.typography.labelMedium,
                 )
             }
@@ -93,8 +93,8 @@ fun ArticleCardExpandedContentPreview() {
     NewsAppTheme() {
         ArticleCardExpandedContent(
             articleDisplayModel = getMockArticleUiList().random(),
-            onOpenInBrowserClick = {},
             onShareClick = {},
+            onNavigateToArticleDetails = {}
         )
     }
 }

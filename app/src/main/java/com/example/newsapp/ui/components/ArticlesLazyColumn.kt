@@ -17,9 +17,9 @@ import com.example.newsapp.ui.theme.NewsAppTheme
 
 @Composable
 fun ArticlesLazyColumn(
+    onNavigateToArticleDetails: (ArticleDisplayModel) -> Unit,
     articleList: List<ArticleDisplayModel>,
     onShareClick: (ArticleDisplayModel) -> Unit,
-    onOpenInBrowserClick: (ArticleDisplayModel) -> Unit,
     onArticleSelectedCategoryChange: (ArticleCategory) -> Unit,
     onExpandOrCollapseCardClick: (ArticleDisplayModel) -> Unit,
     articleSelectedCategory: ArticleCategory,
@@ -53,9 +53,9 @@ fun ArticlesLazyColumn(
             key = { it.id }
         ) { article ->
             ArticleCard(
+                onNavigateToArticleDetails = onNavigateToArticleDetails,
                 article = article,
                 onShareClick = onShareClick,
-                onOpenInBrowserClick = onOpenInBrowserClick,
                 onExpandOrCollapseCardClick = onExpandOrCollapseCardClick,
                 isCardExpanded = isCardExpanded,
             )
@@ -81,7 +81,6 @@ fun ArticlesLazyColumnPreview() {
         ArticlesLazyColumn(
             articleList = getMockArticleUiList(),
             onShareClick = {},
-            onOpenInBrowserClick = {},
             onArticleSelectedCategoryChange = {},
             onExpandOrCollapseCardClick = {},
             articleSelectedCategory = ArticleCategory.GENERAL,
@@ -89,7 +88,8 @@ fun ArticlesLazyColumnPreview() {
             articleSearchBarSearchQuery = "",
             onArticleSearchBarValueChange = {},
             onArticleSearchBarDeleteClick = {},
-            onArticleSearchBarSearchClick = {}
+            onArticleSearchBarSearchClick = {},
+            onNavigateToArticleDetails = {},
         )
     }
 }

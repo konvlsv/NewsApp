@@ -1,5 +1,6 @@
 package com.example.newsapp.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.ui.models.ArticleCategory
@@ -17,6 +18,9 @@ class NewsViewModel() : ViewModel() {
     private val _uiState = MutableStateFlow(NewsUiState())
     val uiState: StateFlow<NewsUiState> = _uiState.asStateFlow()
 
+    private val _detailsArticle = MutableStateFlow<ArticleDisplayModel?>(null)
+    val detailsArticle: StateFlow<ArticleDisplayModel?> = _detailsArticle.asStateFlow()
+
     init {
         imitateDownload()
     }
@@ -33,6 +37,11 @@ class NewsViewModel() : ViewModel() {
                 )
             }
         }
+    }
+
+    fun setDetailsArticle(article: ArticleDisplayModel) {
+        _detailsArticle.update { article }
+        Log.d("MY_LOG", "setDetailsArticle: $article")
     }
 
     fun onArticleSelectedCategoryChange(category: ArticleCategory) {

@@ -1,7 +1,5 @@
 package com.example.newsapp.ui
 
-import android.content.res.Configuration.UI_MODE_NIGHT_NO
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -15,13 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.newsapp.R
+import com.example.newsapp.ui.screens.ArticleDetailsScreen
 import com.example.newsapp.ui.screens.NewsListScreen
-import com.example.newsapp.ui.theme.NewsAppTheme
 import com.example.newsapp.ui.viewmodels.NewsViewModel
 import kotlinx.serialization.Serializable
 
@@ -37,7 +36,6 @@ sealed interface AppScreens {
 @Composable
 fun NewsApp(
     navController: NavHostController = rememberNavController(),
-    viewModel: NewsViewModel = viewModel()
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
@@ -59,50 +57,25 @@ fun NewsApp(
             )
         },
     ) { innerPadding ->
-        NewsListScreen(
-            modifier = Modifier.padding(innerPadding),
-        )
-    }
-}
-
-@ExperimentalMaterial3Api
-@Preview(
-    showBackground = true,
-    uiMode = UI_MODE_NIGHT_NO,
-    name = "DefaultPreviewLight",
-    backgroundColor = 0xFFFFF9EE
-)
-@Preview(
-    showBackground = true,
-    uiMode = UI_MODE_NIGHT_YES,
-    name = "DefaultPreviewDark",
-    backgroundColor = 0xFF15130B
-)
-@Composable
-fun NewsAppPreview() {
-    NewsAppTheme() {
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
-        Scaffold(
+        val viewModel: NewsViewModel = viewModel<NewsViewModel>()
+        NavHost(
+            navController = navController,
+            startDestination = AppScreens.NewsListScreen,
             modifier = Modifier
                 .fillMaxSize()
-                .nestedScroll(scrollBehavior.nestedScrollConnection),
-            containerColor = MaterialTheme.colorScheme.background,
-            topBar = {
-                TopAppBar(
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        titleContentColor = MaterialTheme.colorScheme.primary,
-                    ),
-                    title = {
-                        Text(stringResource(R.string.app_name))
+                .padding(innerPadding)
+        ) {
+            composable<AppScreens.NewsListScreen> {
+                NewsListScreen(
+                    onNavigateToArticleDetails = {
+                        navController.navigate(AppScreens.ArticleDetailsScreen)
                     },
-                    scrollBehavior = scrollBehavior
+                    viewModel = viewModel
                 )
-            },
-        ) { innerPadding ->
-            NewsListScreen(
-                modifier = Modifier.padding(innerPadding),
-            )
+            }
+            composable<AppScreens.ArticleDetailsScreen> {
+                ArticleDetailsScreen(viewModel = viewModel)
+            }
         }
     }
 }

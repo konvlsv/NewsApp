@@ -2,6 +2,7 @@ package com.example.newsapp.ui.screens
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.util.Log
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,11 +20,17 @@ import com.example.newsapp.ui.viewmodels.NewsViewModel
 @Composable
 fun NewsListScreen(
     modifier: Modifier = Modifier,
-    viewModel: NewsViewModel = viewModel()
+    viewModel: NewsViewModel = viewModel(),
+    onNavigateToArticleDetails: () -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     NewsListContent(
+        onNavigateToArticleDetails = {
+            viewModel.setDetailsArticle(it)
+            onNavigateToArticleDetails()
+            Log.d("MY_LOG", "onNavigateToArticleDetails: $it")
+        },
         articleList = state.articles,
         articleSelectedCategory = state.selectedCategory,
         isCardExpanded = { article -> state.expandedCards.contains(article) },
@@ -32,7 +39,6 @@ fun NewsListScreen(
         onArticleSelectedCategoryChange = { viewModel.onArticleSelectedCategoryChange(it) },
         onExpandOrCollapseCardClick = { viewModel.onExpandOrCollapseCardClick(it) },
         onShareClick = { viewModel.onShareClick(it) },
-        onOpenInBrowserClick = { viewModel.onOpenInBrowserClick(it) },
         onRefresh = { viewModel.onRefresh() },
         onArticleSearchBarValueChange = { viewModel.onArticleSearchBarValueChange(it) },
         onArticleSearchBarDeleteClick = { viewModel.onArticleSearchBarDeleteClick() },
@@ -43,9 +49,9 @@ fun NewsListScreen(
 
 @Composable
 fun NewsListContent(
+    onNavigateToArticleDetails: (ArticleDisplayModel) -> Unit,
     articleList: List<ArticleDisplayModel>,
     onShareClick: (ArticleDisplayModel) -> Unit,
-    onOpenInBrowserClick: (ArticleDisplayModel) -> Unit,
     articleSelectedCategory: ArticleCategory,
     isCardExpanded: (ArticleDisplayModel) -> Boolean,
     onArticleSelectedCategoryChange: (ArticleCategory) -> Unit,
@@ -64,9 +70,9 @@ fun NewsListContent(
         modifier = modifier
     ) {
         ArticlesLazyColumn(
+            onNavigateToArticleDetails = onNavigateToArticleDetails,
             articleList = articleList,
             onShareClick = onShareClick,
-            onOpenInBrowserClick = onOpenInBrowserClick,
             isCardExpanded = isCardExpanded,
             articleSelectedCategory = articleSelectedCategory,
             onArticleSelectedCategoryChange = onArticleSelectedCategoryChange,
@@ -97,7 +103,6 @@ fun NewsListContentPreview() {
         NewsListContent(
             articleList = getMockArticleUiList(),
             onShareClick = {},
-            onOpenInBrowserClick = {},
             articleSelectedCategory = ArticleCategory.GENERAL,
             isCardExpanded = { false },
             isRefreshing = false,
@@ -107,7 +112,8 @@ fun NewsListContentPreview() {
             articleSearchBarSearchQuery = "",
             onArticleSearchBarValueChange = {},
             onArticleSearchBarDeleteClick = {},
-            onArticleSearchBarSearchClick = {}
+            onArticleSearchBarSearchClick = {},
+            onNavigateToArticleDetails = {},
         )
     }
 }
