@@ -42,7 +42,11 @@ fun NewsApp(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             NewsTopAppBar(
-                title = stringResource(R.string.app_name),
+                title = if (canNavigateBack) {
+                    stringResource(R.string.article_details_screen)
+                } else{
+                    stringResource(R.string.news_list_screen)
+                },
                 canNavigateBack = canNavigateBack,
                 navigateUp = { navController.navigateUp() },
                 scrollBehavior = scrollBehavior

@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">NewsApp</string>
+    <string name="news_list_screen">News</string>
+    <string name="article_details_screen">Details</string>
     <string name="open_in_browser">Open in browser</string>
     <string name="open_details">Open details</string>
     <string name="share">Share</string>
