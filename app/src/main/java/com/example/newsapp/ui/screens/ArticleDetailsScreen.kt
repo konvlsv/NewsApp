@@ -1,6 +1,5 @@
 package com.example.newsapp.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -8,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -40,12 +40,13 @@ fun ArticleDetailsScreen(
     modifier: Modifier = Modifier,
     viewModel: NewsViewModel = viewModel()
 ) {
-
     val article by viewModel.detailsArticle.collectAsStateWithLifecycle()
     if (article != null) {
-        Log.d("MY_LOG", "ArticleDetailsScreen: $article")
         Column(
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier
+                .padding(AppTheme.dimens.paddingLarge)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
@@ -60,13 +61,16 @@ fun ArticleDetailsScreen(
             Text(
                 text = article!!.name,
                 style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.padding(top = AppTheme.dimens.paddingLarge)
             )
             Text(
                 text = article!!.description,
                 style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(top = AppTheme.dimens.paddingLarge)
             )
             Row(
                 verticalAlignment = Alignment.Bottom,
+                modifier = Modifier.padding(top = AppTheme.dimens.paddingLarge)
             ) {
                 Text(
                     text = article!!.author,
@@ -83,11 +87,13 @@ fun ArticleDetailsScreen(
             Text(
                 text = article!!.content,
                 style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(top = AppTheme.dimens.paddingLarge)
             )
             Row(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .fillMaxWidth()
+                    .padding(top = AppTheme.dimens.paddingLarge),
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Button(
                     onClick = { },
