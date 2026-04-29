@@ -19,9 +19,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.newsapp.R
 import com.example.newsapp.ui.components.NewsTopAppBar
 import com.example.newsapp.ui.navigation.AppScreens
+import com.example.newsapp.ui.navigation.titleRes
 import com.example.newsapp.ui.screens.ArticleDetailsScreen
 import com.example.newsapp.ui.screens.NewsListScreen
 import com.example.newsapp.ui.viewmodels.NewsViewModel
@@ -42,11 +42,7 @@ fun NewsApp(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             NewsTopAppBar(
-                title = if (canNavigateBack) {
-                    stringResource(R.string.article_details_screen)
-                } else{
-                    stringResource(R.string.news_list_screen)
-                },
+                title = stringResource(backStackEntry?.destination.titleRes),
                 canNavigateBack = canNavigateBack,
                 navigateUp = { navController.navigateUp() },
                 scrollBehavior = scrollBehavior
