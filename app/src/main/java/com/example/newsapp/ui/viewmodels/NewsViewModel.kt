@@ -80,7 +80,7 @@ class NewsViewModel() : ViewModel() {
 
     }
 
-    fun onOpenInBrowserClick(article: ArticleDisplayModel) {
+    fun onOpenInBrowserClick() {
 
     }
 }
