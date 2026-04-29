@@ -21,18 +21,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.newsapp.R
 import com.example.newsapp.ui.components.NewsTopAppBar
+import com.example.newsapp.ui.navigation.AppScreens
 import com.example.newsapp.ui.screens.ArticleDetailsScreen
 import com.example.newsapp.ui.screens.NewsListScreen
 import com.example.newsapp.ui.viewmodels.NewsViewModel
-import kotlinx.serialization.Serializable
-
-sealed interface AppScreens {
-    @Serializable
-    data object NewsListScreen : AppScreens
-
-    @Serializable
-    data object ArticleDetailsScreen : AppScreens
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
