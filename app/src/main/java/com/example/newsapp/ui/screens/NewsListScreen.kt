@@ -34,7 +34,7 @@ fun NewsListScreen(
         articleList = state.articles,
         articleSelectedCategory = state.selectedCategory,
         isCardExpanded = { article -> state.expandedCards.contains(article) },
-        isRefreshing = state.isRefreshing,
+        isRefreshing = state.isLoading,
         articleSearchBarSearchQuery = state.searchQuery,
         onArticleSelectedCategoryChange = { viewModel.onArticleSelectedCategoryChange(it) },
         onExpandOrCollapseCardClick = { viewModel.onExpandOrCollapseCardClick(it) },

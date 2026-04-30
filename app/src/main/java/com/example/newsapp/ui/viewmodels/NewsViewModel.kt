@@ -1,6 +1,5 @@
 package com.example.newsapp.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.ui.models.ArticleCategory
@@ -18,30 +17,26 @@ class NewsViewModel() : ViewModel() {
     private val _uiState = MutableStateFlow(NewsUiState())
     val uiState: StateFlow<NewsUiState> = _uiState.asStateFlow()
 
-    private val _detailsArticle = MutableStateFlow<ArticleDisplayModel?>(null)
-    val detailsArticle: StateFlow<ArticleDisplayModel?> = _detailsArticle.asStateFlow()
-
     init {
         imitateDownload()
     }
 
     private fun imitateDownload() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isRefreshing = true) }
+            _uiState.update { it.copy(isLoading = true) }
             delay(2000)
             val mockArticles = getMockArticleUiList()
             _uiState.update {
                 it.copy(
                     articles = mockArticles,
-                    isRefreshing = false
+                    isLoading = false
                 )
             }
         }
     }
 
     fun setDetailsArticle(article: ArticleDisplayModel) {
-        _detailsArticle.update { article }
-        Log.d("MY_LOG", "setDetailsArticle: $article")
+        _uiState.update { it.copy(detailsArticle = article) }
     }
 
     fun onArticleSelectedCategoryChange(category: ArticleCategory) {
@@ -80,7 +75,7 @@ class NewsViewModel() : ViewModel() {
 
     }
 
-    fun onOpenInBrowserClick() {
+    fun onOpenInBrowserClick(article: ArticleDisplayModel) {
 
     }
 }
@@ -90,6 +85,7 @@ data class NewsUiState(
     val searchQuery: String = "",
     val selectedCategory: ArticleCategory = ArticleCategory.GENERAL,
     val expandedCards: Set<ArticleDisplayModel> = emptySet(),
-    val isRefreshing: Boolean = false,
-    val isError: Boolean = false
+    val isLoading: Boolean = false,
+    val isError: Boolean = false,
+    val detailsArticle: ArticleDisplayModel? = null,
 )

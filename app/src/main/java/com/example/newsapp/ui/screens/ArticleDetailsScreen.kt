@@ -42,12 +42,13 @@ fun ArticleDetailsScreen(
     modifier: Modifier = Modifier,
     viewModel: NewsViewModel = viewModel()
 ) {
-    val article by viewModel.detailsArticle.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val article = uiState.detailsArticle
     article?.let {
         ArticleDetailsContent(
-            article = article!!,
-            onOpenInBrowserClick = { viewModel.onOpenInBrowserClick() },
-            onShareClick = { viewModel.onShareClick(article!!) },
+            article = article,
+            onOpenInBrowserClick = { viewModel.onOpenInBrowserClick(article) },
+            onShareClick = { viewModel.onShareClick(article) },
             modifier = modifier
         )
     }
