@@ -12,6 +12,7 @@ sealed class NewsUiState {
         val selectedCategory: ArticleCategory = ArticleCategory.GENERAL,
         val expandedCards: Set<ArticleDisplayModel> = emptySet(),
         val detailsArticle: ArticleDisplayModel? = null,
+        val isRefreshing: Boolean = false,
     ) : NewsUiState()
 
     data class Error(

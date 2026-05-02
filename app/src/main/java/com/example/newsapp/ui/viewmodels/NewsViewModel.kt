@@ -22,29 +22,6 @@ class NewsViewModel() : ViewModel() {
         imitateDownload()
     }
 
-    private fun imitateDownload() {
-        viewModelScope.launch {
-            _uiState.value = NewsUiState.Loading
-            delay(2000)
-            try {
-                val mockArticles = getMockArticleUiList()
-                val previousSuccess = _uiState.value as? NewsUiState.Success
-
-                _uiState.value = NewsUiState.Success(
-                    articles = mockArticles,
-                    searchQuery = previousSuccess?.searchQuery ?: "",
-                    selectedCategory = previousSuccess?.selectedCategory ?: ArticleCategory.GENERAL,
-                    expandedCards = previousSuccess?.expandedCards ?: emptySet(),
-                    detailsArticle = previousSuccess?.detailsArticle
-                )
-            } catch (e: Exception) {
-                _uiState.value = NewsUiState.Error(
-                    message = e.message ?: "Unknown error"
-                )
-            }
-        }
-    }
-
     fun setDetailsArticle(article: ArticleDisplayModel) {
         _uiState.update { currentState ->
             when (currentState) {
@@ -107,15 +84,59 @@ class NewsViewModel() : ViewModel() {
         }
     }
 
-    fun onRefresh() {
-        imitateDownload()
-    }
-
     fun onShareClick(article: ArticleDisplayModel) {
 
     }
 
     fun onOpenInBrowserClick(article: ArticleDisplayModel) {
 
+    }
+
+    fun onRefresh() {
+        viewModelScope.launch {
+            _uiState.update { state ->
+                (state as? NewsUiState.Success)?.copy(isRefreshing = true) ?: state
+            }
+            try {
+                delay(2000)
+                val newArticles = getMockArticleUiList()
+                _uiState.update { state ->
+                    if (state is NewsUiState.Success) {
+                        state.copy(
+                            articles = newArticles,
+                            isRefreshing = false
+                        )
+                    } else {
+                        state
+                    }
+                }
+            } catch (e: Exception) {
+                _uiState.update { state ->
+                    (state as? NewsUiState.Success)?.copy(isRefreshing = false) ?: state
+                }
+            }
+        }
+    }
+    private fun imitateDownload() {
+        viewModelScope.launch {
+            _uiState.value = NewsUiState.Loading
+            delay(2000)
+            try {
+                val mockArticles = getMockArticleUiList()
+                val previousSuccess = _uiState.value as? NewsUiState.Success
+
+                _uiState.value = NewsUiState.Success(
+                    articles = mockArticles,
+                    searchQuery = previousSuccess?.searchQuery ?: "",
+                    selectedCategory = previousSuccess?.selectedCategory ?: ArticleCategory.GENERAL,
+                    expandedCards = previousSuccess?.expandedCards ?: emptySet(),
+                    detailsArticle = previousSuccess?.detailsArticle
+                )
+            } catch (e: Exception) {
+                _uiState.value = NewsUiState.Error(
+                    message = e.message ?: "Unknown error"
+                )
+            }
+        }
     }
 }
