@@ -9,25 +9,17 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.newsapp.ui.models.ArticleCategory
-import com.example.newsapp.ui.models.ArticleDisplayModel
-import com.example.newsapp.ui.models.getMockArticleUiList
+import com.example.newsapp.ui.events.NewsListEvents
+import com.example.newsapp.ui.events.getMockNewsListEvents
 import com.example.newsapp.ui.theme.AppTheme
 import com.example.newsapp.ui.theme.NewsAppTheme
+import com.example.newsapp.ui.state.NewsUiState
+import com.example.newsapp.ui.state.getMockSuccessNewsUiState
 
 @Composable
 fun ArticlesLazyColumn(
-    onNavigateToArticleDetails: (ArticleDisplayModel) -> Unit,
-    articleList: List<ArticleDisplayModel>,
-    onShareClick: (ArticleDisplayModel) -> Unit,
-    onArticleSelectedCategoryChange: (ArticleCategory) -> Unit,
-    onExpandOrCollapseCardClick: (ArticleDisplayModel) -> Unit,
-    articleSelectedCategory: ArticleCategory,
-    isCardExpanded: (ArticleDisplayModel) -> Boolean,
-    articleSearchBarSearchQuery: String,
-    onArticleSearchBarValueChange: (String) -> Unit,
-    onArticleSearchBarDeleteClick: () -> Unit,
-    onArticleSearchBarSearchClick: () -> Unit,
+    state: NewsUiState.Success,
+    events: NewsListEvents,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -35,29 +27,29 @@ fun ArticlesLazyColumn(
     ) {
         item {
             ArticleSearchBar(
-                articleSearchBarSearchQuery = articleSearchBarSearchQuery,
-                onArticleSearchBarValueChange = onArticleSearchBarValueChange,
-                onArticleSearchBarDeleteClick = onArticleSearchBarDeleteClick,
-                onArticleSearchBarSearchClick = onArticleSearchBarSearchClick,
+                articleSearchBarSearchQuery = state.searchQuery,
+                onArticleSearchBarValueChange = events.onArticleSearchBarValueChange,
+                onArticleSearchBarDeleteClick = events.onArticleSearchBarDeleteClick,
+                onArticleSearchBarSearchClick = events.onArticleSearchBarSearchClick,
                 modifier = Modifier
                     .padding(horizontal = AppTheme.dimens.paddingLarge)
                     .padding(vertical = AppTheme.dimens.paddingLarge)
             )
             ArticlesCategoryLazyRow(
-                articleSelectedCategory = articleSelectedCategory,
-                onArticleSelectedCategoryChange = onArticleSelectedCategoryChange
+                articleSelectedCategory = state.selectedCategory,
+                onArticleSelectedCategoryChange = events.onArticleSelectedCategoryChange
             )
         }
         items(
-            items = articleList,
+            items = state.articles,
             key = { it.id }
         ) { article ->
             ArticleCard(
-                onNavigateToArticleDetails = onNavigateToArticleDetails,
+                onNavigateToArticleDetails = events.onNavigateToArticleDetails,
                 article = article,
-                onShareClick = onShareClick,
-                onExpandOrCollapseCardClick = onExpandOrCollapseCardClick,
-                isCardExpanded = isCardExpanded,
+                onShareClick = events.onShareClick,
+                onExpandOrCollapseCardClick = events.onExpandOrCollapseCardClick,
+                isCardExpanded = { state.expandedCards.contains(it) },
             )
         }
     }
@@ -79,17 +71,8 @@ fun ArticlesLazyColumn(
 fun ArticlesLazyColumnPreview() {
     NewsAppTheme() {
         ArticlesLazyColumn(
-            articleList = getMockArticleUiList(),
-            onShareClick = {},
-            onArticleSelectedCategoryChange = {},
-            onExpandOrCollapseCardClick = {},
-            articleSelectedCategory = ArticleCategory.GENERAL,
-            isCardExpanded = { false },
-            articleSearchBarSearchQuery = "",
-            onArticleSearchBarValueChange = {},
-            onArticleSearchBarDeleteClick = {},
-            onArticleSearchBarSearchClick = {},
-            onNavigateToArticleDetails = {},
+            state = getMockSuccessNewsUiState(),
+            events = getMockNewsListEvents()
         )
     }
 }

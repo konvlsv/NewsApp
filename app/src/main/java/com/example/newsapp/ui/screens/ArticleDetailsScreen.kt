@@ -35,6 +35,7 @@ import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.models.getMockArticleUiList
 import com.example.newsapp.ui.theme.AppTheme
 import com.example.newsapp.ui.theme.NewsAppTheme
+import com.example.newsapp.ui.state.NewsUiState
 import com.example.newsapp.ui.viewmodels.NewsViewModel
 
 @Composable
@@ -43,15 +44,27 @@ fun ArticleDetailsScreen(
     viewModel: NewsViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val article = uiState.detailsArticle
-    article?.let {
-        ArticleDetailsContent(
-            article = article,
-            onOpenInBrowserClick = { viewModel.onOpenInBrowserClick(article) },
-            onShareClick = { viewModel.onShareClick(article) },
-            modifier = modifier
-        )
+
+    when (uiState){
+        is NewsUiState.Success -> {
+            val article = (uiState as NewsUiState.Success).detailsArticle
+            article?.let {
+                ArticleDetailsContent(
+                    article = article,
+                    onOpenInBrowserClick = { viewModel.onOpenInBrowserClick(article) },
+                    onShareClick = { viewModel.onShareClick(article) },
+                    modifier = modifier
+                )
+            }
+        }
+        is NewsUiState.Loading -> {
+
+        }
+        is NewsUiState.Error -> {
+
+        }
     }
+
 }
 
 @Composable

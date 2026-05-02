@@ -24,8 +24,8 @@ import com.example.newsapp.ui.theme.NewsAppTheme
 
 @Composable
 fun ArticleCard(
-    onNavigateToArticleDetails: (ArticleDisplayModel) -> Unit,
     article: ArticleDisplayModel,
+    onNavigateToArticleDetails: (ArticleDisplayModel) -> Unit,
     isCardExpanded: (ArticleDisplayModel) -> Boolean,
     onShareClick: (ArticleDisplayModel) -> Unit,
     onExpandOrCollapseCardClick: (ArticleDisplayModel) -> Unit,
