@@ -32,10 +32,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.newsapp.R
 import com.example.newsapp.ui.models.ArticleDisplayModel
-import com.example.newsapp.ui.models.getMockArticleUiList
+import com.example.newsapp.ui.preview.getMockArticleUiList
+import com.example.newsapp.ui.state.NewsUiState
 import com.example.newsapp.ui.theme.AppTheme
 import com.example.newsapp.ui.theme.NewsAppTheme
-import com.example.newsapp.ui.state.NewsUiState
 import com.example.newsapp.ui.viewmodels.NewsViewModel
 
 @Composable
@@ -45,7 +45,7 @@ fun ArticleDetailsScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    when (uiState){
+    when (uiState) {
         is NewsUiState.Success -> {
             val article = (uiState as NewsUiState.Success).detailsArticle
             article?.let {
@@ -57,9 +57,11 @@ fun ArticleDetailsScreen(
                 )
             }
         }
+
         is NewsUiState.Loading -> {
 
         }
+
         is NewsUiState.Error -> {
 
         }

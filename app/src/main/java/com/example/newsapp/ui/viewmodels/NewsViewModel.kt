@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.ui.models.ArticleCategory
 import com.example.newsapp.ui.models.ArticleDisplayModel
-import com.example.newsapp.ui.models.getMockArticleUiList
+import com.example.newsapp.ui.preview.getMockArticleUiList
 import com.example.newsapp.ui.state.NewsUiState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
