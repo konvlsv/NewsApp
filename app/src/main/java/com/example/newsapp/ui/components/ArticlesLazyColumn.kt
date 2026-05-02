@@ -10,11 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.newsapp.ui.events.NewsListEvents
-import com.example.newsapp.ui.events.getMockNewsListEvents
+import com.example.newsapp.ui.preview.getMockNewsListEvents
+import com.example.newsapp.ui.preview.getMockSuccessNewsUiState
+import com.example.newsapp.ui.state.NewsUiState
 import com.example.newsapp.ui.theme.AppTheme
 import com.example.newsapp.ui.theme.NewsAppTheme
-import com.example.newsapp.ui.state.NewsUiState
-import com.example.newsapp.ui.state.getMockSuccessNewsUiState
 
 @Composable
 fun ArticlesLazyColumn(

@@ -2,7 +2,6 @@ package com.example.newsapp.ui.state
 
 import com.example.newsapp.ui.models.ArticleCategory
 import com.example.newsapp.ui.models.ArticleDisplayModel
-import com.example.newsapp.ui.models.getMockArticleUiList
 
 sealed class NewsUiState {
     object Loading : NewsUiState()
@@ -19,14 +18,4 @@ sealed class NewsUiState {
         val message: String,
         val errorType: ErrorType = ErrorType.GENERIC
     ) : NewsUiState()
-}
-
-fun getMockSuccessNewsUiState(): NewsUiState.Success {
-    return NewsUiState.Success(
-        articles = getMockArticleUiList(),
-        searchQuery = "",
-        selectedCategory = ArticleCategory.GENERAL,
-        expandedCards = emptySet(),
-        detailsArticle = null
-    )
 }

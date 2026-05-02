@@ -18,7 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.newsapp.ui.models.ArticleDisplayModel
-import com.example.newsapp.ui.models.getMockArticleUiList
+import com.example.newsapp.ui.preview.getMockArticleUiList
 import com.example.newsapp.ui.theme.AppTheme
 import com.example.newsapp.ui.theme.NewsAppTheme
 

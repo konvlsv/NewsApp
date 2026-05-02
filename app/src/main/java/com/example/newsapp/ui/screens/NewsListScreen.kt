@@ -12,9 +12,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.newsapp.ui.components.ArticlesLazyColumn
 import com.example.newsapp.ui.events.NewsListEvents
-import com.example.newsapp.ui.events.getMockNewsListEvents
+import com.example.newsapp.ui.preview.getMockNewsListEvents
+import com.example.newsapp.ui.preview.getMockSuccessNewsUiState
 import com.example.newsapp.ui.state.NewsUiState
-import com.example.newsapp.ui.state.getMockSuccessNewsUiState
 import com.example.newsapp.ui.theme.NewsAppTheme
 import com.example.newsapp.ui.viewmodels.NewsViewModel
 
@@ -31,19 +31,25 @@ fun NewsListScreen(
                 viewModel.setDetailsArticle(article)
                 onNavigateToArticleDetails()
             },
-            onArticleSelectedCategoryChange = viewModel::onArticleSelectedCategoryChange,
-            onExpandOrCollapseCardClick = viewModel::onExpandOrCollapseCardClick,
-            onShareClick = viewModel::onShareClick,
-            onRefresh = viewModel::onRefresh,
-            onArticleSearchBarValueChange = viewModel::onArticleSearchBarValueChange,
-            onArticleSearchBarDeleteClick = viewModel::onArticleSearchBarDeleteClick,
-            onArticleSearchBarSearchClick = viewModel::onArticleSearchBarSearchClick,
+            onArticleSelectedCategoryChange = { viewModel.onArticleSelectedCategoryChange(it) },
+            onExpandOrCollapseCardClick = { viewModel.onExpandOrCollapseCardClick(it) },
+            onShareClick = { viewModel.onShareClick(it) },
+            onRefresh = { viewModel.onRefresh() },
+            onArticleSearchBarValueChange = { viewModel.onArticleSearchBarValueChange(it) },
+            onArticleSearchBarDeleteClick = { viewModel.onArticleSearchBarDeleteClick() },
+            onArticleSearchBarSearchClick = { viewModel.onArticleSearchBarSearchClick() },
         )
     }
 
     when (state) {
-        is NewsUiState.Loading -> {}
-        is NewsUiState.Error -> {}
+        is NewsUiState.Loading -> {
+            //todo show loading
+        }
+
+        is NewsUiState.Error -> {
+            //todo show error
+        }
+
         is NewsUiState.Success -> {
             NewsListContent(
                 state = state as NewsUiState.Success,

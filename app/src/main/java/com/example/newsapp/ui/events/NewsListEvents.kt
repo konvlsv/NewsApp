@@ -13,16 +13,3 @@ data class NewsListEvents(
     val onArticleSearchBarDeleteClick: () -> Unit,
     val onArticleSearchBarSearchClick: () -> Unit,
 )
-
-fun getMockNewsListEvents(): NewsListEvents {
-    return NewsListEvents(
-        onNavigateToArticleDetails = {},
-        onArticleSelectedCategoryChange = {},
-        onExpandOrCollapseCardClick = {},
-        onShareClick = {},
-        onRefresh = {},
-        onArticleSearchBarValueChange = {},
-        onArticleSearchBarDeleteClick = {},
-        onArticleSearchBarSearchClick = {},
-    )
-}
