@@ -50,11 +50,11 @@ fun NewsListScreen(
 
     when (state) {
         is NewsUiState.Loading -> {
-            //todo show loading
+            LoadingScreen()
         }
 
         is NewsUiState.Error -> {
-            //todo show error
+            ErrorScreen(message = (state as NewsUiState.Error).message)
         }
 
         is NewsUiState.Success -> {
