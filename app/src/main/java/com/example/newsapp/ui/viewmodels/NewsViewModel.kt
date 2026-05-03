@@ -2,9 +2,10 @@ package com.example.newsapp.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.newsapp.App
+import com.example.newsapp.data.repository.ArticleRepository
 import com.example.newsapp.ui.models.ArticleCategory
 import com.example.newsapp.ui.models.ArticleDisplayModel
-import com.example.newsapp.ui.preview.getMockArticleUiList
 import com.example.newsapp.ui.state.NewsUiState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,13 +14,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class NewsViewModel() : ViewModel() {
+class NewsViewModel(
+    private val repository: ArticleRepository = App.instance.articleRepository
+) : ViewModel() {
 
     private val _uiState: MutableStateFlow<NewsUiState> = MutableStateFlow(NewsUiState.Loading)
     val uiState: StateFlow<NewsUiState> = _uiState.asStateFlow()
 
     init {
-        imitateDownload()
+        loadArticles()
     }
 
     fun setDetailsArticle(article: ArticleDisplayModel) {
@@ -63,7 +66,7 @@ class NewsViewModel() : ViewModel() {
     }
 
     fun onArticleSearchBarSearchClick() {
-        imitateDownload()
+        loadArticles()
     }
 
     fun onExpandOrCollapseCardClick(article: ArticleDisplayModel) {
@@ -94,12 +97,17 @@ class NewsViewModel() : ViewModel() {
 
     fun onRefresh() {
         viewModelScope.launch {
-            _uiState.update { state ->
-                (state as? NewsUiState.Success)?.copy(isRefreshing = true) ?: state
-            }
             try {
+                _uiState.update { state ->
+                    (state as? NewsUiState.Success)?.copy(isRefreshing = true) ?: state
+                }
                 delay(2000)
-                val newArticles = getMockArticleUiList()
+                val previousSuccess = _uiState.value as? NewsUiState.Success
+                val newArticles = repository.getArticles(
+                    query = previousSuccess?.searchQuery ?: "",
+                    category = previousSuccess?.selectedCategory?.name ?: "",
+                    country = "us"
+                ).shuffled()
                 _uiState.update { state ->
                     if (state is NewsUiState.Success) {
                         state.copy(
@@ -117,16 +125,20 @@ class NewsViewModel() : ViewModel() {
             }
         }
     }
-    private fun imitateDownload() {
+    private fun loadArticles() {
         viewModelScope.launch {
             _uiState.value = NewsUiState.Loading
             delay(2000)
             try {
-                val mockArticles = getMockArticleUiList()
+                val newArticles = repository.getArticles(
+                    query = "",
+                    category = "",
+                    country = "us"
+                ).shuffled()
                 val previousSuccess = _uiState.value as? NewsUiState.Success
 
                 _uiState.value = NewsUiState.Success(
-                    articles = mockArticles,
+                    articles = newArticles,
                     searchQuery = previousSuccess?.searchQuery ?: "",
                     selectedCategory = previousSuccess?.selectedCategory ?: ArticleCategory.GENERAL,
                     expandedCards = previousSuccess?.expandedCards ?: emptySet(),

@@ -100,7 +100,7 @@ fun NewsListContent(
             }
             items(
                 items = state.articles,
-                key = { it.id }
+                key = { it.url }
             ) { article ->
                 ArticleCard(
                     onNavigateToArticleDetails = events.onNavigateToArticleDetails,
