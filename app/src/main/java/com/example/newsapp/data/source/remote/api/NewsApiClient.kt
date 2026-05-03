@@ -4,8 +4,8 @@ import com.example.newsapp.data.exception.RemoteException
 import com.example.newsapp.data.source.remote.models.NewsApiResponseDto
 import com.example.newsapp.data.source.remote.models.getMockNewsApiResponse
 
-object NewsApiClient {
-    suspend fun getArticles(
+object NewsApiClient: NewsApi {
+    override suspend fun getArticles(
         query: String,
         category: String,
         country: String,
