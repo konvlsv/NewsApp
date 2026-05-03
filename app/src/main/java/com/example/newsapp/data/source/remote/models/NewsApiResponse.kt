@@ -1,4 +1,4 @@
-package com.example.newsapp.data.source.network.models
+package com.example.newsapp.data.source.remote.models
 
 data class NewsApiResponse(
     val status: String?,

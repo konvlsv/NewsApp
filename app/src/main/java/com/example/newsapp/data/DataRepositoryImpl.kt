@@ -1,19 +1,25 @@
 package com.example.newsapp.data
 
-import com.example.newsapp.data.source.network.NetworkRepository
-import com.example.newsapp.data.source.network.models.NewsApiResponse
+import com.example.newsapp.data.exception.RemoteException
+import com.example.newsapp.data.source.remote.RemoteRepository
+import com.example.newsapp.data.source.remote.models.NewsApiResponse
 import com.example.newsapp.ui.models.ArticleDisplayModel
 
 class DataRepositoryImpl(
-    val networkRepository: NetworkRepository
+    val remoteRepository: RemoteRepository
 ) : DataRepository {
 
     override suspend fun getArticles(
         query: String,
-        category: String
+        category: String,
+        country: String
     ): List<ArticleDisplayModel> {
-        val response = networkRepository.getArticles(query, category)
-        return response.toArticleDisplayModel()
+        return try {
+            val response = remoteRepository.getArticles(query, category, country)
+            response.toArticleDisplayModel()
+        } catch (e: Exception) {
+            throw RemoteException.ParseException()
+        }
     }
 }
 
