@@ -1,9 +1,9 @@
-package com.example.newsapp.data.source.remote.mapper
+package com.example.newsapp.data.mapper
 
 import com.example.newsapp.data.source.remote.models.NewsApiResponseDto
 import com.example.newsapp.ui.models.ArticleDisplayModel
 
-object ArticleRemoteMapper {
+object ArticleMapper {
     fun toDisplayModel(response: NewsApiResponseDto): List<ArticleDisplayModel> {
         return response.articles?.map { apiArticle ->
             ArticleDisplayModel(

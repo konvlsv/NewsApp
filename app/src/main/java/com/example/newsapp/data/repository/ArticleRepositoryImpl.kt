@@ -1,13 +1,13 @@
 package com.example.newsapp.data.repository
 
 import com.example.newsapp.data.exception.RemoteException
-import com.example.newsapp.data.source.remote.mapper.ArticleRemoteMapper
+import com.example.newsapp.data.mapper.ArticleMapper
 import com.example.newsapp.data.source.remote.RemoteDataSource
 import com.example.newsapp.ui.models.ArticleDisplayModel
 
 class ArticleRepositoryImpl(
     val remoteDataSource: RemoteDataSource,
-    val mapper: ArticleRemoteMapper
+    val mapper: ArticleMapper
 ) : ArticleRepository {
 
     override suspend fun getArticles(
