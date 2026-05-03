@@ -1,13 +1,13 @@
 package com.example.newsapp.data.source.remote.models
 
-data class NewsApiResponse(
+data class NewsApiResponseDto(
     val status: String?,
     val totalResults: Int?,
-    val articles: List<Article>?
+    val articles: List<ArticleDto>?
 )
 
-data class Article(
-    val source: Source?,
+data class ArticleDto(
+    val source: SourceDto?,
     val author: String?,
     val title: String?,
     val description: String?,
@@ -17,18 +17,18 @@ data class Article(
     val content: String?
 )
 
-data class Source(
+data class SourceDto(
     val id: String?,
     val name: String?
 )
 
-fun getMockNewsApiResponse(): NewsApiResponse {
-    return NewsApiResponse(
+fun getMockNewsApiResponse(): NewsApiResponseDto {
+    return NewsApiResponseDto(
         status = "ok",
         totalResults = 35,
         articles = listOf(
-            Article(
-                source = Source(id = null, name = "TMZ"),
+            ArticleDto(
+                source = SourceDto(id = null, name = "TMZ"),
                 author = "TMZ Staff",
                 title = "'RHOBH' Kathy Hilton Fighting Injured House Guest Over \$\$\$ Demand - TMZ",
                 description = "'Real Housewives of Beverly Hills' star Kathy Hilton said the house guest suing her over an alleged fall at her Bel Air mansion may have caused her own injuries ... TMZ has learned.",
@@ -37,8 +37,8 @@ fun getMockNewsApiResponse(): NewsApiResponse {
                 publishedAt = "2026-05-02T08:00:11Z",
                 content = "'Real Housewives of Beverly Hills' star Kathy Hilton said the house guest suing her over an alleged fall at her Bel Air mansion may have caused her own injuries ... TMZ has learned."
             ),
-            Article(
-                source = Source(id = "the-washington-post", name = "The Washington Post"),
+            ArticleDto(
+                source = SourceDto(id = "the-washington-post", name = "The Washington Post"),
                 author = "Rachel Roubein, Praveena Somasundaram",
                 title = "Appeals court limits abortion pill access nationwide - The Washington Post",
                 description = "A federal appeals court issued a ruling that would temporarily block people from accessing abortion pills through telehealth providers and via mail.",
@@ -47,8 +47,8 @@ fun getMockNewsApiResponse(): NewsApiResponse {
                 publishedAt = "2026-05-02T03:50:00Z",
                 content = "A federal appeals court is temporarily reinstating a requirement that abortion pills be picked up in person instead of sent through the mail."
             ),
-            Article(
-                source = Source(id = "cbs-news", name = "CBS News"),
+            ArticleDto(
+                source = SourceDto(id = "cbs-news", name = "CBS News"),
                 author = "Tucker Reals, Mark Osborne",
                 title = "Live Updates: Trump \"not satisfied\" with new peace deal offered by Iran - CBS News",
                 description = "Iran said it had offered a new proposal to the U.S. to end the war, as the Strait of Hormuz standoff sends costs soaring around the world.",
@@ -57,8 +57,8 @@ fun getMockNewsApiResponse(): NewsApiResponse {
                 publishedAt = "2026-05-02T02:49:00Z",
                 content = "The U.S. Embassy in Beirut has called on Lebanon's government to further its engagement with Israel."
             ),
-            Article(
-                source = Source(id = null, name = "cleveland.com"),
+            ArticleDto(
+                source = SourceDto(id = null, name = "cleveland.com"),
                 author = "Chris Fedor, cleveland.com",
                 title = "Late Cleveland turnover, improbable 3-pointer send Raptors past Cavs 112-110 in overtime to force Game 7 - Cleveland.com",
                 description = "The Cavs were outlasted by the Raptors, 112-110, in overtime of Game 6 at Scotiabank Arena. The best-of-seven series is tied at 3-3, with the finale Sunday in Cleveland.",
@@ -67,8 +67,8 @@ fun getMockNewsApiResponse(): NewsApiResponse {
                 publishedAt = "2026-05-02T02:44:00Z",
                 content = "The fourth-seeded Cavs were outlasted by the fifth-seeded Toronto Raptors, 112-110, in overtime of Game 6 on Friday night at Scotiabank Arena."
             ),
-            Article(
-                source = Source(id = "the-washington-post", name = "The Washington Post"),
+            ArticleDto(
+                source = SourceDto(id = "the-washington-post", name = "The Washington Post"),
                 author = "Christopher Rowland",
                 title = "FDA expands access to a promising drug for one of the worst cancers - The Washington Post",
                 description = "More patients will be able to take the pill while it is under review, as the agency cited the dire need for a drug to fight one of the most lethal cancers.",
@@ -77,8 +77,8 @@ fun getMockNewsApiResponse(): NewsApiResponse {
                 publishedAt = "2026-05-02T02:41:26Z",
                 content = "The Food and Drug Administration said Friday that it has granted expanded access to a promising pancreatic cancer drug."
             ),
-            Article(
-                source = Source(id = null, name = "WABC-TV"),
+            ArticleDto(
+                source = SourceDto(id = null, name = "WABC-TV"),
                 author = "Eyewitness News",
                 title = "NYC May Day: Protests and rallies take place across five boroughs - ABC7 New York",
                 description = "Hundreds of demonstrators poured into Washington Square Park in Greenwich Village determined to take a stand against large corporations and to stand up for organized labor.",
@@ -87,8 +87,8 @@ fun getMockNewsApiResponse(): NewsApiResponse {
                 publishedAt = "2026-05-02T01:53:16Z",
                 content = "Hundreds of demonstrators poured into Washington Square Park in Greenwich Village, determined to take a stand against large corporations and to stand up for organized labor."
             ),
-            Article(
-                source = Source(id = null, name = "mlive.com"),
+            ArticleDto(
+                source = SourceDto(id = null, name = "mlive.com"),
                 author = "Jacob Richman | jrichman@mlive.com",
                 title = "Pistons fight back from 24 down, force Game 7 vs. Magic with epic comeback - MLive.com",
                 description = "An all-time defensive showing in the second half opened the door for the Pistons to survive another elimination game.",
@@ -97,8 +97,8 @@ fun getMockNewsApiResponse(): NewsApiResponse {
                 publishedAt = "2026-05-02T01:45:00Z",
                 content = "The Detroit Pistons aren't ready to call it a season."
             ),
-            Article(
-                source = Source(id = "the-washington-post", name = "The Washington Post"),
+            ArticleDto(
+                source = SourceDto(id = "the-washington-post", name = "The Washington Post"),
                 author = "Salvador Rizzo, Samuel Oakford",
                 title = "Pirro says video shows moment gunman fired outside correspondents' dinner - The Washington Post",
                 description = "Defense attorneys for the alleged gunman have questioned the evidence in the case.",
@@ -107,8 +107,8 @@ fun getMockNewsApiResponse(): NewsApiResponse {
                 publishedAt = "2026-05-02T01:22:28Z",
                 content = "U.S. Attorney Jeanine Pirro posted video to social media that she said shows the alleged assailant at the White House correspondents dinner."
             ),
-            Article(
-                source = Source(id = "the-wall-street-journal", name = "The Wall Street Journal"),
+            ArticleDto(
+                source = SourceDto(id = "the-wall-street-journal", name = "The Wall Street Journal"),
                 author = "WSJ",
                 title = "Trump Orders the Withdrawal of 5,000 U.S. Troops From Germany - WSJ",
                 description = null,
@@ -117,8 +117,8 @@ fun getMockNewsApiResponse(): NewsApiResponse {
                 publishedAt = "2026-05-02T01:02:00Z",
                 content = null
             ),
-            Article(
-                source = Source(id = null, name = "Deadline"),
+            ArticleDto(
+                source = SourceDto(id = null, name = "Deadline"),
                 author = "Glenn Garner",
                 title = "Jodie Sweetin Received One-Cent Residual Check For 'Full House' - Deadline",
                 description = "How rude! Jodie Sweetin's latest residual check from 'Full House' sure isn't buying her a San Francisco townhouse anytime soon.",
@@ -127,8 +127,8 @@ fun getMockNewsApiResponse(): NewsApiResponse {
                 publishedAt = "2026-05-02T01:02:00Z",
                 content = "Jodie Sweetin recently revealed that she got a one-cent check the other day for Full House residuals."
             ),
-            Article(
-                source = Source(id = "politico", name = "Politico"),
+            ArticleDto(
+                source = SourceDto(id = "politico", name = "Politico"),
                 author = "Kimberly Leonard",
                 title = "'What's a more secure place than The Villages?': Trump finds his people again in Florida - Politico",
                 description = "The event had the feel of a pep rally for the president at a time when his popularity is flagging, even in Florida.",
@@ -137,8 +137,8 @@ fun getMockNewsApiResponse(): NewsApiResponse {
                 publishedAt = "2026-05-02T00:33:50Z",
                 content = "Trump met a roaring, supportive crowd with many still in line outside the charter school where the rally was held."
             ),
-            Article(
-                source = Source(id = "cbs-news", name = "CBS News"),
+            ArticleDto(
+                source = SourceDto(id = "cbs-news", name = "CBS News"),
                 author = "Joe Walsh",
                 title = "Tennessee and Alabama take steps to redraw House maps in wake of Supreme Court ruling - CBS News",
                 description = "The Republican governors of Tennessee and Alabama called state lawmakers into special sessions on Friday.",
@@ -147,8 +147,8 @@ fun getMockNewsApiResponse(): NewsApiResponse {
                 publishedAt = "2026-05-02T00:31:00Z",
                 content = "The Republican governors of Tennessee and Alabama called state lawmakers into special sessions on Friday."
             ),
-            Article(
-                source = Source(id = null, name = "The Advocate"),
+            ArticleDto(
+                source = SourceDto(id = null, name = "The Advocate"),
                 author = "Will Nickel",
                 title = "Post Malone and Jelly Roll's Tiger Stadium concert canceled - The Advocate",
                 description = "The two singers were scheduled to perform at Tiger Stadium on May 23.",
@@ -157,8 +157,8 @@ fun getMockNewsApiResponse(): NewsApiResponse {
                 publishedAt = "2026-05-02T00:23:00Z",
                 content = "Multi-platinum artist Post Malone and three-time Grammy winner Jelly Roll announced that their planned Tiger Stadium concert is canceled."
             ),
-            Article(
-                source = Source(id = "cnn", name = "CNN"),
+            ArticleDto(
+                source = SourceDto(id = "cnn", name = "CNN"),
                 author = "Marnie Hunter",
                 title = "What passengers need to know about Spirit Airlines - CNN",
                 description = "Thousands of Spirit Airlines passengers are facing a chaotic weekend as the budget carrier announced it's halting all flights as of early Saturday.",
@@ -167,8 +167,8 @@ fun getMockNewsApiResponse(): NewsApiResponse {
                 publishedAt = "2026-05-02T00:20:00Z",
                 content = "Thousands of Spirit Airlines passengers are facing a chaotic weekend as the budget carrier announced its halting all flights as of early Saturday."
             ),
-            Article(
-                source = Source(id = null, name = "CNET"),
+            ArticleDto(
+                source = SourceDto(id = null, name = "CNET"),
                 author = "See full bio",
                 title = "Google Photos' New AI Tool Will Help You Picture Yourself in All Your Clothes - CNET",
                 description = "The Google Photos wardrobe feature uses AI to scan your camera roll and create a digital version of your closet.",
@@ -177,8 +177,8 @@ fun getMockNewsApiResponse(): NewsApiResponse {
                 publishedAt = "2026-05-01T22:53:00Z",
                 content = "Google Photos is launching a new AI wardrobe feature that scans your camera roll and creates a digital version of your closet."
             ),
-            Article(
-                source = Source(id = null, name = "SpaceNews"),
+            ArticleDto(
+                source = SourceDto(id = null, name = "SpaceNews"),
                 author = "Jeff Foust",
                 title = "NASA to increase value of CLPS contract to support surge of lunar lander missions - SpaceNews",
                 description = "NASA is planning to increase the total value of a contract for robotic lunar lander missions to support a proposed surge in flights for a moon base.",
@@ -187,8 +187,8 @@ fun getMockNewsApiResponse(): NewsApiResponse {
                 publishedAt = "2026-05-01T22:43:05Z",
                 content = "NASA is planning to increase the total value of a contract for robotic lunar lander missions to support a proposed surge in flights for the agency's moon base plans."
             ),
-            Article(
-                source = Source(id = "ars-technica", name = "Ars Technica"),
+            ArticleDto(
+                source = SourceDto(id = "ars-technica", name = "Ars Technica"),
                 author = "Kyle Orland",
                 title = "Study: AI models that consider user's feeling are more likely to make errors - Ars Technica",
                 description = "Overtuning can cause models to prioritize user satisfaction over truthfulness.",

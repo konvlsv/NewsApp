@@ -1,8 +1,8 @@
-package com.example.newsapp.data
+package com.example.newsapp.data.repository
 
 import com.example.newsapp.ui.models.ArticleDisplayModel
 
-interface DataRepository {
+interface ArticleRepository {
 
     suspend fun getArticles(
         query: String,
