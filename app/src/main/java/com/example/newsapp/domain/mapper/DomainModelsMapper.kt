@@ -3,7 +3,7 @@ package com.example.newsapp.domain.mapper
 import com.example.newsapp.domain.models.ArticleDomainModel
 import com.example.newsapp.ui.models.ArticleDisplayModel
 
-object ArticleMapperDomain {
+object DomainModelsMapper {
     fun toDisplayModels(domainModels: List<ArticleDomainModel>): List<ArticleDisplayModel> {
         return domainModels.map { domainModel ->
             ArticleDisplayModel(

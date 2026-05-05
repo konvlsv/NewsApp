@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.newsapp.App
 import com.example.newsapp.domain.usecase.GetCategoryTopHeadlinesUseCase
 import com.example.newsapp.domain.usecase.SearchTopHeadlinesUseCase
+import com.example.newsapp.ui.mapper.DisplayModelsMapper
 import com.example.newsapp.ui.models.ArticleCategoryDisplayModel
 import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.state.NewsUiState
@@ -17,6 +18,7 @@ import kotlinx.coroutines.launch
 class NewsViewModel(
     val getCategoryTopHeadlinesUseCase: GetCategoryTopHeadlinesUseCase = App.instance.getCategoryTopHeadlinesUseCase,
     val searchTopHeadlinesUseCase: SearchTopHeadlinesUseCase = App.instance.searchTopHeadlinesUseCase,
+    val mapper: DisplayModelsMapper = App.instance.displayModelsMapper
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<NewsUiState> = MutableStateFlow(NewsUiState.Loading)
@@ -104,12 +106,13 @@ class NewsViewModel(
                 }
                 val previousSuccess = _uiState.value as? NewsUiState.Success
                 val newArticles = if (previousSuccess?.searchQuery?.isEmpty() == true) {
-                    getCategoryTopHeadlinesUseCase(ArticleCategoryDisplayModel.GENERAL.name)
+                    getCategoryTopHeadlinesUseCase(mapper.toDomainModel(ArticleCategoryDisplayModel.GENERAL))
                 } else {
                     searchTopHeadlinesUseCase(
                         query = previousSuccess?.searchQuery ?: "",
-                        category = previousSuccess?.selectedCategory?.name
-                            ?: ArticleCategoryDisplayModel.GENERAL.name
+                        category = mapper.toDomainModel(
+                            previousSuccess?.selectedCategory ?: ArticleCategoryDisplayModel.GENERAL
+                        )
                     )
                 }
                 _uiState.update { state ->
@@ -134,13 +137,16 @@ class NewsViewModel(
         viewModelScope.launch {
             _uiState.value = NewsUiState.Loading
             try {
-                val newArticles = getCategoryTopHeadlinesUseCase(ArticleCategoryDisplayModel.GENERAL.name)
+                val newArticles = getCategoryTopHeadlinesUseCase(
+                    mapper.toDomainModel(ArticleCategoryDisplayModel.GENERAL)
+                )
                 val previousSuccess = _uiState.value as? NewsUiState.Success
 
                 _uiState.value = NewsUiState.Success(
                     articles = newArticles,
                     searchQuery = previousSuccess?.searchQuery ?: "",
-                    selectedCategory = previousSuccess?.selectedCategory ?: ArticleCategoryDisplayModel.GENERAL,
+                    selectedCategory = previousSuccess?.selectedCategory
+                        ?: ArticleCategoryDisplayModel.GENERAL,
                     expandedCards = previousSuccess?.expandedCards ?: emptySet(),
                     detailsArticle = previousSuccess?.detailsArticle
                 )
