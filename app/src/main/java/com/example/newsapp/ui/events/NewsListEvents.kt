@@ -1,11 +1,11 @@
 package com.example.newsapp.ui.events
 
-import com.example.newsapp.ui.models.ArticleCategory
+import com.example.newsapp.ui.models.ArticleCategoryDisplayModel
 import com.example.newsapp.ui.models.ArticleDisplayModel
 
 data class NewsListEvents(
     val onNavigateToArticleDetails: (ArticleDisplayModel) -> Unit,
-    val onArticleSelectedCategoryChange: (ArticleCategory) -> Unit,
+    val onArticleSelectedCategoryChange: (ArticleCategoryDisplayModel) -> Unit,
     val onExpandOrCollapseCardClick: (ArticleDisplayModel) -> Unit,
     val onShareClick: (ArticleDisplayModel) -> Unit,
     val onRefresh: () -> Unit,

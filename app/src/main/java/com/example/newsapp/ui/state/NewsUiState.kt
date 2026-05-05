@@ -1,6 +1,6 @@
 package com.example.newsapp.ui.state
 
-import com.example.newsapp.ui.models.ArticleCategory
+import com.example.newsapp.ui.models.ArticleCategoryDisplayModel
 import com.example.newsapp.ui.models.ArticleDisplayModel
 
 sealed class NewsUiState {
@@ -9,7 +9,7 @@ sealed class NewsUiState {
     data class Success(
         val articles: List<ArticleDisplayModel>,
         val searchQuery: String = "",
-        val selectedCategory: ArticleCategory = ArticleCategory.GENERAL,
+        val selectedCategory: ArticleCategoryDisplayModel = ArticleCategoryDisplayModel.GENERAL,
         val expandedCards: Set<ArticleDisplayModel> = emptySet(),
         val detailsArticle: ArticleDisplayModel? = null,
         val isRefreshing: Boolean = false,

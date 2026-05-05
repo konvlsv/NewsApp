@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.newsapp.App
 import com.example.newsapp.domain.usecase.GetCategoryTopHeadlinesUseCase
 import com.example.newsapp.domain.usecase.SearchTopHeadlinesUseCase
-import com.example.newsapp.ui.models.ArticleCategory
+import com.example.newsapp.ui.models.ArticleCategoryDisplayModel
 import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.state.NewsUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,7 +36,7 @@ class NewsViewModel(
         }
     }
 
-    fun onArticleSelectedCategoryChange(category: ArticleCategory) {
+    fun onArticleSelectedCategoryChange(category: ArticleCategoryDisplayModel) {
         _uiState.update { currentState ->
             when (currentState) {
                 is NewsUiState.Success -> currentState.copy(selectedCategory = category)
@@ -104,11 +104,12 @@ class NewsViewModel(
                 }
                 val previousSuccess = _uiState.value as? NewsUiState.Success
                 val newArticles = if (previousSuccess?.searchQuery?.isEmpty() == true) {
-                    getCategoryTopHeadlinesUseCase(ArticleCategory.GENERAL.name)
+                    getCategoryTopHeadlinesUseCase(ArticleCategoryDisplayModel.GENERAL.name)
                 } else {
                     searchTopHeadlinesUseCase(
                         query = previousSuccess?.searchQuery ?: "",
-                        category = previousSuccess?.selectedCategory?.name ?: ""
+                        category = previousSuccess?.selectedCategory?.name
+                            ?: ArticleCategoryDisplayModel.GENERAL.name
                     )
                 }
                 _uiState.update { state ->
@@ -133,13 +134,13 @@ class NewsViewModel(
         viewModelScope.launch {
             _uiState.value = NewsUiState.Loading
             try {
-                val newArticles = getCategoryTopHeadlinesUseCase(ArticleCategory.GENERAL.name)
+                val newArticles = getCategoryTopHeadlinesUseCase(ArticleCategoryDisplayModel.GENERAL.name)
                 val previousSuccess = _uiState.value as? NewsUiState.Success
 
                 _uiState.value = NewsUiState.Success(
                     articles = newArticles,
                     searchQuery = previousSuccess?.searchQuery ?: "",
-                    selectedCategory = previousSuccess?.selectedCategory ?: ArticleCategory.GENERAL,
+                    selectedCategory = previousSuccess?.selectedCategory ?: ArticleCategoryDisplayModel.GENERAL,
                     expandedCards = previousSuccess?.expandedCards ?: emptySet(),
                     detailsArticle = previousSuccess?.detailsArticle
                 )

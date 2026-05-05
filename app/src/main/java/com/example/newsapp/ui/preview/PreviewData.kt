@@ -1,6 +1,6 @@
 package com.example.newsapp.ui.preview
 
-import com.example.newsapp.ui.models.ArticleCategory
+import com.example.newsapp.ui.models.ArticleCategoryDisplayModel
 import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.state.NewsUiState
 import kotlin.random.Random
@@ -9,7 +9,7 @@ fun getMockSuccessNewsUiState(): NewsUiState.Success {
     return NewsUiState.Success(
         articles = getMockArticleUiList(),
         searchQuery = "",
-        selectedCategory = ArticleCategory.GENERAL,
+        selectedCategory = ArticleCategoryDisplayModel.GENERAL,
         expandedCards = emptySet(),
         detailsArticle = null
     )
