@@ -3,11 +3,11 @@ package com.example.newsapp.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.App
-import com.example.newsapp.data.repository.ArticleRepository
+import com.example.newsapp.domain.usecase.GetCategoryTopHeadlinesUseCase
+import com.example.newsapp.domain.usecase.SearchTopHeadlinesUseCase
 import com.example.newsapp.ui.models.ArticleCategory
 import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.state.NewsUiState
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,7 +15,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class NewsViewModel(
-    private val repository: ArticleRepository = App.instance.articleRepository
+    val getCategoryTopHeadlinesUseCase: GetCategoryTopHeadlinesUseCase = App.instance.getCategoryTopHeadlinesUseCase,
+    val searchTopHeadlinesUseCase: SearchTopHeadlinesUseCase = App.instance.searchTopHeadlinesUseCase,
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<NewsUiState> = MutableStateFlow(NewsUiState.Loading)
@@ -66,7 +67,7 @@ class NewsViewModel(
     }
 
     fun onArticleSearchBarSearchClick() {
-        loadArticles()
+        onRefresh()
     }
 
     fun onExpandOrCollapseCardClick(article: ArticleDisplayModel) {
@@ -101,13 +102,15 @@ class NewsViewModel(
                 _uiState.update { state ->
                     (state as? NewsUiState.Success)?.copy(isRefreshing = true) ?: state
                 }
-                delay(2000)
                 val previousSuccess = _uiState.value as? NewsUiState.Success
-                val newArticles = repository.getArticles(
-                    query = previousSuccess?.searchQuery ?: "",
-                    category = previousSuccess?.selectedCategory?.name ?: "",
-                    country = "us"
-                ).shuffled()
+                val newArticles = if (previousSuccess?.searchQuery?.isEmpty() == true) {
+                    getCategoryTopHeadlinesUseCase(ArticleCategory.GENERAL.name)
+                } else {
+                    searchTopHeadlinesUseCase(
+                        query = previousSuccess?.searchQuery ?: "",
+                        category = previousSuccess?.selectedCategory?.name ?: ""
+                    )
+                }
                 _uiState.update { state ->
                     if (state is NewsUiState.Success) {
                         state.copy(
@@ -125,16 +128,12 @@ class NewsViewModel(
             }
         }
     }
+
     private fun loadArticles() {
         viewModelScope.launch {
             _uiState.value = NewsUiState.Loading
-            delay(2000)
             try {
-                val newArticles = repository.getArticles(
-                    query = "",
-                    category = "",
-                    country = "us"
-                ).shuffled()
+                val newArticles = getCategoryTopHeadlinesUseCase(ArticleCategory.GENERAL.name)
                 val previousSuccess = _uiState.value as? NewsUiState.Success
 
                 _uiState.value = NewsUiState.Success(

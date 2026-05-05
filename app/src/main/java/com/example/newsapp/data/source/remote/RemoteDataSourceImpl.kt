@@ -9,13 +9,24 @@ import java.net.SocketTimeoutException
 class RemoteDataSourceImpl(
     val newsApi: NewsApi
 ) : RemoteDataSource {
-    override suspend fun getArticles(
+    override suspend fun searchTopHeadlines(
         query: String,
         category: String,
-        country: String
     ): NewsApiResponseDto {
         return try {
-            newsApi.getArticles(query, category, country)
+            newsApi.searchTopHeadlines(query, category)
+        } catch (e: SocketTimeoutException) {
+            throw RemoteException.TimeoutException()
+        } catch (e: IOException) {
+            throw RemoteException.NoInternetException()
+        } catch (e: Exception) {
+            throw RemoteException.UnknownException(e.message ?: "Unknown error")
+        }
+    }
+
+    override suspend fun getCategoryTopHeadlines(category: String): NewsApiResponseDto {
+        return try {
+            newsApi.getCategoryTopHeadlines(category)
         } catch (e: SocketTimeoutException) {
             throw RemoteException.TimeoutException()
         } catch (e: IOException) {

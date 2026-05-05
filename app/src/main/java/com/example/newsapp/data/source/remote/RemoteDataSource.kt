@@ -4,9 +4,12 @@ import com.example.newsapp.data.source.remote.models.NewsApiResponseDto
 
 interface RemoteDataSource {
 
-    suspend fun getArticles(
+    suspend fun getCategoryTopHeadlines(
+        category: String,
+    ): NewsApiResponseDto
+
+    suspend fun searchTopHeadlines(
         query: String,
         category: String,
-        country: String
     ): NewsApiResponseDto
 }

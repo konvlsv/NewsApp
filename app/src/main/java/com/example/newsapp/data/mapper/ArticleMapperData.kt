@@ -1,12 +1,12 @@
 package com.example.newsapp.data.mapper
 
 import com.example.newsapp.data.source.remote.models.NewsApiResponseDto
-import com.example.newsapp.ui.models.ArticleDisplayModel
+import com.example.newsapp.domain.models.ArticleDomainModel
 
-object ArticleMapper {
-    fun toDisplayModel(response: NewsApiResponseDto): List<ArticleDisplayModel> {
+object ArticleMapperData {
+    fun toDomainModels(response: NewsApiResponseDto): List<ArticleDomainModel> {
         return response.articles?.map { apiArticle ->
-            ArticleDisplayModel(
+            ArticleDomainModel(
                 id = apiArticle.source?.id ?: "",
                 name = apiArticle.source?.name ?: "",
                 author = apiArticle.author ?: "",
