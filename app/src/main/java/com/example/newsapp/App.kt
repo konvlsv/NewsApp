@@ -7,10 +7,8 @@ import com.example.newsapp.data.source.remote.RemoteDataSource
 import com.example.newsapp.data.source.remote.RemoteDataSourceImpl
 import com.example.newsapp.data.source.remote.api.NewsApi
 import com.example.newsapp.data.source.remote.api.NewsApiClient
-import com.example.newsapp.domain.mapper.DomainModelsMapper
 import com.example.newsapp.domain.repository.ArticleRepository
-import com.example.newsapp.domain.usecase.GetCategoryTopHeadlinesUseCase
-import com.example.newsapp.domain.usecase.SearchTopHeadlinesUseCase
+import com.example.newsapp.domain.usecase.GetTopHeadlinesUseCase
 import com.example.newsapp.ui.mapper.DisplayModelsMapper
 
 class App : Application() {
@@ -20,7 +18,6 @@ class App : Application() {
         RemoteDataSourceImpl(newsApi = newsApi)
     }
     private val dataModelsMapper by lazy { DataModelsMapper }
-    private val domainModelsMapper by lazy { DomainModelsMapper }
     val displayModelsMapper by lazy { DisplayModelsMapper }
     private val articleRepository: ArticleRepository by lazy {
         ArticleRepositoryImpl(
@@ -29,17 +26,9 @@ class App : Application() {
         )
     }
 
-    val getCategoryTopHeadlinesUseCase: GetCategoryTopHeadlinesUseCase by lazy {
-        GetCategoryTopHeadlinesUseCase(
+    val getTopHeadlinesUseCase: GetTopHeadlinesUseCase by lazy {
+        GetTopHeadlinesUseCase(
             articleRepository = articleRepository,
-            mapper = domainModelsMapper
-        )
-    }
-
-    val searchTopHeadlinesUseCase: SearchTopHeadlinesUseCase by lazy {
-        SearchTopHeadlinesUseCase(
-            articleRepository = articleRepository,
-            mapper = domainModelsMapper
         )
     }
 

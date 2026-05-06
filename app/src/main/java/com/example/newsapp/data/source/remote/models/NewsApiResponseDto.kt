@@ -108,7 +108,10 @@ fun getMockNewsApiResponse(): NewsApiResponseDto {
                 content = "U.S. Attorney Jeanine Pirro posted video to social media that she said shows the alleged assailant at the White House correspondents dinner."
             ),
             ArticleDto(
-                source = SourceDto(id = "the-wall-street-journal", name = "The Wall Street Journal"),
+                source = SourceDto(
+                    id = "the-wall-street-journal",
+                    name = "The Wall Street Journal"
+                ),
                 author = "WSJ",
                 title = "Trump Orders the Withdrawal of 5,000 U.S. Troops From Germany - WSJ",
                 description = null,

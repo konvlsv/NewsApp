@@ -1,6 +1,6 @@
 package com.example.newsapp.domain.models
 
-enum class ArticleCategoryDomainModel{
+enum class ArticleCategoryDomainModel {
     GENERAL,
     BUSINESS,
     ENTERTAINMENT,

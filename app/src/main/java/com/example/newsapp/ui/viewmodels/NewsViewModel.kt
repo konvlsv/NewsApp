@@ -3,11 +3,11 @@ package com.example.newsapp.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.App
-import com.example.newsapp.domain.usecase.GetCategoryTopHeadlinesUseCase
-import com.example.newsapp.domain.usecase.SearchTopHeadlinesUseCase
+import com.example.newsapp.domain.usecase.GetTopHeadlinesUseCase
 import com.example.newsapp.ui.mapper.DisplayModelsMapper
 import com.example.newsapp.ui.models.ArticleCategoryDisplayModel
 import com.example.newsapp.ui.models.ArticleDisplayModel
+import com.example.newsapp.ui.models.ArticleQueryDisplayModel
 import com.example.newsapp.ui.state.NewsUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,8 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class NewsViewModel(
-    val getCategoryTopHeadlinesUseCase: GetCategoryTopHeadlinesUseCase = App.instance.getCategoryTopHeadlinesUseCase,
-    val searchTopHeadlinesUseCase: SearchTopHeadlinesUseCase = App.instance.searchTopHeadlinesUseCase,
+    val getTopHeadlinesUseCase: GetTopHeadlinesUseCase = App.instance.getTopHeadlinesUseCase,
     val mapper: DisplayModelsMapper = App.instance.displayModelsMapper
 ) : ViewModel() {
 
@@ -25,7 +24,10 @@ class NewsViewModel(
     val uiState: StateFlow<NewsUiState> = _uiState.asStateFlow()
 
     init {
-        loadArticles()
+        _uiState.value = NewsUiState.Loading
+        viewModelScope.launch {
+            loadArticles()
+        }
     }
 
     fun setDetailsArticle(article: ArticleDisplayModel) {
@@ -41,7 +43,12 @@ class NewsViewModel(
     fun onArticleSelectedCategoryChange(category: ArticleCategoryDisplayModel) {
         _uiState.update { currentState ->
             when (currentState) {
-                is NewsUiState.Success -> currentState.copy(selectedCategory = category)
+                is NewsUiState.Success -> currentState.copy(
+                    articleQuery = currentState.articleQuery.copy(
+                        category = category
+                    )
+                )
+
                 is NewsUiState.Loading -> currentState
                 is NewsUiState.Error -> currentState
             }
@@ -51,7 +58,12 @@ class NewsViewModel(
     fun onArticleSearchBarValueChange(query: String) {
         _uiState.update { currentState ->
             when (currentState) {
-                is NewsUiState.Success -> currentState.copy(searchQuery = query)
+                is NewsUiState.Success -> currentState.copy(
+                    articleQuery = currentState.articleQuery.copy(
+                        query = query
+                    )
+                )
+
                 is NewsUiState.Loading -> currentState
                 is NewsUiState.Error -> currentState
             }
@@ -61,15 +73,16 @@ class NewsViewModel(
     fun onArticleSearchBarDeleteClick() {
         _uiState.update { currentState ->
             when (currentState) {
-                is NewsUiState.Success -> currentState.copy(searchQuery = "")
+                is NewsUiState.Success -> currentState.copy(
+                    articleQuery = currentState.articleQuery.copy(
+                        query = ""
+                    )
+                )
+
                 is NewsUiState.Loading -> currentState
                 is NewsUiState.Error -> currentState
             }
         }
-    }
-
-    fun onArticleSearchBarSearchClick() {
-        onRefresh()
     }
 
     fun onExpandOrCollapseCardClick(article: ArticleDisplayModel) {
@@ -98,63 +111,36 @@ class NewsViewModel(
 
     }
 
+    fun onArticleSearchBarSearchClick() {
+        onRefresh()
+    }
+
     fun onRefresh() {
         viewModelScope.launch {
-            try {
-                _uiState.update { state ->
-                    (state as? NewsUiState.Success)?.copy(isRefreshing = true) ?: state
-                }
-                val previousSuccess = _uiState.value as? NewsUiState.Success
-                val newArticles = if (previousSuccess?.searchQuery?.isEmpty() == true) {
-                    getCategoryTopHeadlinesUseCase(mapper.toDomainModel(ArticleCategoryDisplayModel.GENERAL))
-                } else {
-                    searchTopHeadlinesUseCase(
-                        query = previousSuccess?.searchQuery ?: "",
-                        category = mapper.toDomainModel(
-                            previousSuccess?.selectedCategory ?: ArticleCategoryDisplayModel.GENERAL
-                        )
-                    )
-                }
-                _uiState.update { state ->
-                    if (state is NewsUiState.Success) {
-                        state.copy(
-                            articles = newArticles,
-                            isRefreshing = false
-                        )
-                    } else {
-                        state
-                    }
-                }
-            } catch (e: Exception) {
-                _uiState.update { state ->
-                    (state as? NewsUiState.Success)?.copy(isRefreshing = false) ?: state
-                }
-            }
+            loadArticles()
         }
     }
 
-    private fun loadArticles() {
-        viewModelScope.launch {
-            _uiState.value = NewsUiState.Loading
-            try {
-                val newArticles = getCategoryTopHeadlinesUseCase(
-                    mapper.toDomainModel(ArticleCategoryDisplayModel.GENERAL)
+    private suspend fun loadArticles() {
+        try {
+            val previousSuccess = _uiState.value as? NewsUiState.Success
+            val previousQuery = previousSuccess?.articleQuery ?: ArticleQueryDisplayModel()
+            val newArticles = mapper.mapToArticleDisplayModel(
+                getTopHeadlinesUseCase(
+                    mapper.mapToArticleQueryDomainModel(previousQuery)
                 )
-                val previousSuccess = _uiState.value as? NewsUiState.Success
-
-                _uiState.value = NewsUiState.Success(
-                    articles = newArticles,
-                    searchQuery = previousSuccess?.searchQuery ?: "",
-                    selectedCategory = previousSuccess?.selectedCategory
-                        ?: ArticleCategoryDisplayModel.GENERAL,
-                    expandedCards = previousSuccess?.expandedCards ?: emptySet(),
-                    detailsArticle = previousSuccess?.detailsArticle
-                )
-            } catch (e: Exception) {
-                _uiState.value = NewsUiState.Error(
-                    message = e.message ?: "Unknown error"
-                )
-            }
+            )
+            _uiState.value = NewsUiState.Success(
+                articles = newArticles,
+                articleQuery = previousQuery,
+                expandedCards = previousSuccess?.expandedCards ?: emptySet(),
+                detailsArticle = previousSuccess?.detailsArticle,
+                isRefreshing = false
+            )
+        } catch (e: Exception) {
+            _uiState.value = NewsUiState.Error(
+                message = e.message ?: "Unknown error"
+            )
         }
     }
 }

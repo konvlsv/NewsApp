@@ -83,7 +83,7 @@ fun NewsListContent(
         ) {
             item {
                 ArticleSearchBar(
-                    articleSearchBarSearchQuery = state.searchQuery,
+                    articleSearchBarSearchQuery = state.articleQuery.query,
                     onArticleSearchBarValueChange = events.onArticleSearchBarValueChange,
                     onArticleSearchBarDeleteClick = events.onArticleSearchBarDeleteClick,
                     onArticleSearchBarSearchClick = events.onArticleSearchBarSearchClick,
@@ -94,7 +94,7 @@ fun NewsListContent(
             }
             item {
                 ArticlesCategoryLazyRow(
-                    articleSelectedCategory = state.selectedCategory,
+                    articleSelectedCategory = state.articleQuery.category,
                     onArticleSelectedCategoryChange = events.onArticleSelectedCategoryChange
                 )
             }

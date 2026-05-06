@@ -1,12 +1,14 @@
 package com.example.newsapp.data.mapper
 
 import com.example.newsapp.data.source.remote.models.ArticleCategoryRemoteModel
+import com.example.newsapp.data.source.remote.models.ArticleQueryRemoteModel
 import com.example.newsapp.data.source.remote.models.NewsApiResponseDto
 import com.example.newsapp.domain.models.ArticleCategoryDomainModel
 import com.example.newsapp.domain.models.ArticleDomainModel
+import com.example.newsapp.domain.models.ArticleQueryDomainModel
 
 object DataModelsMapper {
-    fun toDomainModels(response: NewsApiResponseDto): List<ArticleDomainModel> {
+    fun mapToArticleDomainModel(response: NewsApiResponseDto): List<ArticleDomainModel> {
         return response.articles?.map { apiArticle ->
             ArticleDomainModel(
                 id = apiArticle.source?.id ?: "",
@@ -22,7 +24,13 @@ object DataModelsMapper {
         } ?: emptyList()
     }
 
-    fun toRemoteModel(articleCategoryDomainModel: ArticleCategoryDomainModel): ArticleCategoryRemoteModel =
+    fun matToArticleQueryRemoteModel(articleQueryDomainModel: ArticleQueryDomainModel): ArticleQueryRemoteModel =
+        ArticleQueryRemoteModel(
+            query = articleQueryDomainModel.query,
+            category = mapToArticleCategoryDomainModel(articleQueryDomainModel.category)
+        )
+
+    private fun mapToArticleCategoryDomainModel(articleCategoryDomainModel: ArticleCategoryDomainModel): ArticleCategoryRemoteModel =
         when (articleCategoryDomainModel) {
             ArticleCategoryDomainModel.GENERAL -> ArticleCategoryRemoteModel.GENERAL
             ArticleCategoryDomainModel.BUSINESS -> ArticleCategoryRemoteModel.BUSINESS
