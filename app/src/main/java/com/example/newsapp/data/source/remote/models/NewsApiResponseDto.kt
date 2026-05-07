@@ -200,6 +200,6 @@ fun getMockNewsApiResponse(): NewsApiResponseDto {
                 publishedAt = "2026-05-01T22:23:36Z",
                 content = null
             )
-        )
+        ).shuffled()
     )
 }
