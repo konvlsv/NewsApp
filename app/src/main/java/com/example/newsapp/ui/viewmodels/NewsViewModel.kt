@@ -10,6 +10,7 @@ import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.models.ArticleQueryDisplayModel
 import com.example.newsapp.ui.state.NewsUiState
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -40,7 +41,7 @@ class NewsViewModel(
                 )
             } else currentState
         }
-        loadArticles()
+        loadArticles(true)
     }
 
     fun onArticleSearchBarValueChange(query: String) {
@@ -52,7 +53,7 @@ class NewsViewModel(
                 )
             } else currentState
         }
-        loadArticles()
+        loadArticles(true)
     }
 
     fun onArticleSearchBarDeleteClick() {
@@ -64,7 +65,7 @@ class NewsViewModel(
                 )
             } else currentState
         }
-        loadArticles()
+        loadArticles(true)
     }
 
     fun onExpandOrCollapseCardClick(article: ArticleDisplayModel) {
@@ -94,7 +95,7 @@ class NewsViewModel(
         loadArticles()
     }
 
-    private fun loadArticles() {
+    private fun loadArticles(withDelay: Boolean = false) {
         fetchJob?.cancel()
         val currentState = _uiState.value
         val currentQuery =
@@ -103,6 +104,7 @@ class NewsViewModel(
             (currentState as? NewsUiState.Success)?.expandedCards ?: emptySet()
         fetchJob = viewModelScope.launch {
             try {
+                if (withDelay) delay(500)
                 val domainQuery = mapper.mapToArticleQueryDomainModel(currentQuery)
                 val articles = getTopHeadlinesUseCase(domainQuery)
                 val displayArticles = mapper.mapToArticleDisplayModel(articles)
@@ -116,9 +118,8 @@ class NewsViewModel(
                     )
                 }
             } catch (e: Exception) {
-                _uiState.value = NewsUiState.Error(
-                    message = e.message ?: "Unknown error"
-                )
+                if (e is kotlinx.coroutines.CancellationException) return@launch
+                _uiState.update { NewsUiState.Error(message = e.message ?: "Unknown error") }
             }
         }
     }
