@@ -18,12 +18,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.example.newsapp.ui.components.NewsTopAppBar
+import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.navigation.AppScreens
 import com.example.newsapp.ui.navigation.titleRes
-import com.example.newsapp.ui.preview.getMockArticleUiList
 import com.example.newsapp.ui.screens.ArticleDetailsScreen
 import com.example.newsapp.ui.screens.NewsListScreen
+import kotlin.reflect.typeOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,12 +60,15 @@ fun NewsApp(
             composable<AppScreens.NewsListScreen> {
                 NewsListScreen(
                     onNavigateToArticleDetails = { article ->
-                        navController.navigate(AppScreens.ArticleDetailsScreen)
+                        navController.navigate(AppScreens.ArticleDetailsScreen(article))
                     },
                 )
             }
-            composable<AppScreens.ArticleDetailsScreen> {
-                ArticleDetailsScreen(getMockArticleUiList().random())
+            composable<AppScreens.ArticleDetailsScreen>(
+                typeMap = mapOf(typeOf<ArticleDisplayModel>() to ArticleDisplayModel.NavigationType)
+            ) { backStackEntry ->
+                val route = backStackEntry.toRoute<AppScreens.ArticleDetailsScreen>()
+                ArticleDetailsScreen(route.article)
             }
         }
     }
