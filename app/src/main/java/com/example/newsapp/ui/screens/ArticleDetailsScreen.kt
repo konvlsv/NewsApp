@@ -20,7 +20,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,45 +27,23 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.newsapp.R
 import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.preview.getMockArticleUiList
-import com.example.newsapp.ui.state.NewsUiState
 import com.example.newsapp.ui.theme.AppTheme
 import com.example.newsapp.ui.theme.NewsAppTheme
-import com.example.newsapp.ui.viewmodels.NewsViewModel
 
 @Composable
 fun ArticleDetailsScreen(
-    modifier: Modifier = Modifier,
-    viewModel: NewsViewModel = viewModel()
+    article: ArticleDisplayModel,
+    modifier: Modifier = Modifier
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    when (uiState) {
-        is NewsUiState.Success -> {
-            val article = (uiState as NewsUiState.Success).detailsArticle
-            article?.let {
-                ArticleDetailsContent(
-                    article = article,
-                    onOpenInBrowserClick = { viewModel.onOpenInBrowserClick(article) },
-                    onShareClick = { viewModel.onShareClick(article) },
-                    modifier = modifier
-                )
-            }
-        }
-
-        is NewsUiState.Loading -> {
-
-        }
-
-        is NewsUiState.Error -> {
-
-        }
-    }
-
+    ArticleDetailsContent(
+        article = article,
+        onOpenInBrowserClick = {},
+        onShareClick = {},
+        modifier = modifier
+    )
 }
 
 @Composable

@@ -12,7 +12,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -22,9 +21,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.newsapp.ui.components.NewsTopAppBar
 import com.example.newsapp.ui.navigation.AppScreens
 import com.example.newsapp.ui.navigation.titleRes
+import com.example.newsapp.ui.preview.getMockArticleUiList
 import com.example.newsapp.ui.screens.ArticleDetailsScreen
 import com.example.newsapp.ui.screens.NewsListScreen
-import com.example.newsapp.ui.viewmodels.NewsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,7 +48,6 @@ fun NewsApp(
             )
         },
     ) { innerPadding ->
-        val viewModel: NewsViewModel = viewModel<NewsViewModel>()
         NavHost(
             navController = navController,
             startDestination = AppScreens.NewsListScreen,
@@ -59,14 +57,13 @@ fun NewsApp(
         ) {
             composable<AppScreens.NewsListScreen> {
                 NewsListScreen(
-                    onNavigateToArticleDetails = {
+                    onNavigateToArticleDetails = { article ->
                         navController.navigate(AppScreens.ArticleDetailsScreen)
                     },
-                    viewModel = viewModel
                 )
             }
             composable<AppScreens.ArticleDetailsScreen> {
-                ArticleDetailsScreen(viewModel = viewModel)
+                ArticleDetailsScreen(getMockArticleUiList().random())
             }
         }
     }
