@@ -10,7 +10,6 @@ fun getMockSuccessNewsUiState(): NewsUiState.Success {
         articles = getMockArticleUiList(),
         articleQuery = ArticleQueryDisplayModel(),
         expandedCards = emptySet(),
-        detailsArticle = null
     )
 }
 

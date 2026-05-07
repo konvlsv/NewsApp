@@ -9,6 +9,7 @@ import com.example.newsapp.ui.models.ArticleCategoryDisplayModel
 import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.models.ArticleQueryDisplayModel
 import com.example.newsapp.ui.state.NewsUiState
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,92 +24,61 @@ class NewsViewModel(
     private val _uiState: MutableStateFlow<NewsUiState> = MutableStateFlow(NewsUiState.Loading)
     val uiState: StateFlow<NewsUiState> = _uiState.asStateFlow()
 
-    init {
-        _uiState.value = NewsUiState.Loading
-        viewModelScope.launch {
-            loadArticles()
-        }
-    }
+    private var fetchJob: Job? = null
 
-    fun setDetailsArticle(article: ArticleDisplayModel) {
-        _uiState.update { currentState ->
-            when (currentState) {
-                is NewsUiState.Success -> currentState.copy(detailsArticle = article)
-                is NewsUiState.Loading -> currentState
-                is NewsUiState.Error -> currentState
-            }
-        }
+    init {
+        _uiState.update { NewsUiState.Loading }
+        loadArticles()
     }
 
     fun onArticleSelectedCategoryChange(category: ArticleCategoryDisplayModel) {
         _uiState.update { currentState ->
-            when (currentState) {
-                is NewsUiState.Success -> currentState.copy(
-                    articleQuery = currentState.articleQuery.copy(
-                        category = category
-                    )
+            if (currentState is NewsUiState.Success) {
+                currentState.copy(
+                    articleQuery = currentState.articleQuery.copy(category = category),
+                    isRefreshing = true
                 )
-
-                is NewsUiState.Loading -> currentState
-                is NewsUiState.Error -> currentState
-            }
+            } else currentState
         }
+        loadArticles()
     }
 
     fun onArticleSearchBarValueChange(query: String) {
         _uiState.update { currentState ->
-            when (currentState) {
-                is NewsUiState.Success -> currentState.copy(
-                    articleQuery = currentState.articleQuery.copy(
-                        query = query
-                    )
+            if (currentState is NewsUiState.Success) {
+                currentState.copy(
+                    articleQuery = currentState.articleQuery.copy(query = query),
+                    isRefreshing = true
                 )
-
-                is NewsUiState.Loading -> currentState
-                is NewsUiState.Error -> currentState
-            }
+            } else currentState
         }
+        loadArticles()
     }
 
     fun onArticleSearchBarDeleteClick() {
         _uiState.update { currentState ->
-            when (currentState) {
-                is NewsUiState.Success -> currentState.copy(
-                    articleQuery = currentState.articleQuery.copy(
-                        query = ""
-                    )
+            if (currentState is NewsUiState.Success) {
+                currentState.copy(
+                    articleQuery = currentState.articleQuery.copy(query = ""),
+                    isRefreshing = true
                 )
-
-                is NewsUiState.Loading -> currentState
-                is NewsUiState.Error -> currentState
-            }
+            } else currentState
         }
+        loadArticles()
     }
 
     fun onExpandOrCollapseCardClick(article: ArticleDisplayModel) {
         _uiState.update { currentState ->
-            when (currentState) {
-                is NewsUiState.Loading -> currentState
-                is NewsUiState.Error -> currentState
-                is NewsUiState.Success -> {
-                    val newCards = currentState.expandedCards.toMutableSet()
-                    if (newCards.contains(article)) {
-                        newCards.remove(article)
-                    } else {
-                        newCards.add(article)
-                    }
-                    currentState.copy(expandedCards = newCards)
+            if (currentState is NewsUiState.Success) {
+                val newCards = currentState.expandedCards.toMutableSet()
+                if (newCards.contains(article)) {
+                    newCards.remove(article)
+                } else {
+                    newCards.add(article)
                 }
-            }
+                currentState.copy(expandedCards = newCards)
+            } else currentState
         }
-    }
-
-    fun onShareClick(article: ArticleDisplayModel) {
-
-    }
-
-    fun onOpenInBrowserClick(article: ArticleDisplayModel) {
-
     }
 
     fun onArticleSearchBarSearchClick() {
@@ -116,31 +86,40 @@ class NewsViewModel(
     }
 
     fun onRefresh() {
-        viewModelScope.launch {
-            loadArticles()
+        _uiState.update { currentState ->
+            if (currentState is NewsUiState.Success) {
+                currentState.copy(isRefreshing = true)
+            } else currentState
         }
+        loadArticles()
     }
 
-    private suspend fun loadArticles() {
-        try {
-            val previousSuccess = _uiState.value as? NewsUiState.Success
-            val previousQuery = previousSuccess?.articleQuery ?: ArticleQueryDisplayModel()
-            val newArticles = mapper.mapToArticleDisplayModel(
-                getTopHeadlinesUseCase(
-                    mapper.mapToArticleQueryDomainModel(previousQuery)
+    private fun loadArticles() {
+        fetchJob?.cancel()
+        val currentState = _uiState.value
+        val currentQuery =
+            (currentState as? NewsUiState.Success)?.articleQuery ?: ArticleQueryDisplayModel()
+        val currentExpandedCards =
+            (currentState as? NewsUiState.Success)?.expandedCards ?: emptySet()
+        fetchJob = viewModelScope.launch {
+            try {
+                val domainQuery = mapper.mapToArticleQueryDomainModel(currentQuery)
+                val articles = getTopHeadlinesUseCase(domainQuery)
+                val displayArticles = mapper.mapToArticleDisplayModel(articles)
+
+                _uiState.update {
+                    NewsUiState.Success(
+                        articles = displayArticles,
+                        articleQuery = currentQuery,
+                        expandedCards = currentExpandedCards,
+                        isRefreshing = false
+                    )
+                }
+            } catch (e: Exception) {
+                _uiState.value = NewsUiState.Error(
+                    message = e.message ?: "Unknown error"
                 )
-            )
-            _uiState.value = NewsUiState.Success(
-                articles = newArticles,
-                articleQuery = previousQuery,
-                expandedCards = previousSuccess?.expandedCards ?: emptySet(),
-                detailsArticle = previousSuccess?.detailsArticle,
-                isRefreshing = false
-            )
-        } catch (e: Exception) {
-            _uiState.value = NewsUiState.Error(
-                message = e.message ?: "Unknown error"
-            )
+            }
         }
     }
 }

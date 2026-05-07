@@ -18,6 +18,7 @@ import com.example.newsapp.ui.components.ArticleCard
 import com.example.newsapp.ui.components.ArticleSearchBar
 import com.example.newsapp.ui.components.ArticlesCategoryLazyRow
 import com.example.newsapp.ui.events.NewsListEvents
+import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.preview.getMockNewsListEvents
 import com.example.newsapp.ui.preview.getMockSuccessNewsUiState
 import com.example.newsapp.ui.state.NewsUiState
@@ -29,18 +30,15 @@ import com.example.newsapp.ui.viewmodels.NewsViewModel
 fun NewsListScreen(
     modifier: Modifier = Modifier,
     viewModel: NewsViewModel = viewModel(),
-    onNavigateToArticleDetails: () -> Unit,
+    onNavigateToArticleDetails: (ArticleDisplayModel) -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val events = remember {
         NewsListEvents(
-            onNavigateToArticleDetails = { article ->
-                viewModel.setDetailsArticle(article)
-                onNavigateToArticleDetails()
-            },
+            onNavigateToArticleDetails = { article -> onNavigateToArticleDetails(article) },
             onArticleSelectedCategoryChange = { viewModel.onArticleSelectedCategoryChange(it) },
             onExpandOrCollapseCardClick = { viewModel.onExpandOrCollapseCardClick(it) },
-            onShareClick = { viewModel.onShareClick(it) },
+            onShareClick = { onNavigateToArticleDetails(it) },
             onRefresh = { viewModel.onRefresh() },
             onArticleSearchBarValueChange = { viewModel.onArticleSearchBarValueChange(it) },
             onArticleSearchBarDeleteClick = { viewModel.onArticleSearchBarDeleteClick() },

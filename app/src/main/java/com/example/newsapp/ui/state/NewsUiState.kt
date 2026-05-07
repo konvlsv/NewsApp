@@ -10,7 +10,6 @@ sealed class NewsUiState {
         val articles: List<ArticleDisplayModel>,
         val articleQuery: ArticleQueryDisplayModel = ArticleQueryDisplayModel(),
         val expandedCards: Set<ArticleDisplayModel> = emptySet(),
-        val detailsArticle: ArticleDisplayModel? = null,
         val isRefreshing: Boolean = false,
     ) : NewsUiState()
 
