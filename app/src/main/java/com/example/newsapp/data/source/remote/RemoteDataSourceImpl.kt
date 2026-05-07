@@ -18,6 +18,7 @@ class RemoteDataSourceImpl(
         } catch (e: IOException) {
             throw RemoteException.NoInternetException()
         } catch (e: Exception) {
+            if (e is kotlinx.coroutines.CancellationException) throw e
             throw RemoteException.UnknownException(e.message ?: "Unknown error")
         }
     }

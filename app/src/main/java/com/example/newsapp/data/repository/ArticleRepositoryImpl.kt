@@ -17,6 +17,7 @@ class ArticleRepositoryImpl(
             val response = remoteDataSource.getTopHeadlines(remoteQuery)
             mapper.mapToArticleDomainModel(response)
         } catch (e: Exception) {
+            if (e is kotlinx.coroutines.CancellationException) throw e
             throw RemoteException.ParseException()
         }
     }

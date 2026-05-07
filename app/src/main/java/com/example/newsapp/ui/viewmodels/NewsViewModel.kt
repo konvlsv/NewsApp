@@ -118,7 +118,9 @@ class NewsViewModel(
                     )
                 }
             } catch (e: Exception) {
-                if (e is kotlinx.coroutines.CancellationException) return@launch
+                if (e is kotlinx.coroutines.CancellationException) {
+                    return@launch
+                }
                 _uiState.update { NewsUiState.Error(message = e.message ?: "Unknown error") }
             }
         }
