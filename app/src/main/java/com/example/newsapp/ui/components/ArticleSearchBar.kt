@@ -49,7 +49,11 @@ fun ArticleSearchBar(
         },
         trailingIcon = {
             if (articleSearchBarSearchQuery.isNotEmpty()) {
-                IconButton(onClick = { onArticleSearchBarDeleteClick() }) {
+                IconButton(onClick = {
+                    onArticleSearchBarDeleteClick()
+                    focusManager.clearFocus()
+                    keyboardController?.hide()
+                }) {
                     Icon(Icons.Default.Clear, contentDescription = stringResource(R.string.clear))
                 }
             }
