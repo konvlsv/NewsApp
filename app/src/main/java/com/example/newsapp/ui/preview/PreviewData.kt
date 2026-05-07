@@ -25,7 +25,7 @@ fun getMockArticleUiList(): List<ArticleDisplayModel> {
                 description = generateRandomText(Random.nextInt(15, 25)),
                 publishedAt = "12.04.2024",
                 title = generateRandomText(Random.nextInt(3, 7)),
-                url = "https://example.com",
+                url = "https://example.com/$index",
                 urlToImage = "https://picsum.photos/seed/${index}/400/300"
             )
         )
