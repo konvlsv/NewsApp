@@ -3,11 +3,13 @@ package com.example.newsapp.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.App
+import com.example.newsapp.domain.exception.DomainException
 import com.example.newsapp.domain.usecase.GetTopHeadlinesUseCase
 import com.example.newsapp.ui.mapper.DisplayModelsMapper
 import com.example.newsapp.ui.models.ArticleCategoryDisplayModel
 import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.models.ArticleQueryDisplayModel
+import com.example.newsapp.ui.state.ErrorType
 import com.example.newsapp.ui.state.NewsUiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -16,6 +18,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 
 class NewsViewModel(
     val getTopHeadlinesUseCase: GetTopHeadlinesUseCase = App.instance.getTopHeadlinesUseCase,
@@ -118,10 +121,17 @@ class NewsViewModel(
                     )
                 }
             } catch (e: Exception) {
-                if (e is kotlinx.coroutines.CancellationException) {
-                    return@launch
+                if (e is CancellationException) return@launch
+                val errorType = when (e) {
+                    is DomainException.ServerException -> ErrorType.SERVER
+                    is DomainException.ParseException -> ErrorType.PARSING
+                    is DomainException.NetworkException -> ErrorType.NETWORK
+                    is DomainException.TimeoutException -> ErrorType.NETWORK
+                    else -> ErrorType.GENERIC
                 }
-                _uiState.update { NewsUiState.Error(message = e.message ?: "Unknown error") }
+                _uiState.update {
+                    NewsUiState.Error(message = e.message ?: "Unknown error", errorType = errorType)
+                }
             }
         }
     }
