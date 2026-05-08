@@ -79,7 +79,7 @@ fun NewsListContent(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
         ) {
-            item {
+            item(key = "search_bar") {
                 ArticleSearchBar(
                     articleSearchBarSearchQuery = state.articleQuery.query,
                     onArticleSearchBarValueChange = events.onArticleSearchBarValueChange,
@@ -90,7 +90,7 @@ fun NewsListContent(
                         .padding(vertical = AppTheme.dimens.paddingLarge)
                 )
             }
-            item {
+            item(key = "categories") {
                 ArticlesCategoryLazyRow(
                     articleSelectedCategory = state.articleQuery.category,
                     onArticleSelectedCategoryChange = events.onArticleSelectedCategoryChange

@@ -29,7 +29,10 @@ fun ArticlesCategoryLazyRow(
         horizontalArrangement = Arrangement.spacedBy(AppTheme.dimens.paddingMedium),
         modifier = modifier,
     ) {
-        items(ArticleCategoryDisplayModel.entries) { category ->
+        items(
+            items = ArticleCategoryDisplayModel.entries,
+            key = { it.name }
+        ) { category ->
             FilterChip(
                 selected = articleSelectedCategory == category,
                 onClick = { onArticleSelectedCategoryChange(category) },
