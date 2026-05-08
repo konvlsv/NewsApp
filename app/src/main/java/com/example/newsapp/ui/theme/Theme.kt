@@ -93,7 +93,6 @@ private val DarkColors = darkColorScheme(
 @Composable
 fun NewsAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // 1. По умолчанию выключаем динамические цвета, чтобы видеть свои
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
@@ -107,20 +106,18 @@ fun NewsAppTheme(
         else -> LightColors
     }
 
-    // 2. Обязательно оборачиваем в CompositionLocalProvider для работы Dimens
     CompositionLocalProvider(
         LocalDimens provides AppDimens()
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
-            typography = typography, // Убедитесь, что это ваша переменная
-            shapes = shapes,         // Убедитесь, что это ваша переменная
+            typography = typography,
+            shapes = shapes,
             content = content
         )
     }
 }
 
-// Объект для доступа к размерам
 object AppTheme {
     val dimens: AppDimens
         @Composable
