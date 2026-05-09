@@ -2,9 +2,9 @@ package com.example.newsapp.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -37,6 +37,7 @@ import com.example.newsapp.ui.theme.NewsAppTheme
 @Composable
 fun ArticleDetailsScreen(
     article: ArticleDisplayModel,
+    onShareClick: (ArticleDisplayModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val uriHandler = LocalUriHandler.current
@@ -45,7 +46,9 @@ fun ArticleDetailsScreen(
         onOpenInBrowserClick = {
             uriHandler.openUri(article.url)
         },
-        onShareClick = {},
+        onShareClick = {
+            onShareClick(article)
+        },
         modifier = modifier
     )
 }

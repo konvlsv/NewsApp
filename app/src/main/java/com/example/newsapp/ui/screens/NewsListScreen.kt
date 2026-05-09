@@ -31,6 +31,7 @@ fun NewsListScreen(
     modifier: Modifier = Modifier,
     viewModel: NewsViewModel = viewModel(),
     onNavigateToArticleDetails: (ArticleDisplayModel) -> Unit,
+    onShareClick: (ArticleDisplayModel) -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val events = remember {
@@ -38,7 +39,7 @@ fun NewsListScreen(
             onNavigateToArticleDetails = { article -> onNavigateToArticleDetails(article) },
             onArticleSelectedCategoryChange = { viewModel.onArticleSelectedCategoryChange(it) },
             onExpandOrCollapseCardClick = { viewModel.onExpandOrCollapseCardClick(it) },
-            onShareClick = { onNavigateToArticleDetails(it) },
+            onShareClick = { onShareClick(it) },
             onRefresh = { viewModel.onRefresh() },
             onArticleSearchBarValueChange = { viewModel.onArticleSearchBarValueChange(it) },
             onArticleSearchBarDeleteClick = { viewModel.onArticleSearchBarDeleteClick() },
