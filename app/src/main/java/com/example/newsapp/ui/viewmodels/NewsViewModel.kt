@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.newsapp.App
 import com.example.newsapp.domain.exception.DomainException
 import com.example.newsapp.domain.usecase.GetTopHeadlinesUseCase
+import com.example.newsapp.domain.usecase.SaveDetailArticleUseCase
 import com.example.newsapp.ui.mapper.DisplayModelsMapper
 import com.example.newsapp.ui.models.ArticleCategoryDisplayModel
 import com.example.newsapp.ui.models.ArticleDisplayModel
@@ -22,8 +23,9 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
 class NewsViewModel(
-    val getTopHeadlinesUseCase: GetTopHeadlinesUseCase = App.instance.getTopHeadlinesUseCase,
-    val mapper: DisplayModelsMapper = App.instance.displayModelsMapper
+    private val getTopHeadlinesUseCase: GetTopHeadlinesUseCase = App.instance.getTopHeadlinesUseCase,
+    private val mapper: DisplayModelsMapper = App.instance.displayModelsMapper,
+    private val saveDetailArticleUseCase: SaveDetailArticleUseCase = App.instance.saveDetailArticleUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState<NewsScreenData>>(UiState.Loading())
@@ -34,6 +36,17 @@ class NewsViewModel(
     init {
         _uiState.update { UiState.Loading() }
         loadArticles()
+    }
+
+    fun saveDetailArticle(article: ArticleDisplayModel){
+        viewModelScope.launch {
+            try {
+                val domainArticle = mapper.mapToArticleDomainModel(article)
+                saveDetailArticleUseCase(domainArticle)
+            }catch (e: Exception) {
+                if (e is CancellationException) return@launch
+            }
+        }
     }
 
     fun onArticleSelectedCategoryChange(category: ArticleCategoryDisplayModel) {

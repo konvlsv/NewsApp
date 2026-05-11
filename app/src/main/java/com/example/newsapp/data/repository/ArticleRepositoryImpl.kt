@@ -2,6 +2,7 @@ package com.example.newsapp.data.repository
 
 import com.example.newsapp.data.exception.RemoteException
 import com.example.newsapp.data.mapper.DataModelsMapper
+import com.example.newsapp.data.source.local.LocalDataSource
 import com.example.newsapp.data.source.remote.RemoteDataSource
 import com.example.newsapp.domain.exception.DomainException
 import com.example.newsapp.domain.models.ArticleDomainModel
@@ -11,6 +12,7 @@ import kotlin.coroutines.cancellation.CancellationException
 
 class ArticleRepositoryImpl(
     val remoteDataSource: RemoteDataSource,
+    val localDataSource: LocalDataSource,
     val mapper: DataModelsMapper
 ) : ArticleRepository {
     override suspend fun getTopHeadlines(query: ArticleQueryDomainModel): List<ArticleDomainModel> {
@@ -26,10 +28,20 @@ class ArticleRepositoryImpl(
                 is RemoteException.TimeoutException -> DomainException.TimeoutException()
                 is RemoteException.ServerException -> DomainException.ServerException()
                 is RemoteException.ParseException -> DomainException.ParseException()
-                is RemoteException.UnknownException -> DomainException.UnknownException(e.message ?: "")
+                is RemoteException.UnknownException -> DomainException.UnknownException(
+                    e.message ?: ""
+                )
             }
         } catch (e: Exception) {
             throw DomainException.UnknownException(e.message ?: "")
         }
+    }
+
+    override suspend fun saveDetailArticle(article: ArticleDomainModel) {
+        localDataSource.saveDetailArticle(mapper.mapToArticleLocalModel(article))
+    }
+
+    override suspend fun getDetailArticle(): ArticleDomainModel {
+        return mapper.mapToArticleDomainModel(localDataSource.getDetailArticle())
     }
 }

@@ -3,12 +3,17 @@ package com.example.newsapp
 import android.app.Application
 import com.example.newsapp.data.mapper.DataModelsMapper
 import com.example.newsapp.data.repository.ArticleRepositoryImpl
+import com.example.newsapp.data.source.local.LocalDataSource
+import com.example.newsapp.data.source.local.LocalDataSourceImpl
+import com.example.newsapp.data.source.local.db.ArticleDao
 import com.example.newsapp.data.source.remote.RemoteDataSource
 import com.example.newsapp.data.source.remote.RemoteDataSourceImpl
 import com.example.newsapp.data.source.remote.api.NewsApi
 import com.example.newsapp.data.source.remote.api.NewsApiClient
 import com.example.newsapp.domain.repository.ArticleRepository
+import com.example.newsapp.domain.usecase.GetDetailArticleUseCase
 import com.example.newsapp.domain.usecase.GetTopHeadlinesUseCase
+import com.example.newsapp.domain.usecase.SaveDetailArticleUseCase
 import com.example.newsapp.ui.mapper.DisplayModelsMapper
 
 class App : Application() {
@@ -17,17 +22,34 @@ class App : Application() {
     private val remoteDataSource: RemoteDataSource by lazy {
         RemoteDataSourceImpl(newsApi = newsApi)
     }
+    private val articleDao: ArticleDao by lazy { ArticleDao }
+    private val localDataSource: LocalDataSource by lazy {
+        LocalDataSourceImpl(articleDao = articleDao)
+    }
     private val dataModelsMapper by lazy { DataModelsMapper }
     val displayModelsMapper by lazy { DisplayModelsMapper }
     private val articleRepository: ArticleRepository by lazy {
         ArticleRepositoryImpl(
             remoteDataSource = remoteDataSource,
+            localDataSource = localDataSource,
             mapper = dataModelsMapper
         )
     }
 
     val getTopHeadlinesUseCase: GetTopHeadlinesUseCase by lazy {
         GetTopHeadlinesUseCase(
+            articleRepository = articleRepository,
+        )
+    }
+
+    val getDetailArticleUseCase: GetDetailArticleUseCase by lazy {
+        GetDetailArticleUseCase(
+            articleRepository = articleRepository,
+        )
+    }
+
+    val saveDetailArticleUseCase: SaveDetailArticleUseCase by lazy {
+        SaveDetailArticleUseCase(
             articleRepository = articleRepository,
         )
     }

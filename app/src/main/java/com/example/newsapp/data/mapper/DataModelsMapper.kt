@@ -1,5 +1,6 @@
 package com.example.newsapp.data.mapper
 
+import com.example.newsapp.data.source.local.models.ArticleLocalModel
 import com.example.newsapp.data.source.remote.models.ArticleCategoryRemoteModel
 import com.example.newsapp.data.source.remote.models.ArticleQueryRemoteModel
 import com.example.newsapp.data.source.remote.models.NewsApiResponseDto
@@ -40,4 +41,32 @@ object DataModelsMapper {
             ArticleCategoryDomainModel.SPORTS -> ArticleCategoryRemoteModel.SPORTS
             ArticleCategoryDomainModel.TECHNOLOGY -> ArticleCategoryRemoteModel.TECHNOLOGY
         }
+
+    fun mapToArticleLocalModel(article: ArticleDomainModel): ArticleLocalModel {
+        return ArticleLocalModel(
+            id = article.id,
+            name = article.name,
+            author = article.author,
+            content = article.content,
+            description = article.description,
+            publishedAt = article.publishedAt,
+            title = article.title,
+            url = article.url,
+            urlToImage = article.urlToImage
+        )
+    }
+
+    fun mapToArticleDomainModel(article: ArticleLocalModel): ArticleDomainModel {
+        return ArticleDomainModel(
+            id = article.id,
+            name = article.name,
+            author = article.author,
+            content = article.content,
+            description = article.description,
+            publishedAt = article.publishedAt,
+            title = article.title,
+            url = article.url,
+            urlToImage = article.urlToImage
+        )
+    }
 }

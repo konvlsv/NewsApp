@@ -3,7 +3,6 @@ package com.example.newsapp.ui.navigation
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import com.example.newsapp.R
-import com.example.newsapp.ui.models.ArticleDisplayModel
 import kotlinx.serialization.Serializable
 
 sealed interface AppScreens {
@@ -11,7 +10,7 @@ sealed interface AppScreens {
     data object NewsListScreen : AppScreens
 
     @Serializable
-    data class ArticleDetailsScreen(val article: ArticleDisplayModel) : AppScreens
+    data object ArticleDetailsScreen : AppScreens
 }
 
 val NavDestination?.titleRes: Int

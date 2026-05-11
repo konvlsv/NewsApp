@@ -31,6 +31,34 @@ object DisplayModelsMapper {
         }
     }
 
+    fun mapToArticleDisplayModel(domainModel: ArticleDomainModel): ArticleDisplayModel {
+        return ArticleDisplayModel(
+            id = domainModel.id,
+            name = domainModel.name,
+            author = domainModel.author,
+            content = domainModel.content,
+            description = domainModel.description,
+            publishedAt = domainModel.publishedAt,
+            title = domainModel.title,
+            url = domainModel.url,
+            urlToImage = domainModel.urlToImage,
+        )
+    }
+
+    fun mapToArticleDomainModel(article: ArticleDisplayModel): ArticleDomainModel {
+        return ArticleDomainModel(
+            id = article.id,
+            name = article.name,
+            author = article.author,
+            content = article.content,
+            description = article.description,
+            publishedAt = article.publishedAt,
+            title = article.title,
+            url = article.url,
+            urlToImage = article.urlToImage,
+        )
+    }
+
     private fun mapToArticleCategoryDomainModel(articleCategoryDisplayModel: ArticleCategoryDisplayModel): ArticleCategoryDomainModel =
         when (articleCategoryDisplayModel) {
             ArticleCategoryDisplayModel.GENERAL -> ArticleCategoryDomainModel.GENERAL

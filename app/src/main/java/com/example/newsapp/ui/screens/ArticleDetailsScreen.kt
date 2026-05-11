@@ -2,9 +2,9 @@ package com.example.newsapp.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,37 +20,50 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.newsapp.R
 import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.preview.getMockArticleUiList
+import com.example.newsapp.ui.state.UiState
 import com.example.newsapp.ui.theme.AppTheme
 import com.example.newsapp.ui.theme.NewsAppTheme
+import com.example.newsapp.ui.viewmodels.ArticleDetailsViewModel
 
 @Composable
 fun ArticleDetailsScreen(
-    article: ArticleDisplayModel,
-    onShareClick: (ArticleDisplayModel) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: ArticleDetailsViewModel = viewModel()
 ) {
-    val uriHandler = LocalUriHandler.current
-    ArticleDetailsContent(
-        article = article,
-        onOpenInBrowserClick = {
-            uriHandler.openUri(article.url)
-        },
-        onShareClick = {
-            onShareClick(article)
-        },
-        modifier = modifier
-    )
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    when (state) {
+        is UiState.Loading -> {
+            LoadingScreen()
+        }
+
+        is UiState.Error -> {
+            ErrorScreen(message = (state as UiState.Error).message)
+        }
+
+        is UiState.Success -> {
+            ArticleDetailsContent(
+                article = (state as UiState.Success).data.detail,
+                onOpenInBrowserClick = {
+                },
+                onShareClick = {
+                },
+                modifier = modifier
+            )
+        }
+    }
 }
 
 @Composable
