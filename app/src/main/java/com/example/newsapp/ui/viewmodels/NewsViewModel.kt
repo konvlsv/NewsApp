@@ -10,7 +10,8 @@ import com.example.newsapp.ui.models.ArticleCategoryDisplayModel
 import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.models.ArticleQueryDisplayModel
 import com.example.newsapp.ui.state.ErrorType
-import com.example.newsapp.ui.state.NewsUiState
+import com.example.newsapp.ui.state.NewsScreenData
+import com.example.newsapp.ui.state.UiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,22 +26,24 @@ class NewsViewModel(
     val mapper: DisplayModelsMapper = App.instance.displayModelsMapper
 ) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<NewsUiState> = MutableStateFlow(NewsUiState.Loading)
-    val uiState: StateFlow<NewsUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow<UiState<NewsScreenData>>(UiState.Loading())
+    val uiState: StateFlow<UiState<NewsScreenData>> = _uiState.asStateFlow()
 
     private var fetchJob: Job? = null
 
     init {
-        _uiState.update { NewsUiState.Loading }
+        _uiState.update { UiState.Loading() }
         loadArticles()
     }
 
     fun onArticleSelectedCategoryChange(category: ArticleCategoryDisplayModel) {
         _uiState.update { currentState ->
-            if (currentState is NewsUiState.Success) {
+            if (currentState is UiState.Success) {
                 currentState.copy(
-                    articleQuery = currentState.articleQuery.copy(category = category),
-                    isRefreshing = true
+                    data = currentState.data.copy(
+                        isRefreshing = true,
+                        articleQuery = currentState.data.articleQuery.copy(category = category)
+                    )
                 )
             } else currentState
         }
@@ -49,10 +52,12 @@ class NewsViewModel(
 
     fun onArticleSearchBarValueChange(query: String) {
         _uiState.update { currentState ->
-            if (currentState is NewsUiState.Success) {
+            if (currentState is UiState.Success) {
                 currentState.copy(
-                    articleQuery = currentState.articleQuery.copy(query = query),
-                    isRefreshing = true
+                    data = currentState.data.copy(
+                        isRefreshing = true,
+                        articleQuery = currentState.data.articleQuery.copy(query = query)
+                    )
                 )
             } else currentState
         }
@@ -61,10 +66,12 @@ class NewsViewModel(
 
     fun onArticleSearchBarDeleteClick() {
         _uiState.update { currentState ->
-            if (currentState is NewsUiState.Success) {
+            if (currentState is UiState.Success) {
                 currentState.copy(
-                    articleQuery = currentState.articleQuery.copy(query = ""),
-                    isRefreshing = true
+                    data = currentState.data.copy(
+                        isRefreshing = true,
+                        articleQuery = currentState.data.articleQuery.copy(query = "")
+                    )
                 )
             } else currentState
         }
@@ -73,14 +80,16 @@ class NewsViewModel(
 
     fun onExpandOrCollapseCardClick(article: ArticleDisplayModel) {
         _uiState.update { currentState ->
-            if (currentState is NewsUiState.Success) {
-                val newCards = currentState.expandedCards.toMutableSet()
+            if (currentState is UiState.Success) {
+                val newCards = currentState.data.expandedCards.toMutableSet()
                 if (newCards.contains(article)) {
                     newCards.remove(article)
                 } else {
                     newCards.add(article)
                 }
-                currentState.copy(expandedCards = newCards)
+                currentState.copy(
+                    data = currentState.data.copy(expandedCards = newCards)
+                )
             } else currentState
         }
     }
@@ -91,8 +100,12 @@ class NewsViewModel(
 
     fun onRefresh() {
         _uiState.update { currentState ->
-            if (currentState is NewsUiState.Success) {
-                currentState.copy(isRefreshing = true)
+            if (currentState is UiState.Success) {
+                currentState.copy(
+                    data = currentState.data.copy(
+                        isRefreshing = true,
+                    )
+                )
             } else currentState
         }
         loadArticles()
@@ -102,9 +115,9 @@ class NewsViewModel(
         fetchJob?.cancel()
         val currentState = _uiState.value
         val currentQuery =
-            (currentState as? NewsUiState.Success)?.articleQuery ?: ArticleQueryDisplayModel()
+            (currentState as? UiState.Success)?.data?.articleQuery ?: ArticleQueryDisplayModel()
         val currentExpandedCards =
-            (currentState as? NewsUiState.Success)?.expandedCards ?: emptySet()
+            (currentState as? UiState.Success)?.data?.expandedCards ?: emptySet()
         fetchJob = viewModelScope.launch {
             try {
                 if (withDelay) delay(500)
@@ -113,11 +126,13 @@ class NewsViewModel(
                 val displayArticles = mapper.mapToArticleDisplayModel(articles)
 
                 _uiState.update {
-                    NewsUiState.Success(
-                        articles = displayArticles,
-                        articleQuery = currentQuery,
-                        expandedCards = currentExpandedCards,
-                        isRefreshing = false
+                    UiState.Success(
+                        data = NewsScreenData(
+                            articles = displayArticles,
+                            articleQuery = currentQuery,
+                            expandedCards = currentExpandedCards,
+                            isRefreshing = false
+                        )
                     )
                 }
             } catch (e: Exception) {
@@ -130,7 +145,7 @@ class NewsViewModel(
                     else -> ErrorType.GENERIC
                 }
                 _uiState.update {
-                    NewsUiState.Error(message = e.message ?: "Unknown error", errorType = errorType)
+                    UiState.Error(message = e.message ?: "Unknown error", errorType = errorType)
                 }
             }
         }

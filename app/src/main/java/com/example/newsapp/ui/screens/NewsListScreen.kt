@@ -21,7 +21,8 @@ import com.example.newsapp.ui.events.NewsListEvents
 import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.preview.getMockNewsListEvents
 import com.example.newsapp.ui.preview.getMockSuccessNewsUiState
-import com.example.newsapp.ui.state.NewsUiState
+import com.example.newsapp.ui.state.NewsScreenData
+import com.example.newsapp.ui.state.UiState
 import com.example.newsapp.ui.theme.AppTheme
 import com.example.newsapp.ui.theme.NewsAppTheme
 import com.example.newsapp.ui.viewmodels.NewsViewModel
@@ -48,17 +49,17 @@ fun NewsListScreen(
     }
 
     when (state) {
-        is NewsUiState.Loading -> {
+        is UiState.Loading -> {
             LoadingScreen()
         }
 
-        is NewsUiState.Error -> {
-            ErrorScreen(message = (state as NewsUiState.Error).message)
+        is UiState.Error -> {
+            ErrorScreen(message = (state as UiState.Error).message)
         }
 
-        is NewsUiState.Success -> {
+        is UiState.Success -> {
             NewsListContent(
-                state = state as NewsUiState.Success,
+                state = (state as UiState.Success).data,
                 events = events,
                 modifier = modifier
             )
@@ -68,7 +69,7 @@ fun NewsListScreen(
 
 @Composable
 fun NewsListContent(
-    state: NewsUiState.Success,
+    state: NewsScreenData,
     events: NewsListEvents,
     modifier: Modifier = Modifier,
 ) {
@@ -129,7 +130,7 @@ fun NewsListContent(
 fun NewsListContentPreview() {
     NewsAppTheme() {
         NewsListContent(
-            state = getMockSuccessNewsUiState(),
+            state = getMockSuccessNewsUiState().data,
             events = getMockNewsListEvents()
         )
     }

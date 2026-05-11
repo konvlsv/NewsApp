@@ -2,14 +2,17 @@ package com.example.newsapp.ui.preview
 
 import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.models.ArticleQueryDisplayModel
-import com.example.newsapp.ui.state.NewsUiState
+import com.example.newsapp.ui.state.NewsScreenData
+import com.example.newsapp.ui.state.UiState
 import kotlin.random.Random
 
-fun getMockSuccessNewsUiState(): NewsUiState.Success {
-    return NewsUiState.Success(
-        articles = getMockArticleUiList(),
-        articleQuery = ArticleQueryDisplayModel(),
-        expandedCards = emptySet(),
+fun getMockSuccessNewsUiState(): UiState.Success<NewsScreenData> {
+    return UiState.Success(
+        data = NewsScreenData(
+            articles = getMockArticleUiList(),
+            articleQuery = ArticleQueryDisplayModel(),
+            expandedCards = emptySet(),
+        )
     )
 }
 
