@@ -11,7 +11,7 @@ import com.example.newsapp.ui.models.ArticleCategoryDisplayModel
 import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.models.ArticleQueryDisplayModel
 import com.example.newsapp.ui.state.ErrorType
-import com.example.newsapp.ui.state.NewsScreenData
+import com.example.newsapp.ui.state.NewsState
 import com.example.newsapp.ui.state.UiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -28,8 +28,8 @@ class NewsViewModel(
     private val saveDetailArticleUseCase: SaveDetailArticleUseCase = App.instance.saveDetailArticleUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<UiState<NewsScreenData>>(UiState.Loading())
-    val uiState: StateFlow<UiState<NewsScreenData>> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow<UiState<NewsState>>(UiState.Loading())
+    val uiState: StateFlow<UiState<NewsState>> = _uiState.asStateFlow()
 
     private var fetchJob: Job? = null
 
@@ -140,7 +140,7 @@ class NewsViewModel(
 
                 _uiState.update {
                     UiState.Success(
-                        data = NewsScreenData(
+                        data = NewsState(
                             articles = displayArticles,
                             articleQuery = currentQuery,
                             expandedCards = currentExpandedCards,

@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.newsapp.App
 import com.example.newsapp.domain.usecase.GetDetailArticleUseCase
 import com.example.newsapp.ui.mapper.DisplayModelsMapper
-import com.example.newsapp.ui.state.DetailsScreenData
+import com.example.newsapp.ui.state.DetailsState
 import com.example.newsapp.ui.state.UiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,8 +22,8 @@ class ArticleDetailsViewModel(
 
     private var fetchJob: Job? = null
 
-    private val _uiState = MutableStateFlow<UiState<DetailsScreenData>>(UiState.Loading())
-    val uiState: StateFlow<UiState<DetailsScreenData>> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow<UiState<DetailsState>>(UiState.Loading())
+    val uiState: StateFlow<UiState<DetailsState>> = _uiState.asStateFlow()
 
     init {
         _uiState.update { UiState.Loading() }
@@ -37,7 +37,7 @@ class ArticleDetailsViewModel(
                 val detailArticle = mapper.mapToArticleDisplayModel(getDetailArticleUseCase())
                 _uiState.update {
                     UiState.Success(
-                        data = DetailsScreenData(
+                        data = DetailsState(
                             detail = detailArticle
                         )
                     )

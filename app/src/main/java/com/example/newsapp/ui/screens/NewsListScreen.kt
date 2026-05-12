@@ -20,7 +20,7 @@ import com.example.newsapp.ui.components.ArticlesCategoryLazyRow
 import com.example.newsapp.ui.events.NewsListEvents
 import com.example.newsapp.ui.preview.getMockNewsListEvents
 import com.example.newsapp.ui.preview.getMockSuccessNewsUiState
-import com.example.newsapp.ui.state.NewsScreenData
+import com.example.newsapp.ui.state.NewsState
 import com.example.newsapp.ui.state.UiState
 import com.example.newsapp.ui.theme.AppTheme
 import com.example.newsapp.ui.theme.NewsAppTheme
@@ -70,7 +70,7 @@ fun NewsListScreen(
 
 @Composable
 fun NewsListContent(
-    state: NewsScreenData,
+    state: NewsState,
     events: NewsListEvents,
     modifier: Modifier = Modifier,
 ) {
