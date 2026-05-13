@@ -15,6 +15,8 @@ import com.example.newsapp.domain.usecase.GetDetailArticleUseCase
 import com.example.newsapp.domain.usecase.GetTopHeadlinesUseCase
 import com.example.newsapp.domain.usecase.SaveDetailArticleUseCase
 import com.example.newsapp.ui.mapper.DisplayModelsMapper
+import com.example.newsapp.ui.navigation.BrowserNavigator
+import com.example.newsapp.ui.navigation.CustomTabsHelper
 
 class App : Application() {
 
@@ -35,7 +37,6 @@ class App : Application() {
             mapper = dataModelsMapper
         )
     }
-
     val getTopHeadlinesUseCase: GetTopHeadlinesUseCase by lazy {
         GetTopHeadlinesUseCase(
             articleRepository = articleRepository,
@@ -52,6 +53,10 @@ class App : Application() {
         SaveDetailArticleUseCase(
             articleRepository = articleRepository,
         )
+    }
+
+    val browserNavigator: BrowserNavigator by lazy {
+        CustomTabsHelper
     }
 
     override fun onCreate() {

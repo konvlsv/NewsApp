@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,6 +44,7 @@ fun ArticleDetailsScreen(
     modifier: Modifier = Modifier,
     viewModel: ArticleDetailsViewModel = viewModel()
 ) {
+    val context = LocalContext.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     when (state) {
         is UiState.Loading -> {
@@ -57,6 +59,7 @@ fun ArticleDetailsScreen(
             ArticleDetailsContent(
                 article = (state as UiState.Success).data.detail,
                 onOpenInBrowserClick = {
+                    viewModel.openInBrowser(context)
                 },
                 onShareClick = {
                 },
