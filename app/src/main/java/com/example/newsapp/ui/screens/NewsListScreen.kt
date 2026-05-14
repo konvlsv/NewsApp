@@ -41,7 +41,8 @@ fun NewsListScreen(
             },
             onArticleSelectedCategoryChange = { viewModel.onArticleSelectedCategoryChange(it) },
             onExpandOrCollapseCardClick = { viewModel.onExpandOrCollapseCardClick(it) },
-            onShareClick = {  }, //todo
+            onShareClick = { viewModel.shareArticle(it.title, it.description, it.url) },
+            openInBrowserClick = { viewModel.openInBrowser(it.url) },
             onRefresh = { viewModel.onRefresh() },
             onArticleSearchBarValueChange = { viewModel.onArticleSearchBarValueChange(it) },
             onArticleSearchBarDeleteClick = { viewModel.onArticleSearchBarDeleteClick() },
@@ -109,6 +110,7 @@ fun NewsListContent(
                     onShareClick = events.onShareClick,
                     onExpandOrCollapseCardClick = events.onExpandOrCollapseCardClick,
                     isCardExpanded = { state.expandedCards.contains(it) },
+                    openInBrowserClick = events.openInBrowserClick
                 )
             }
         }

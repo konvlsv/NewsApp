@@ -8,6 +8,7 @@ fun getMockNewsListEvents(): NewsListEvents {
         onArticleSelectedCategoryChange = {},
         onExpandOrCollapseCardClick = {},
         onShareClick = {},
+        openInBrowserClick = {},
         onRefresh = {},
         onArticleSearchBarValueChange = {},
         onArticleSearchBarDeleteClick = {},

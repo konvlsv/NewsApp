@@ -10,6 +10,8 @@ import com.example.newsapp.ui.mapper.DisplayModelsMapper
 import com.example.newsapp.ui.models.ArticleCategoryDisplayModel
 import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.models.ArticleQueryDisplayModel
+import com.example.newsapp.ui.navigation.BrowserNavigator
+import com.example.newsapp.ui.navigation.ShareManager
 import com.example.newsapp.ui.state.ErrorType
 import com.example.newsapp.ui.state.NewsState
 import com.example.newsapp.ui.state.UiState
@@ -25,7 +27,9 @@ import kotlin.coroutines.cancellation.CancellationException
 class NewsViewModel(
     private val getTopHeadlinesUseCase: GetTopHeadlinesUseCase = App.instance.getTopHeadlinesUseCase,
     private val mapper: DisplayModelsMapper = App.instance.displayModelsMapper,
-    private val saveDetailArticleUseCase: SaveDetailArticleUseCase = App.instance.saveDetailArticleUseCase
+    private val saveDetailArticleUseCase: SaveDetailArticleUseCase = App.instance.saveDetailArticleUseCase,
+    private val shareManager: ShareManager = App.instance.shareManager,
+    private val browserNavigator: BrowserNavigator = App.instance.browserNavigator
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState<NewsState>>(UiState.Loading())
@@ -36,6 +40,14 @@ class NewsViewModel(
     init {
         _uiState.update { UiState.Loading() }
         loadArticles()
+    }
+
+    fun shareArticle(title: String, description: String, url: String) {
+        shareManager.shareArticle(title, description, url)
+    }
+
+    fun openInBrowser(url: String) {
+        browserNavigator.openUrl(url)
     }
 
     fun saveDetailArticle(article: ArticleDisplayModel){

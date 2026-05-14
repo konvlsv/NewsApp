@@ -29,6 +29,7 @@ fun ArticleCard(
     isCardExpanded: (ArticleDisplayModel) -> Boolean,
     onShareClick: (ArticleDisplayModel) -> Unit,
     onExpandOrCollapseCardClick: (ArticleDisplayModel) -> Unit,
+    openInBrowserClick: (ArticleDisplayModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -63,7 +64,8 @@ fun ArticleCard(
                 ArticleCardExpandedContent(
                     onNavigateToArticleDetails = onNavigateToArticleDetails,
                     articleDisplayModel = article,
-                    onShareClick = onShareClick
+                    onShareClick = onShareClick,
+                    openInBrowserClick = openInBrowserClick
                 )
             }
         }
@@ -90,7 +92,8 @@ fun ArticleCardPreviewCollapsed() {
             onShareClick = {},
             onExpandOrCollapseCardClick = {},
             isCardExpanded = { false },
-            onNavigateToArticleDetails = {}
+            onNavigateToArticleDetails = {},
+            openInBrowserClick = {}
         )
     }
 }
@@ -115,7 +118,8 @@ fun ArticleCardPreviewExpanded() {
             onShareClick = {},
             onExpandOrCollapseCardClick = {},
             isCardExpanded = { true },
-            onNavigateToArticleDetails = {}
+            onNavigateToArticleDetails = {},
+            openInBrowserClick = {}
         )
     }
 }

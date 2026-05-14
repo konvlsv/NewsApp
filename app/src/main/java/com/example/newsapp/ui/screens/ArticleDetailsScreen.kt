@@ -11,10 +11,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -25,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,7 +42,6 @@ fun ArticleDetailsScreen(
     modifier: Modifier = Modifier,
     viewModel: ArticleDetailsViewModel = viewModel()
 ) {
-    val context = LocalContext.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     when (state) {
         is UiState.Loading -> {
@@ -59,9 +56,10 @@ fun ArticleDetailsScreen(
             ArticleDetailsContent(
                 article = (state as UiState.Success).data.detail,
                 onOpenInBrowserClick = {
-                    viewModel.openInBrowser(context)
+                    viewModel.openInBrowser(it.url)
                 },
                 onShareClick = {
+                    viewModel.shareArticle(it.name, it.description, it.url)
                 },
                 modifier = modifier
             )
@@ -72,8 +70,8 @@ fun ArticleDetailsScreen(
 @Composable
 fun ArticleDetailsContent(
     article: ArticleDisplayModel,
-    onOpenInBrowserClick: () -> Unit,
-    onShareClick: () -> Unit,
+    onOpenInBrowserClick: (ArticleDisplayModel) -> Unit,
+    onShareClick: (ArticleDisplayModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -127,19 +125,16 @@ fun ArticleDetailsContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = AppTheme.dimens.paddingLarge),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.End,
         ) {
-            Button(
-                onClick = onOpenInBrowserClick,
-                shape = MaterialTheme.shapes.medium,
-                elevation = ButtonDefaults.buttonElevation(AppTheme.dimens.buttonElevation),
-            ) {
-                Text(
-                    text = stringResource(R.string.open_in_browser),
-                    style = MaterialTheme.typography.labelMedium,
+            IconButton(onClick = { onOpenInBrowserClick(article) }) {
+                Icon(
+                    imageVector = Icons.Default.OpenInBrowser,
+                    contentDescription = stringResource(R.string.open_in_browser),
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
             }
-            IconButton(onClick = onShareClick) {
+            IconButton(onClick = { onShareClick(article) }) {
                 Icon(
                     imageVector = Icons.Default.Share,
                     contentDescription = stringResource(R.string.share),

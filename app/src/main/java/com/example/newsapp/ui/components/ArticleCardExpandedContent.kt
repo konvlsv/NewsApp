@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -33,6 +34,7 @@ fun ArticleCardExpandedContent(
     onNavigateToArticleDetails: (ArticleDisplayModel) -> Unit,
     articleDisplayModel: ArticleDisplayModel,
     onShareClick: (ArticleDisplayModel) -> Unit,
+    openInBrowserClick: (ArticleDisplayModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -65,12 +67,21 @@ fun ArticleCardExpandedContent(
                     style = MaterialTheme.typography.labelMedium,
                 )
             }
-            IconButton(onClick = { onShareClick(articleDisplayModel) }) {
-                Icon(
-                    imageVector = Icons.Default.Share,
-                    contentDescription = stringResource(R.string.share),
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                )
+            Row() {
+                IconButton(onClick = { openInBrowserClick(articleDisplayModel) }) {
+                    Icon(
+                        imageVector = Icons.Default.OpenInBrowser,
+                        contentDescription = stringResource(R.string.open_in_browser),
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    )
+                }
+                IconButton(onClick = { onShareClick(articleDisplayModel) }) {
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = stringResource(R.string.share),
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    )
+                }
             }
         }
     }
@@ -94,7 +105,8 @@ fun ArticleCardExpandedContentPreview() {
         ArticleCardExpandedContent(
             articleDisplayModel = getMockArticleUiList().random(),
             onShareClick = {},
-            onNavigateToArticleDetails = {}
+            onNavigateToArticleDetails = {},
+            openInBrowserClick = {}
         )
     }
 }

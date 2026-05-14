@@ -16,7 +16,10 @@ import com.example.newsapp.domain.usecase.GetTopHeadlinesUseCase
 import com.example.newsapp.domain.usecase.SaveDetailArticleUseCase
 import com.example.newsapp.ui.mapper.DisplayModelsMapper
 import com.example.newsapp.ui.navigation.BrowserNavigator
-import com.example.newsapp.ui.navigation.CustomTabsHelper
+import com.example.newsapp.ui.navigation.BrowserNavigatorImpl
+import com.example.newsapp.ui.navigation.ShareManager
+import com.example.newsapp.ui.navigation.ShareManagerImpl
+import kotlin.getValue
 
 class App : Application() {
 
@@ -56,8 +59,13 @@ class App : Application() {
     }
 
     val browserNavigator: BrowserNavigator by lazy {
-        CustomTabsHelper
+        BrowserNavigatorImpl(context = this)
     }
+
+    val shareManager: ShareManager by lazy {
+        ShareManagerImpl(context = this)
+    }
+
 
     override fun onCreate() {
         super.onCreate()

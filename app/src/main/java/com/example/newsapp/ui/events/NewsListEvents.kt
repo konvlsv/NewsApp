@@ -8,6 +8,7 @@ data class NewsListEvents(
     val onArticleSelectedCategoryChange: (ArticleCategoryDisplayModel) -> Unit,
     val onExpandOrCollapseCardClick: (ArticleDisplayModel) -> Unit,
     val onShareClick: (ArticleDisplayModel) -> Unit,
+    val openInBrowserClick: (ArticleDisplayModel) -> Unit,
     val onRefresh: () -> Unit,
     val onArticleSearchBarValueChange: (String) -> Unit,
     val onArticleSearchBarDeleteClick: () -> Unit,
