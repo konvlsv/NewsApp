@@ -55,17 +55,20 @@ fun ArticleCard(
     ) {
         Column() {
             ArticleCardCollapsedContent(
-                articleDisplayModel = article,
-                onExpandOrCollapseCardClick = onExpandOrCollapseCardClick,
+                name = article.name,
+                title = article.title,
+                author = article.author,
+                publishedAt = article.publishedAt,
+                onExpandOrCollapseCardClick = { onExpandOrCollapseCardClick(article) },
                 onExpandOrCollapseCardIcon = if (isCardExpanded(article)) Icons.Default.KeyboardArrowUp
                 else Icons.Default.KeyboardArrowDown
             )
             if (isCardExpanded(article)) {
                 ArticleCardExpandedContent(
-                    onNavigateToArticleDetails = onNavigateToArticleDetails,
-                    articleDisplayModel = article,
-                    onShareClick = onShareClick,
-                    openInBrowserClick = openInBrowserClick
+                    description = article.description,
+                    onNavigateToArticleDetails = { onNavigateToArticleDetails(article) },
+                    onShareClick = { onShareClick(article) },
+                    openInBrowserClick = { openInBrowserClick(article) }
                 )
             }
         }

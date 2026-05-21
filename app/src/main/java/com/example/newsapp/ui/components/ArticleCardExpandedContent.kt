@@ -24,17 +24,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.newsapp.R
-import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.preview.getMockArticleUiList
 import com.example.newsapp.ui.theme.AppTheme
 import com.example.newsapp.ui.theme.NewsAppTheme
 
 @Composable
 fun ArticleCardExpandedContent(
-    onNavigateToArticleDetails: (ArticleDisplayModel) -> Unit,
-    articleDisplayModel: ArticleDisplayModel,
-    onShareClick: (ArticleDisplayModel) -> Unit,
-    openInBrowserClick: (ArticleDisplayModel) -> Unit,
+    description: String,
+    onNavigateToArticleDetails: () -> Unit,
+    onShareClick: () -> Unit,
+    openInBrowserClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -44,7 +43,7 @@ fun ArticleCardExpandedContent(
             .height(IntrinsicSize.Min),
     ) {
         Text(
-            text = articleDisplayModel.content,
+            text = description,
             maxLines = 6,
             overflow = TextOverflow.Ellipsis,
             color = MaterialTheme.colorScheme.onSurface,
@@ -58,7 +57,7 @@ fun ArticleCardExpandedContent(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Button(
-                onClick = { onNavigateToArticleDetails(articleDisplayModel) },
+                onClick = { onNavigateToArticleDetails() },
                 shape = MaterialTheme.shapes.medium,
                 elevation = ButtonDefaults.buttonElevation(AppTheme.dimens.buttonElevation),
             ) {
@@ -68,14 +67,14 @@ fun ArticleCardExpandedContent(
                 )
             }
             Row() {
-                IconButton(onClick = { openInBrowserClick(articleDisplayModel) }) {
+                IconButton(onClick = { openInBrowserClick() }) {
                     Icon(
                         imageVector = Icons.Default.OpenInBrowser,
                         contentDescription = stringResource(R.string.open_in_browser),
                         tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
                 }
-                IconButton(onClick = { onShareClick(articleDisplayModel) }) {
+                IconButton(onClick = { onShareClick() }) {
                     Icon(
                         imageVector = Icons.Default.Share,
                         contentDescription = stringResource(R.string.share),
@@ -103,7 +102,7 @@ fun ArticleCardExpandedContent(
 fun ArticleCardExpandedContentPreview() {
     NewsAppTheme() {
         ArticleCardExpandedContent(
-            articleDisplayModel = getMockArticleUiList().random(),
+            description = getMockArticleUiList().random().description,
             onShareClick = {},
             onNavigateToArticleDetails = {},
             openInBrowserClick = {}
