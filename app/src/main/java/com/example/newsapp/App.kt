@@ -9,7 +9,7 @@ import com.example.newsapp.data.source.local.db.ArticleDao
 import com.example.newsapp.data.source.remote.RemoteDataSource
 import com.example.newsapp.data.source.remote.RemoteDataSourceImpl
 import com.example.newsapp.data.source.remote.api.NewsApi
-import com.example.newsapp.data.source.remote.api.NewsApiClient
+import com.example.newsapp.data.source.remote.api.RetrofitClient
 import com.example.newsapp.domain.repository.ArticleRepository
 import com.example.newsapp.domain.usecase.GetDetailArticleUseCase
 import com.example.newsapp.domain.usecase.GetTopHeadlinesUseCase
@@ -19,11 +19,10 @@ import com.example.newsapp.ui.navigation.BrowserNavigator
 import com.example.newsapp.ui.navigation.BrowserNavigatorImpl
 import com.example.newsapp.ui.navigation.ShareManager
 import com.example.newsapp.ui.navigation.ShareManagerImpl
-import kotlin.getValue
 
 class App : Application() {
 
-    private val newsApi: NewsApi by lazy { NewsApiClient }
+    private val newsApi: NewsApi by lazy { RetrofitClient.newsApiService }
     private val remoteDataSource: RemoteDataSource by lazy {
         RemoteDataSourceImpl(newsApi = newsApi)
     }
