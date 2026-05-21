@@ -63,6 +63,7 @@ dependencies {
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.kotlinx.serialization)
+    implementation(libs.logging.interceptor)
 
     // Загрузка изображений
     implementation(libs.coil.compose)
