@@ -59,6 +59,7 @@ fun ArticleCard(
                 title = article.title,
                 author = article.author,
                 publishedAt = article.publishedAt,
+                urlToImage = article.urlToImage,
                 onExpandOrCollapseCardClick = { onExpandOrCollapseCardClick(article) },
                 onExpandOrCollapseCardIcon = if (isCardExpanded(article)) Icons.Default.KeyboardArrowUp
                 else Icons.Default.KeyboardArrowDown

@@ -2,7 +2,6 @@ package com.example.newsapp.ui.components
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandCircleDown
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -22,9 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,6 +35,7 @@ fun ArticleCardCollapsedContent(
     title: String,
     author: String,
     publishedAt: String,
+    urlToImage: String,
     onExpandOrCollapseCardClick: () -> Unit,
     onExpandOrCollapseCardIcon: ImageVector,
     modifier: Modifier = Modifier,
@@ -52,14 +49,7 @@ fun ArticleCardCollapsedContent(
             modifier = Modifier
                 .height(IntrinsicSize.Min),
         ) {
-            Image(
-                imageVector = Icons.Default.Person,
-                contentDescription = stringResource(R.string.article_picture),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.Gray),
-            )
+            ArticleImage(urlToImage)
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -148,6 +138,7 @@ fun ArticleCardCollapsedPreview() {
             title = getMockArticleUiList().random().title,
             author = getMockArticleUiList().random().author,
             publishedAt = getMockArticleUiList().random().publishedAt,
+            urlToImage = getMockArticleUiList().random().urlToImage,
             onExpandOrCollapseCardClick = {},
             onExpandOrCollapseCardIcon = Icons.Default.ExpandCircleDown,
         )
