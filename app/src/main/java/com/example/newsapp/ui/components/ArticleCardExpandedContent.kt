@@ -9,9 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.OpenInBrowser
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -20,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -69,14 +67,14 @@ fun ArticleCardExpandedContent(
             Row() {
                 IconButton(onClick = { openInBrowserClick() }) {
                     Icon(
-                        imageVector = Icons.Default.OpenInBrowser,
+                        painter = painterResource(R.drawable.ic_open_in_browser),
                         contentDescription = stringResource(R.string.open_in_browser),
                         tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
                 }
                 IconButton(onClick = { onShareClick() }) {
                     Icon(
-                        imageVector = Icons.Default.Share,
+                        painter = painterResource(R.drawable.ic_share),
                         contentDescription = stringResource(R.string.share),
                         tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     )

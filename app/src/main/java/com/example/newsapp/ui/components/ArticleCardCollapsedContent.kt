@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExpandCircleDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -20,7 +18,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,7 +36,7 @@ fun ArticleCardCollapsedContent(
     publishedAt: String,
     urlToImage: String,
     onExpandOrCollapseCardClick: () -> Unit,
-    onExpandOrCollapseCardIcon: ImageVector,
+    onExpandOrCollapseCardIcon: Painter,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -66,7 +65,7 @@ fun ArticleCardCollapsedContent(
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier
                         .background(
-                            color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f),
+                            color = MaterialTheme.colorScheme.primaryContainer.copy(),
                             shape = MaterialTheme.shapes.medium
                         )
                         .padding(
@@ -76,7 +75,7 @@ fun ArticleCardCollapsedContent(
                 )
                 IconButton(onClick = { onExpandOrCollapseCardClick() }) {
                     Icon(
-                        imageVector = onExpandOrCollapseCardIcon,
+                        painter = onExpandOrCollapseCardIcon,
                         contentDescription = stringResource(R.string.expand_or_collapse_card),
                         tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
@@ -140,7 +139,7 @@ fun ArticleCardCollapsedPreview() {
             publishedAt = getMockArticleUiList().random().publishedAt,
             urlToImage = getMockArticleUiList().random().urlToImage,
             onExpandOrCollapseCardClick = {},
-            onExpandOrCollapseCardIcon = Icons.Default.ExpandCircleDown,
+            onExpandOrCollapseCardIcon = painterResource(R.drawable.ic_arrow_circle_up),
         )
     }
 }
