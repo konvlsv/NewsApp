@@ -60,8 +60,8 @@ fun ArticleCard(
                 publishedAt = article.publishedAt,
                 urlToImage = article.urlToImage,
                 onExpandOrCollapseCardClick = { onExpandOrCollapseCardClick(article) },
-                onExpandOrCollapseCardIcon = if (isCardExpanded(article)) painterResource(R.drawable.ic_arrow_circle_down)
-                else painterResource(R.drawable.ic_arrow_circle_up)
+                onExpandOrCollapseCardIcon = if (isCardExpanded(article)) painterResource(R.drawable.ic_arrow_circle_up)
+                else painterResource(R.drawable.ic_arrow_circle_down)
             )
             if (isCardExpanded(article)) {
                 ArticleCardExpandedContent(
