@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,6 +23,7 @@ import com.example.newsapp.ui.state.NewsState
 import com.example.newsapp.ui.state.UiState
 import com.example.newsapp.ui.theme.AppTheme
 import com.example.newsapp.ui.theme.NewsAppTheme
+import com.example.newsapp.ui.viewmodels.NewsNavigationTarget
 import com.example.newsapp.ui.viewmodels.NewsViewModel
 
 @Composable
@@ -31,6 +33,14 @@ fun NewsListScreen(
     onNavigateToArticleDetails: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(viewModel.navigationEvent) {
+        viewModel.navigationEvent.collect { target ->
+            when (target) {
+                is NewsNavigationTarget.ArticleDetails -> onNavigateToArticleDetails()
+            }
+        }
+    }
 
     when (val currentState = uiState) {
         is UiState.Loading -> {
@@ -45,12 +55,7 @@ fun NewsListScreen(
             NewsListContent(
                 state = currentState.data,
                 modifier = modifier,
-                actions = { action ->
-                    viewModel.onAction(action)
-                    if (action is NewsAction.OnNavigateToArticleDetails) {
-                        onNavigateToArticleDetails()
-                    }
-                }
+                actions = viewModel::onAction
             )
         }
     }

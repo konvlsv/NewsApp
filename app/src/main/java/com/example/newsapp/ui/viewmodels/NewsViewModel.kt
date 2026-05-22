@@ -17,13 +17,19 @@ import com.example.newsapp.ui.state.ErrorType
 import com.example.newsapp.ui.state.NewsState
 import com.example.newsapp.ui.state.UiState
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
+
+sealed interface NewsNavigationTarget {
+    object ArticleDetails : NewsNavigationTarget
+}
 
 class NewsViewModel(
     private val getTopHeadlinesUseCase: GetTopHeadlinesUseCase = App.instance.getTopHeadlinesUseCase,
@@ -35,6 +41,9 @@ class NewsViewModel(
 
     private val _uiState = MutableStateFlow<UiState<NewsState>>(UiState.Loading())
     val uiState: StateFlow<UiState<NewsState>> = _uiState.asStateFlow()
+
+    private val _navigationEvent = Channel<NewsNavigationTarget>()
+    val navigationEvent = _navigationEvent.receiveAsFlow()
 
     private var fetchJob: Job? = null
 
@@ -53,28 +62,34 @@ class NewsViewModel(
             is NewsAction.OnShareClick -> shareArticle(action.article)
             is NewsAction.OnExpandOrCollapseCardClick -> onExpandOrCollapseCardClick(action.article)
             is NewsAction.OpenInBrowserClick -> openInBrowser(action.article)
-            is NewsAction.OnNavigateToArticleDetails -> saveDetailArticle(action.article)
+            is NewsAction.OnNavigateToArticleDetails -> onNavigateToArticleDetails(action.article)
         }
     }
 
+    private fun onNavigateToArticleDetails(article: ArticleDisplayModel) {
+        viewModelScope.launch {
+            try {
+                saveDetailArticle(article)
+                _navigationEvent.send(NewsNavigationTarget.ArticleDetails)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private suspend fun saveDetailArticle(article: ArticleDisplayModel) {
+        val domainArticle = mapper.mapToArticleDomainModel(article) //
+        saveDetailArticleUseCase(domainArticle)
+    }
+
     private fun shareArticle(article: ArticleDisplayModel) {
-        shareManager.shareArticle(article.title, article.description,article.url)
+        shareManager.shareArticle(article.title, article.description, article.url)
     }
 
     private fun openInBrowser(article: ArticleDisplayModel) {
         browserNavigator.openUrl(article.url)
     }
 
-    private fun saveDetailArticle(article: ArticleDisplayModel){
-        viewModelScope.launch {
-            try {
-                val domainArticle = mapper.mapToArticleDomainModel(article)
-                saveDetailArticleUseCase(domainArticle)
-            }catch (e: Exception) {
-                if (e is CancellationException) return@launch
-            }
-        }
-    }
 
     private fun onArticleSelectedCategoryChange(category: ArticleCategoryDisplayModel) {
         _uiState.update { currentState ->
