@@ -13,11 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.newsapp.ui.actions.NewsAction
 import com.example.newsapp.ui.components.ArticleCard
 import com.example.newsapp.ui.components.ArticleSearchBar
 import com.example.newsapp.ui.components.ArticlesCategoryLazyRow
-import com.example.newsapp.ui.models.ArticleCategoryDisplayModel
-import com.example.newsapp.ui.models.ArticleDisplayModel
 import com.example.newsapp.ui.preview.getMockSuccessNewsUiState
 import com.example.newsapp.ui.state.NewsState
 import com.example.newsapp.ui.state.UiState
@@ -31,33 +30,27 @@ fun NewsListScreen(
     viewModel: NewsViewModel = viewModel(),
     onNavigateToArticleDetails: () -> Unit,
 ) {
-    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    when (state) {
+    when (val currentState = uiState) {
         is UiState.Loading -> {
             LoadingScreen(modifier = modifier)
         }
 
         is UiState.Error -> {
-            ErrorScreen(message = (state as UiState.Error).message, modifier = modifier)
+            ErrorScreen(message = currentState.message, modifier = modifier)
         }
 
         is UiState.Success -> {
             NewsListContent(
-                state = (state as UiState.Success).data,
-                onNavigateToArticleDetails = { article ->
-                    viewModel.saveDetailArticle(article)
-                    onNavigateToArticleDetails()
-                },
-                onArticleSelectedCategoryChange = { viewModel.onArticleSelectedCategoryChange(it) },
-                onExpandOrCollapseCardClick = { viewModel.onExpandOrCollapseCardClick(it) },
-                onShareClick = { viewModel.shareArticle(it.title, it.description, it.url) },
-                openInBrowserClick = { viewModel.openInBrowser(it.url) },
-                onRefresh = { viewModel.onRefresh() },
-                onArticleSearchBarValueChange = { viewModel.onArticleSearchBarValueChange(it) },
-                onArticleSearchBarDeleteClick = { viewModel.onArticleSearchBarDeleteClick() },
-                onArticleSearchBarSearchClick = { viewModel.onArticleSearchBarSearchClick() },
-                modifier = modifier
+                state = currentState.data,
+                modifier = modifier,
+                actions = { action ->
+                    viewModel.onAction(action)
+                    if (action is NewsAction.OnNavigateToArticleDetails) {
+                        onNavigateToArticleDetails()
+                    }
+                }
             )
         }
     }
@@ -66,53 +59,47 @@ fun NewsListScreen(
 @Composable
 fun NewsListContent(
     state: NewsState,
-    onNavigateToArticleDetails: (ArticleDisplayModel) -> Unit,
-    onArticleSelectedCategoryChange: (ArticleCategoryDisplayModel) -> Unit,
-    onExpandOrCollapseCardClick: (ArticleDisplayModel) -> Unit,
-    onShareClick: (ArticleDisplayModel) -> Unit,
-    openInBrowserClick: (ArticleDisplayModel) -> Unit,
-    onRefresh: () -> Unit,
-    onArticleSearchBarValueChange: (String) -> Unit,
-    onArticleSearchBarDeleteClick: () -> Unit,
-    onArticleSearchBarSearchClick: () -> Unit,
+    actions: (NewsAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PullToRefreshBox(
         isRefreshing = state.isRefreshing,
-        onRefresh = onRefresh,
-        modifier = modifier
+        onRefresh = { actions(NewsAction.OnRefresh) },
+        modifier = modifier.fillMaxSize()
     ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-        ) {
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+
             item(key = "search_bar") {
                 ArticleSearchBar(
                     articleSearchBarSearchQuery = state.articleQuery.query,
-                    onArticleSearchBarValueChange = onArticleSearchBarValueChange,
-                    onArticleSearchBarDeleteClick = onArticleSearchBarDeleteClick,
-                    onArticleSearchBarSearchClick = onArticleSearchBarSearchClick,
+                    onArticleSearchBarValueChange = { query ->
+                        actions(NewsAction.OnArticleSearchBarValueChange(query))
+                    },
+                    onArticleSearchBarDeleteClick = { actions(NewsAction.OnArticleSearchBarDeleteClick) },
+                    onArticleSearchBarSearchClick = { actions(NewsAction.OnArticleSearchBarSearchClick) },
                     modifier = Modifier
                         .padding(horizontal = AppTheme.dimens.paddingLarge)
                         .padding(vertical = AppTheme.dimens.paddingLarge)
                 )
             }
+
             item(key = "categories") {
                 ArticlesCategoryLazyRow(
                     articleSelectedCategory = state.articleQuery.category,
-                    onArticleSelectedCategoryChange = onArticleSelectedCategoryChange
+                    onArticleSelectedCategoryChange = { category ->
+                        actions(NewsAction.OnArticleSelectedCategoryChange(category))
+                    }
                 )
             }
-            items(
-                items = state.articles,
-                key = { it.url }
-            ) { article ->
+
+            items(items = state.articles, key = { it.url }) { article ->
                 ArticleCard(
-                    onNavigateToArticleDetails = onNavigateToArticleDetails,
                     article = article,
-                    onShareClick = onShareClick,
-                    onExpandOrCollapseCardClick = onExpandOrCollapseCardClick,
-                    isCardExpanded = { state.expandedCards.contains(it) },
-                    openInBrowserClick = openInBrowserClick
+                    onNavigateToArticleDetails = { actions(NewsAction.OnNavigateToArticleDetails(article)) },
+                    onShareClick = { actions(NewsAction.OnShareClick(article)) },
+                    onExpandOrCollapseCardClick = { actions(NewsAction.OnExpandOrCollapseCardClick(article)) },
+                    openInBrowserClick = { actions(NewsAction.OpenInBrowserClick(article)) },
+                    isCardExpanded = { state.expandedCards.contains(article) }
                 )
             }
         }
@@ -136,15 +123,7 @@ fun NewsListContentPreview() {
     NewsAppTheme() {
         NewsListContent(
             state = getMockSuccessNewsUiState().data,
-            onNavigateToArticleDetails = {},
-            onArticleSelectedCategoryChange = {},
-            onExpandOrCollapseCardClick = {},
-            onShareClick = {},
-            openInBrowserClick = {},
-            onRefresh = {},
-            onArticleSearchBarValueChange = {},
-            onArticleSearchBarDeleteClick = {},
-            onArticleSearchBarSearchClick = {}
+            actions = {},
         )
     }
 }

@@ -6,6 +6,7 @@ import com.example.newsapp.App
 import com.example.newsapp.domain.exception.DomainException
 import com.example.newsapp.domain.usecase.GetTopHeadlinesUseCase
 import com.example.newsapp.domain.usecase.SaveDetailArticleUseCase
+import com.example.newsapp.ui.actions.NewsAction
 import com.example.newsapp.ui.mapper.DisplayModelsMapper
 import com.example.newsapp.ui.models.ArticleCategoryDisplayModel
 import com.example.newsapp.ui.models.ArticleDisplayModel
@@ -42,15 +43,29 @@ class NewsViewModel(
         loadArticles()
     }
 
-    fun shareArticle(title: String, description: String, url: String) {
-        shareManager.shareArticle(title, description, url)
+    fun onAction(action: NewsAction) {
+        when (action) {
+            is NewsAction.OnRefresh -> onRefresh()
+            is NewsAction.OnArticleSearchBarDeleteClick -> onArticleSearchBarDeleteClick()
+            is NewsAction.OnArticleSearchBarSearchClick -> onArticleSearchBarSearchClick()
+            is NewsAction.OnArticleSearchBarValueChange -> onArticleSearchBarValueChange(action.query)
+            is NewsAction.OnArticleSelectedCategoryChange -> onArticleSelectedCategoryChange(action.category)
+            is NewsAction.OnShareClick -> shareArticle(action.article)
+            is NewsAction.OnExpandOrCollapseCardClick -> onExpandOrCollapseCardClick(action.article)
+            is NewsAction.OpenInBrowserClick -> openInBrowser(action.article)
+            is NewsAction.OnNavigateToArticleDetails -> saveDetailArticle(action.article)
+        }
     }
 
-    fun openInBrowser(url: String) {
-        browserNavigator.openUrl(url)
+    private fun shareArticle(article: ArticleDisplayModel) {
+        shareManager.shareArticle(article.title, article.description,article.url)
     }
 
-    fun saveDetailArticle(article: ArticleDisplayModel){
+    private fun openInBrowser(article: ArticleDisplayModel) {
+        browserNavigator.openUrl(article.url)
+    }
+
+    private fun saveDetailArticle(article: ArticleDisplayModel){
         viewModelScope.launch {
             try {
                 val domainArticle = mapper.mapToArticleDomainModel(article)
@@ -61,7 +76,7 @@ class NewsViewModel(
         }
     }
 
-    fun onArticleSelectedCategoryChange(category: ArticleCategoryDisplayModel) {
+    private fun onArticleSelectedCategoryChange(category: ArticleCategoryDisplayModel) {
         _uiState.update { currentState ->
             if (currentState is UiState.Success) {
                 currentState.copy(
@@ -89,7 +104,7 @@ class NewsViewModel(
         loadArticles(true)
     }
 
-    fun onArticleSearchBarDeleteClick() {
+    private fun onArticleSearchBarDeleteClick() {
         _uiState.update { currentState ->
             if (currentState is UiState.Success) {
                 currentState.copy(
@@ -103,7 +118,7 @@ class NewsViewModel(
         loadArticles(true)
     }
 
-    fun onExpandOrCollapseCardClick(article: ArticleDisplayModel) {
+    private fun onExpandOrCollapseCardClick(article: ArticleDisplayModel) {
         _uiState.update { currentState ->
             if (currentState is UiState.Success) {
                 val newCards = currentState.data.expandedCards.toMutableSet()
@@ -119,11 +134,11 @@ class NewsViewModel(
         }
     }
 
-    fun onArticleSearchBarSearchClick() {
+    private fun onArticleSearchBarSearchClick() {
         onRefresh()
     }
 
-    fun onRefresh() {
+    private fun onRefresh() {
         _uiState.update { currentState ->
             if (currentState is UiState.Success) {
                 currentState.copy(
