@@ -73,7 +73,7 @@ fun ArticleCardCollapsedContent(
                             vertical = AppTheme.dimens.paddingSmall
                         )
                 )
-                IconButton(onClick = { onToggleArticleExpand() }) {
+                IconButton(onClick = onToggleArticleExpand) {
                     Icon(
                         painter = if (isExpanded) painterResource(R.drawable.ic_arrow_circle_up)
                         else painterResource(R.drawable.ic_arrow_circle_down),
