@@ -22,10 +22,10 @@ import com.example.newsapp.ui.common.theme.NewsAppTheme
 @Composable
 fun ArticleCard(
     article: ArticleUi,
-    onNavigateToDetails: (ArticleUi) -> Unit,
-    onShare: (ArticleUi) -> Unit,
-    onToggleExpand: (ArticleUi) -> Unit,
-    onOpenInBrowser: (ArticleUi) -> Unit,
+    onNavigateToDetails: () -> Unit,
+    onShare: () -> Unit,
+    onToggleExpand: () -> Unit,
+    onOpenInBrowser: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -52,14 +52,14 @@ fun ArticleCard(
         Column() {
             ArticleCardCollapsedContent(
                 article = article,
-                onToggleExpand = { onToggleExpand(article) }
+                onToggleExpand = onToggleExpand
             )
             if (article.isExpanded) {
                 ArticleCardExpandedContent(
                     description = article.description,
-                    onNavigateToDetails = { onNavigateToDetails(article) },
-                    onShare = { onShare(article) },
-                    onOpenInBrowser = { onOpenInBrowser(article) }
+                    onNavigateToDetails = onNavigateToDetails,
+                    onShare = onShare,
+                    onOpenInBrowser = onOpenInBrowser
                 )
             }
         }
