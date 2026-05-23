@@ -51,13 +51,8 @@ fun ArticleCard(
     ) {
         Column() {
             ArticleCardCollapsedContent(
-                sourceName = article.sourceName,
-                title = article.title,
-                author = article.author,
-                publishedAt = article.publishedAt,
-                imageUrl = article.imageUrl,
-                onToggleExpand = { onToggleExpand(article) },
-                isExpanded = article.isExpanded
+                article = article,
+                onToggleExpand = { onToggleExpand(article) }
             )
             if (article.isExpanded) {
                 ArticleCardExpandedContent(
