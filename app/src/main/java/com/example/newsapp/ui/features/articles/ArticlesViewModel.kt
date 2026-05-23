@@ -47,18 +47,18 @@ class ArticlesViewModel(
         loadArticles()
     }
 
-    fun onAction(action: ArticlesEvent) {
-        when (action) {
+    fun handleEvent(event: ArticlesEvent) {
+        when (event) {
             is ArticlesEvent.OnRefresh -> onRefresh()
             is ArticlesEvent.OnArticleSearchBarDeleteClick -> onArticleSearchBarDeleteClick()
             is ArticlesEvent.OnArticleSearchBarSearchClick -> onArticleSearchBarSearchClick()
-            is ArticlesEvent.OnArticleSearchBarValueChange -> onArticleSearchBarValueChange(action.query)
-            is ArticlesEvent.OnShareClick -> shareArticle(action.article)
-            is ArticlesEvent.OnExpandOrCollapseCardClick -> onExpandOrCollapseCardClick(action.article)
-            is ArticlesEvent.OpenInBrowserClick -> openInBrowser(action.article)
-            is ArticlesEvent.OnNavigateToArticleDetails -> onNavigateToArticleDetails(action.article)
+            is ArticlesEvent.OnArticleSearchBarValueChange -> onArticleSearchBarValueChange(event.query)
+            is ArticlesEvent.OnShareClick -> shareArticle(event.article)
+            is ArticlesEvent.OnExpandOrCollapseCardClick -> onExpandOrCollapseCardClick(event.article)
+            is ArticlesEvent.OpenInBrowserClick -> openInBrowser(event.article)
+            is ArticlesEvent.OnNavigateToArticleDetails -> onNavigateToArticleDetails(event.article)
             is ArticlesEvent.OnArticleSelectedCategoryChange -> onArticleSelectedCategoryChange(
-                action.category
+                event.category
             )
         }
     }

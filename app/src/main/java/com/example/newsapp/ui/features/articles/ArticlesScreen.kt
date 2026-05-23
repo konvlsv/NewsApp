@@ -53,7 +53,7 @@ fun ArticlesScreen(
             ArticlesContent(
                 state = currentState.data,
                 modifier = modifier,
-                actions = viewModel::onAction
+                onEvent = viewModel::handleEvent
             )
         }
     }
@@ -62,12 +62,12 @@ fun ArticlesScreen(
 @Composable
 fun ArticlesContent(
     state: ArticlesState,
-    actions: (ArticlesEvent) -> Unit,
+    onEvent: (ArticlesEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PullToRefreshBox(
         isRefreshing = state.isRefreshing,
-        onRefresh = { actions(ArticlesEvent.OnRefresh) },
+        onRefresh = { onEvent(ArticlesEvent.OnRefresh) },
         modifier = modifier.fillMaxSize()
     ) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -76,10 +76,10 @@ fun ArticlesContent(
                 ArticleSearchBar(
                     articleSearchBarSearchQuery = state.articleQuery.query,
                     onArticleSearchBarValueChange = { query ->
-                        actions(ArticlesEvent.OnArticleSearchBarValueChange(query))
+                        onEvent(ArticlesEvent.OnArticleSearchBarValueChange(query))
                     },
-                    onArticleSearchBarDeleteClick = { actions(ArticlesEvent.OnArticleSearchBarDeleteClick) },
-                    onArticleSearchBarSearchClick = { actions(ArticlesEvent.OnArticleSearchBarSearchClick) },
+                    onArticleSearchBarDeleteClick = { onEvent(ArticlesEvent.OnArticleSearchBarDeleteClick) },
+                    onArticleSearchBarSearchClick = { onEvent(ArticlesEvent.OnArticleSearchBarSearchClick) },
                     modifier = Modifier
                         .padding(horizontal = AppTheme.dimens.paddingLarge)
                         .padding(vertical = AppTheme.dimens.paddingLarge)
@@ -90,7 +90,7 @@ fun ArticlesContent(
                 ArticlesCategoryLazyRow(
                     articleSelectedCategory = state.articleQuery.category,
                     onArticleSelectedCategoryChange = { category ->
-                        actions(ArticlesEvent.OnArticleSelectedCategoryChange(category))
+                        onEvent(ArticlesEvent.OnArticleSelectedCategoryChange(category))
                     }
                 )
             }
@@ -98,10 +98,10 @@ fun ArticlesContent(
             items(items = state.articles, key = { it.url }) { article ->
                 ArticleCard(
                     article = article,
-                    onNavigateToArticleDetails = { actions(ArticlesEvent.OnNavigateToArticleDetails(article)) },
-                    onShareClick = { actions(ArticlesEvent.OnShareClick(article)) },
-                    onExpandOrCollapseCardClick = { actions(ArticlesEvent.OnExpandOrCollapseCardClick(article)) },
-                    openInBrowserClick = { actions(ArticlesEvent.OpenInBrowserClick(article)) },
+                    onNavigateToArticleDetails = { onEvent(ArticlesEvent.OnNavigateToArticleDetails(article)) },
+                    onShareClick = { onEvent(ArticlesEvent.OnShareClick(article)) },
+                    onExpandOrCollapseCardClick = { onEvent(ArticlesEvent.OnExpandOrCollapseCardClick(article)) },
+                    openInBrowserClick = { onEvent(ArticlesEvent.OpenInBrowserClick(article)) },
                     isCardExpanded = { state.expandedCards.contains(article) }
                 )
             }
@@ -126,7 +126,7 @@ fun ArticlesContentPreview() {
     NewsAppTheme() {
         ArticlesContent(
             state = getMockSuccessNewsUiState().data,
-            actions = {},
+            onEvent = {},
         )
     }
 }
