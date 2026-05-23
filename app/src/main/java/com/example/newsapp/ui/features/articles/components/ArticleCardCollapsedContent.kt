@@ -134,11 +134,11 @@ fun ArticleCardCollapsedContent(
 fun ArticleCardCollapsedPreview() {
     NewsAppTheme() {
         ArticleCardCollapsedContent(
-            sourceName = getMockArticleUiList().random().sourceName,
-            title = getMockArticleUiList().random().title,
-            author = getMockArticleUiList().random().author,
-            publishedAt = getMockArticleUiList().random().publishedAt,
-            imageUrl = getMockArticleUiList().random().imageUrl,
+            sourceName = getMockArticleUiList().first().sourceName,
+            title = getMockArticleUiList().first().title,
+            author = getMockArticleUiList().first().author,
+            publishedAt = getMockArticleUiList().first().publishedAt,
+            imageUrl = getMockArticleUiList().first().imageUrl,
             onToggleArticleExpand = {},
             isExpanded = false,
         )

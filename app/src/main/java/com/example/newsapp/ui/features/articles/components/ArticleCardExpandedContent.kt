@@ -100,7 +100,7 @@ fun ArticleCardExpandedContent(
 fun ArticleCardExpandedContentPreview() {
     NewsAppTheme() {
         ArticleCardExpandedContent(
-            description = getMockArticleUiList().random().description,
+            description = getMockArticleUiList().first().description,
             onShareClick = {},
             onNavigateToArticleDetails = {},
             openInBrowserClick = {}
