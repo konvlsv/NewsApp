@@ -80,11 +80,11 @@ class ArticlesViewModel(
     }
 
     private fun shareArticle(article: ArticleUi) {
-        shareArticleUseCase(article.title, article.description, article.url)
+        shareArticleUseCase(article.title, article.description, article.articleUrl)
     }
 
     private fun openInBrowser(article: ArticleUi) {
-        openUrlUseCase(article.url)
+        openUrlUseCase(article.articleUrl)
     }
 
 

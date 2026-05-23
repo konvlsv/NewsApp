@@ -95,7 +95,7 @@ fun ArticlesContent(
                 )
             }
 
-            items(items = state.articles, key = { it.url }) { article ->
+            items(items = state.articles, key = { it.articleUrl }) { article ->
                 ArticleCard(
                     article = article,
                     onNavigateToArticleDetails = { onEvent(ArticlesEvent.OnNavigateToArticleDetails(article)) },

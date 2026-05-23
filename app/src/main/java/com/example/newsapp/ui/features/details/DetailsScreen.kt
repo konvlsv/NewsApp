@@ -57,10 +57,10 @@ fun DetailsScreen(
             DetailsContent(
                 article = currentState.data.detail,
                 onOpenInBrowserClick = {
-                    viewModel.openInBrowser(it.url)
+                    viewModel.openInBrowser(it.articleUrl)
                 },
                 onShareClick = {
-                    viewModel.shareArticle(it.name, it.description, it.url)
+                    viewModel.shareArticle(it.sourceName, it.description, it.articleUrl)
                 },
                 modifier = modifier
             )
@@ -92,7 +92,7 @@ fun DetailsContent(
                 .background(Color.Gray)
         )
         Text(
-            text = article.name,
+            text = article.sourceName,
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.padding(top = AppTheme.dimens.paddingLarge)
         )

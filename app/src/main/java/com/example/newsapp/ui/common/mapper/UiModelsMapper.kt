@@ -24,28 +24,28 @@ object UiModelsMapper {
     fun toArticleUi(domainModel: Article): ArticleUi {
         return ArticleUi(
             id = domainModel.id,
-            name = domainModel.name,
+            sourceName = domainModel.name,
             author = domainModel.author,
             content = domainModel.content,
             description = domainModel.description,
             publishedAt = domainModel.publishedAt,
             title = domainModel.title,
-            url = domainModel.url,
-            urlToImage = domainModel.urlToImage,
+            articleUrl = domainModel.url,
+            imageUrl = domainModel.urlToImage,
         )
     }
 
     fun toArticle(article: ArticleUi): Article {
         return Article(
             id = article.id,
-            name = article.name,
+            name = article.sourceName,
             author = article.author,
             content = article.content,
             description = article.description,
             publishedAt = article.publishedAt,
             title = article.title,
-            url = article.url,
-            urlToImage = article.urlToImage,
+            url = article.articleUrl,
+            urlToImage = article.imageUrl,
         )
     }
 

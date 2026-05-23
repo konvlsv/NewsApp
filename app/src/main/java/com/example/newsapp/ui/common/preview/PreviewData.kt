@@ -21,14 +21,14 @@ fun getMockArticleUiList(): List<ArticleUi> {
         articles.add(
             ArticleUi(
                 id = "id_$index",
-                name = "Chanel ${generateRandomText(1).removeSuffix(".")}",
+                sourceName = "Chanel ${generateRandomText(1).removeSuffix(".")}",
                 author = "Author №${index + 1}",
                 content = generateRandomText(Random.nextInt(35, 55)),
                 description = generateRandomText(Random.nextInt(15, 25)),
                 publishedAt = "12.04.2024",
                 title = generateRandomText(Random.nextInt(3, 7)),
-                url = "https://example.com/article/$index",
-                urlToImage = "https://picsum.photos/seed/${index}/400/300"
+                articleUrl = "https://example.com/article/$index",
+                imageUrl = "https://picsum.photos/seed/${index}/400/300"
             )
         )
     }

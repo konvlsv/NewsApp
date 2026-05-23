@@ -51,11 +51,11 @@ fun ArticleCard(
     ) {
         Column() {
             ArticleCardCollapsedContent(
-                name = article.name,
+                name = article.sourceName,
                 title = article.title,
                 author = article.author,
                 publishedAt = article.publishedAt,
-                urlToImage = article.urlToImage,
+                urlToImage = article.imageUrl,
                 onToggleArticleExpand = { onToggleArticleExpand(article) },
                 isExpanded = article.isExpanded
             )
