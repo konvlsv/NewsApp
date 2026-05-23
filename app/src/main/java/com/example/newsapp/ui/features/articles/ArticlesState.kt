@@ -6,6 +6,5 @@ import com.example.newsapp.ui.features.articles.models.ArticleQueryUi
 data class ArticlesState(
     val articles: List<ArticleUi>,
     val articleQuery: ArticleQueryUi = ArticleQueryUi(),
-    val expandedCards: Set<ArticleUi> = emptySet(),
     val isRefreshing: Boolean = false,
 )

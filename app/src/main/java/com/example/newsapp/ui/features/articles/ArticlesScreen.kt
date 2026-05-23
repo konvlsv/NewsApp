@@ -102,7 +102,6 @@ fun ArticlesContent(
                     onShareClick = { onEvent(ArticlesEvent.OnShareClick(article)) },
                     onToggleArticleExpand = { onEvent(ArticlesEvent.OnToggleArticleExpand(article)) },
                     openInBrowserClick = { onEvent(ArticlesEvent.OpenInBrowserClick(article)) },
-                    isCardExpanded = state.expandedCards.contains(article)
                 )
             }
         }

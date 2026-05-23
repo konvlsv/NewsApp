@@ -130,18 +130,17 @@ class ArticlesViewModel(
         loadArticles(true)
     }
 
-    private fun onToggleArticleExpand(article: ArticleUi) {
+    private fun onToggleArticleExpand(clickedArticle: ArticleUi) {
         _uiState.update { currentState ->
             if (currentState is UiState.Success) {
-                val newCards = currentState.data.expandedCards.toMutableSet()
-                if (newCards.contains(article)) {
-                    newCards.remove(article)
-                } else {
-                    newCards.add(article)
+                val updatedArticles = currentState.data.articles.map { article ->
+                    if (article.id == clickedArticle.id) {
+                        article.copy(isExpanded = !article.isExpanded) // Переключаем флаг
+                    } else {
+                        article
+                    }
                 }
-                currentState.copy(
-                    data = currentState.data.copy(expandedCards = newCards)
-                )
+                currentState.copy(data = currentState.data.copy(articles = updatedArticles))
             } else currentState
         }
     }
@@ -168,8 +167,6 @@ class ArticlesViewModel(
         val currentState = _uiState.value
         val currentQuery =
             (currentState as? UiState.Success)?.data?.articleQuery ?: ArticleQueryUi()
-        val currentExpandedCards =
-            (currentState as? UiState.Success)?.data?.expandedCards ?: emptySet()
         fetchJob = viewModelScope.launch {
             try {
                 if (withDelay) delay(500)
@@ -182,7 +179,6 @@ class ArticlesViewModel(
                         data = ArticlesState(
                             articles = displayArticles,
                             articleQuery = currentQuery,
-                            expandedCards = currentExpandedCards,
                             isRefreshing = false
                         )
                     )

@@ -23,7 +23,6 @@ import com.example.newsapp.ui.common.theme.NewsAppTheme
 fun ArticleCard(
     article: ArticleUi,
     onNavigateToArticleDetails: (ArticleUi) -> Unit,
-    isCardExpanded: Boolean,
     onShareClick: (ArticleUi) -> Unit,
     onToggleArticleExpand: (ArticleUi) -> Unit,
     openInBrowserClick: (ArticleUi) -> Unit,
@@ -58,9 +57,9 @@ fun ArticleCard(
                 publishedAt = article.publishedAt,
                 urlToImage = article.urlToImage,
                 onToggleArticleExpand = { onToggleArticleExpand(article) },
-                isCardExpanded = isCardExpanded
+                isExpanded = article.isExpanded
             )
-            if (isCardExpanded) {
+            if (article.isExpanded) {
                 ArticleCardExpandedContent(
                     description = article.description,
                     onNavigateToArticleDetails = { onNavigateToArticleDetails(article) },
@@ -91,7 +90,6 @@ fun ArticleCardPreviewCollapsed() {
             article = getMockArticleUiList().random(),
             onShareClick = {},
             onToggleArticleExpand = {},
-            isCardExpanded = false,
             onNavigateToArticleDetails = {},
             openInBrowserClick = {}
         )
@@ -117,7 +115,6 @@ fun ArticleCardPreviewExpanded() {
             article = getMockArticleUiList().random(),
             onShareClick = {},
             onToggleArticleExpand = {},
-            isCardExpanded = true,
             onNavigateToArticleDetails = {},
             openInBrowserClick = {}
         )
