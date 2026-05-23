@@ -62,12 +62,12 @@ fun ArticlesScreen(
 @Composable
 fun ArticlesContent(
     state: ArticlesState,
-    actions: (ArticlesActions) -> Unit,
+    actions: (ArticlesEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PullToRefreshBox(
         isRefreshing = state.isRefreshing,
-        onRefresh = { actions(ArticlesActions.OnRefresh) },
+        onRefresh = { actions(ArticlesEvent.OnRefresh) },
         modifier = modifier.fillMaxSize()
     ) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -76,10 +76,10 @@ fun ArticlesContent(
                 ArticleSearchBar(
                     articleSearchBarSearchQuery = state.articleQuery.query,
                     onArticleSearchBarValueChange = { query ->
-                        actions(ArticlesActions.OnArticleSearchBarValueChange(query))
+                        actions(ArticlesEvent.OnArticleSearchBarValueChange(query))
                     },
-                    onArticleSearchBarDeleteClick = { actions(ArticlesActions.OnArticleSearchBarDeleteClick) },
-                    onArticleSearchBarSearchClick = { actions(ArticlesActions.OnArticleSearchBarSearchClick) },
+                    onArticleSearchBarDeleteClick = { actions(ArticlesEvent.OnArticleSearchBarDeleteClick) },
+                    onArticleSearchBarSearchClick = { actions(ArticlesEvent.OnArticleSearchBarSearchClick) },
                     modifier = Modifier
                         .padding(horizontal = AppTheme.dimens.paddingLarge)
                         .padding(vertical = AppTheme.dimens.paddingLarge)
@@ -90,7 +90,7 @@ fun ArticlesContent(
                 ArticlesCategoryLazyRow(
                     articleSelectedCategory = state.articleQuery.category,
                     onArticleSelectedCategoryChange = { category ->
-                        actions(ArticlesActions.OnArticleSelectedCategoryChange(category))
+                        actions(ArticlesEvent.OnArticleSelectedCategoryChange(category))
                     }
                 )
             }
@@ -98,10 +98,10 @@ fun ArticlesContent(
             items(items = state.articles, key = { it.url }) { article ->
                 ArticleCard(
                     article = article,
-                    onNavigateToArticleDetails = { actions(ArticlesActions.OnNavigateToArticleDetails(article)) },
-                    onShareClick = { actions(ArticlesActions.OnShareClick(article)) },
-                    onExpandOrCollapseCardClick = { actions(ArticlesActions.OnExpandOrCollapseCardClick(article)) },
-                    openInBrowserClick = { actions(ArticlesActions.OpenInBrowserClick(article)) },
+                    onNavigateToArticleDetails = { actions(ArticlesEvent.OnNavigateToArticleDetails(article)) },
+                    onShareClick = { actions(ArticlesEvent.OnShareClick(article)) },
+                    onExpandOrCollapseCardClick = { actions(ArticlesEvent.OnExpandOrCollapseCardClick(article)) },
+                    openInBrowserClick = { actions(ArticlesEvent.OpenInBrowserClick(article)) },
                     isCardExpanded = { state.expandedCards.contains(article) }
                 )
             }
