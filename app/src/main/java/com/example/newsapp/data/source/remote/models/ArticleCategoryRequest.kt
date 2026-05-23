@@ -1,6 +1,6 @@
 package com.example.newsapp.data.source.remote.models
 
-enum class ArticleCategoryRemoteModel {
+enum class ArticleCategoryRequest {
     GENERAL,
     BUSINESS,
     ENTERTAINMENT,

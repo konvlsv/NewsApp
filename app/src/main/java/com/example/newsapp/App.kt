@@ -14,7 +14,7 @@ import com.example.newsapp.domain.repository.ArticleRepository
 import com.example.newsapp.domain.usecase.GetDetailArticleUseCase
 import com.example.newsapp.domain.usecase.GetTopHeadlinesUseCase
 import com.example.newsapp.domain.usecase.SaveDetailArticleUseCase
-import com.example.newsapp.ui.common.mapper.DisplayModelsMapper
+import com.example.newsapp.ui.common.mapper.UiModelsMapper
 import com.example.newsapp.domain.navigation.BrowserNavigator
 import com.example.newsapp.data.navigation.BrowserNavigatorImpl
 import com.example.newsapp.domain.share.ShareManager
@@ -31,7 +31,7 @@ class App : Application() {
         LocalDataSourceImpl(articleDao = articleDao)
     }
     private val dataModelsMapper by lazy { DataModelsMapper }
-    val displayModelsMapper by lazy { DisplayModelsMapper }
+    val uiModelsMapper by lazy { UiModelsMapper }
     private val articleRepository: ArticleRepository by lazy {
         ArticleRepositoryImpl(
             remoteDataSource = remoteDataSource,

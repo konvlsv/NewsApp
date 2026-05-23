@@ -3,7 +3,7 @@ package com.example.newsapp.ui.features.articles.models
 import androidx.annotation.StringRes
 import com.example.newsapp.R
 
-enum class ArticleCategoryDisplayModel(
+enum class ArticleCategoryUi(
     @param:StringRes val label: Int
 ) {
     GENERAL(R.string.general),

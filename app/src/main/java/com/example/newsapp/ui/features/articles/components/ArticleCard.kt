@@ -16,19 +16,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.newsapp.R
-import com.example.newsapp.ui.common.models.ArticleDisplayModel
+import com.example.newsapp.ui.common.models.ArticleUi
 import com.example.newsapp.ui.common.preview.getMockArticleUiList
 import com.example.newsapp.ui.common.theme.AppTheme
 import com.example.newsapp.ui.common.theme.NewsAppTheme
 
 @Composable
 fun ArticleCard(
-    article: ArticleDisplayModel,
-    onNavigateToArticleDetails: (ArticleDisplayModel) -> Unit,
-    isCardExpanded: (ArticleDisplayModel) -> Boolean,
-    onShareClick: (ArticleDisplayModel) -> Unit,
-    onExpandOrCollapseCardClick: (ArticleDisplayModel) -> Unit,
-    openInBrowserClick: (ArticleDisplayModel) -> Unit,
+    article: ArticleUi,
+    onNavigateToArticleDetails: (ArticleUi) -> Unit,
+    isCardExpanded: (ArticleUi) -> Boolean,
+    onShareClick: (ArticleUi) -> Unit,
+    onExpandOrCollapseCardClick: (ArticleUi) -> Unit,
+    openInBrowserClick: (ArticleUi) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(

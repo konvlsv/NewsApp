@@ -1,7 +1,7 @@
 package com.example.newsapp.ui.common.preview
 
-import com.example.newsapp.ui.common.models.ArticleDisplayModel
-import com.example.newsapp.ui.features.articles.models.ArticleQueryDisplayModel
+import com.example.newsapp.ui.common.models.ArticleUi
+import com.example.newsapp.ui.features.articles.models.ArticleQueryUi
 import com.example.newsapp.ui.features.articles.ArticlesState
 import com.example.newsapp.ui.state.UiState
 import kotlin.random.Random
@@ -10,17 +10,17 @@ fun getMockSuccessNewsUiState(): UiState.Success<ArticlesState> {
     return UiState.Success(
         data = ArticlesState(
             articles = getMockArticleUiList(),
-            articleQuery = ArticleQueryDisplayModel(),
+            articleQuery = ArticleQueryUi(),
             expandedCards = emptySet(),
         )
     )
 }
 
-fun getMockArticleUiList(): List<ArticleDisplayModel> {
-    val articles = mutableListOf<ArticleDisplayModel>()
+fun getMockArticleUiList(): List<ArticleUi> {
+    val articles = mutableListOf<ArticleUi>()
     repeat(100) { index ->
         articles.add(
-            ArticleDisplayModel(
+            ArticleUi(
                 id = "id_$index",
                 name = "Chanel ${generateRandomText(1).removeSuffix(".")}",
                 author = "Author №${index + 1}",

@@ -1,6 +1,6 @@
-package com.example.newsapp.data.source.local.models
+package com.example.newsapp.domain.models
 
-data class ArticleLocalModel(
+data class Article(
     val id: String,
     val name: String,
     val author: String,

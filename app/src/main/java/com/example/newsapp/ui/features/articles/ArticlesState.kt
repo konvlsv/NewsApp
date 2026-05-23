@@ -1,11 +1,11 @@
 package com.example.newsapp.ui.features.articles
 
-import com.example.newsapp.ui.common.models.ArticleDisplayModel
-import com.example.newsapp.ui.features.articles.models.ArticleQueryDisplayModel
+import com.example.newsapp.ui.common.models.ArticleUi
+import com.example.newsapp.ui.features.articles.models.ArticleQueryUi
 
 data class ArticlesState(
-    val articles: List<ArticleDisplayModel>,
-    val articleQuery: ArticleQueryDisplayModel = ArticleQueryDisplayModel(),
-    val expandedCards: Set<ArticleDisplayModel> = emptySet(),
+    val articles: List<ArticleUi>,
+    val articleQuery: ArticleQueryUi = ArticleQueryUi(),
+    val expandedCards: Set<ArticleUi> = emptySet(),
     val isRefreshing: Boolean = false,
 )

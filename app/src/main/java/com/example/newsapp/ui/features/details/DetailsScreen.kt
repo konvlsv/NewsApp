@@ -30,7 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.newsapp.R
-import com.example.newsapp.ui.common.models.ArticleDisplayModel
+import com.example.newsapp.ui.common.models.ArticleUi
 import com.example.newsapp.ui.common.preview.getMockArticleUiList
 import com.example.newsapp.ui.state.UiState
 import com.example.newsapp.ui.common.theme.AppTheme
@@ -70,9 +70,9 @@ fun DetailsScreen(
 
 @Composable
 fun DetailsContent(
-    article: ArticleDisplayModel,
-    onOpenInBrowserClick: (ArticleDisplayModel) -> Unit,
-    onShareClick: (ArticleDisplayModel) -> Unit,
+    article: ArticleUi,
+    onOpenInBrowserClick: (ArticleUi) -> Unit,
+    onShareClick: (ArticleUi) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(

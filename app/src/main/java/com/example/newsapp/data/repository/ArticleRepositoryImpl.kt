@@ -5,8 +5,8 @@ import com.example.newsapp.data.mapper.DataModelsMapper
 import com.example.newsapp.data.source.local.LocalDataSource
 import com.example.newsapp.data.source.remote.RemoteDataSource
 import com.example.newsapp.domain.exception.DomainException
-import com.example.newsapp.domain.models.ArticleDomainModel
-import com.example.newsapp.domain.models.ArticleQueryDomainModel
+import com.example.newsapp.domain.models.Article
+import com.example.newsapp.domain.models.ArticleQuery
 import com.example.newsapp.domain.repository.ArticleRepository
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -15,11 +15,11 @@ class ArticleRepositoryImpl(
     val localDataSource: LocalDataSource,
     val mapper: DataModelsMapper
 ) : ArticleRepository {
-    override suspend fun getTopHeadlines(query: ArticleQueryDomainModel): List<ArticleDomainModel> {
+    override suspend fun getTopHeadlines(query: ArticleQuery): List<Article> {
         return try {
-            val remoteQuery = mapper.matToArticleQueryRemoteModel(query)
+            val remoteQuery = mapper.toArticleQueryRequest(query)
             val response = remoteDataSource.getTopHeadlines(remoteQuery)
-            mapper.mapToArticleDomainModel(response)
+            mapper.toArticle(response)
         } catch (e: CancellationException) {
             throw e
         } catch (e: RemoteException) {
@@ -37,11 +37,11 @@ class ArticleRepositoryImpl(
         }
     }
 
-    override suspend fun saveDetailArticle(article: ArticleDomainModel) {
-        localDataSource.saveDetailArticle(mapper.mapToArticleLocalModel(article))
+    override suspend fun saveDetailArticle(article: Article) {
+        localDataSource.saveDetailArticle(mapper.toArticleEntity(article))
     }
 
-    override suspend fun getDetailArticle(): ArticleDomainModel {
-        return mapper.mapToArticleDomainModel(localDataSource.getDetailArticle())
+    override suspend fun getDetailArticle(): Article {
+        return mapper.toArticle(localDataSource.getDetailArticle())
     }
 }

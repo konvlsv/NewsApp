@@ -1,6 +1,6 @@
 package com.example.newsapp.ui.common.models
 
-data class ArticleDisplayModel(
+data class ArticleUi(
     val id: String,
     val name: String,
     val author: String,

@@ -8,10 +8,10 @@ import com.example.newsapp.domain.navigation.BrowserNavigator
 import com.example.newsapp.domain.share.ShareManager
 import com.example.newsapp.domain.usecase.GetTopHeadlinesUseCase
 import com.example.newsapp.domain.usecase.SaveDetailArticleUseCase
-import com.example.newsapp.ui.common.mapper.DisplayModelsMapper
-import com.example.newsapp.ui.common.models.ArticleDisplayModel
-import com.example.newsapp.ui.features.articles.models.ArticleCategoryDisplayModel
-import com.example.newsapp.ui.features.articles.models.ArticleQueryDisplayModel
+import com.example.newsapp.ui.common.mapper.UiModelsMapper
+import com.example.newsapp.ui.common.models.ArticleUi
+import com.example.newsapp.ui.features.articles.models.ArticleCategoryUi
+import com.example.newsapp.ui.features.articles.models.ArticleQueryUi
 import com.example.newsapp.ui.state.ErrorState
 import com.example.newsapp.ui.state.ErrorType
 import com.example.newsapp.ui.state.UiState
@@ -28,7 +28,7 @@ import kotlin.coroutines.cancellation.CancellationException
 
 class ArticlesViewModel(
     private val getTopHeadlinesUseCase: GetTopHeadlinesUseCase = App.instance.getTopHeadlinesUseCase,
-    private val mapper: DisplayModelsMapper = App.instance.displayModelsMapper,
+    private val mapper: UiModelsMapper = App.instance.uiModelsMapper,
     private val saveDetailArticleUseCase: SaveDetailArticleUseCase = App.instance.saveDetailArticleUseCase,
     private val shareManager: ShareManager = App.instance.shareManager,
     private val browserNavigator: BrowserNavigator = App.instance.browserNavigator
@@ -63,7 +63,7 @@ class ArticlesViewModel(
         }
     }
 
-    private fun onNavigateToArticleDetails(article: ArticleDisplayModel) {
+    private fun onNavigateToArticleDetails(article: ArticleUi) {
         viewModelScope.launch {
             try {
                 saveDetailArticle(article)
@@ -74,21 +74,21 @@ class ArticlesViewModel(
         }
     }
 
-    private suspend fun saveDetailArticle(article: ArticleDisplayModel) {
-        val domainArticle = mapper.mapToArticleDomainModel(article) //
+    private suspend fun saveDetailArticle(article: ArticleUi) {
+        val domainArticle = mapper.toArticle(article) //
         saveDetailArticleUseCase(domainArticle)
     }
 
-    private fun shareArticle(article: ArticleDisplayModel) {
+    private fun shareArticle(article: ArticleUi) {
         shareManager.shareArticle(article.title, article.description, article.url)
     }
 
-    private fun openInBrowser(article: ArticleDisplayModel) {
+    private fun openInBrowser(article: ArticleUi) {
         browserNavigator.openUrl(article.url)
     }
 
 
-    private fun onArticleSelectedCategoryChange(category: ArticleCategoryDisplayModel) {
+    private fun onArticleSelectedCategoryChange(category: ArticleCategoryUi) {
         _uiState.update { currentState ->
             if (currentState is UiState.Success) {
                 currentState.copy(
@@ -130,7 +130,7 @@ class ArticlesViewModel(
         loadArticles(true)
     }
 
-    private fun onExpandOrCollapseCardClick(article: ArticleDisplayModel) {
+    private fun onExpandOrCollapseCardClick(article: ArticleUi) {
         _uiState.update { currentState ->
             if (currentState is UiState.Success) {
                 val newCards = currentState.data.expandedCards.toMutableSet()
@@ -167,15 +167,15 @@ class ArticlesViewModel(
         fetchJob?.cancel()
         val currentState = _uiState.value
         val currentQuery =
-            (currentState as? UiState.Success)?.data?.articleQuery ?: ArticleQueryDisplayModel()
+            (currentState as? UiState.Success)?.data?.articleQuery ?: ArticleQueryUi()
         val currentExpandedCards =
             (currentState as? UiState.Success)?.data?.expandedCards ?: emptySet()
         fetchJob = viewModelScope.launch {
             try {
                 if (withDelay) delay(500)
-                val domainQuery = mapper.mapToArticleQueryDomainModel(currentQuery)
+                val domainQuery = mapper.toArticleQuery(currentQuery)
                 val articles = getTopHeadlinesUseCase(domainQuery)
-                val displayArticles = mapper.mapToArticleDisplayModel(articles)
+                val displayArticles = mapper.toArticleUi(articles)
 
                 _uiState.update {
                     UiState.Success(

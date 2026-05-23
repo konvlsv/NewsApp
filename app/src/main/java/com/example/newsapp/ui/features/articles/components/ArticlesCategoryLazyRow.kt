@@ -14,14 +14,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.newsapp.ui.features.articles.models.ArticleCategoryDisplayModel
+import com.example.newsapp.ui.features.articles.models.ArticleCategoryUi
 import com.example.newsapp.ui.common.theme.AppTheme
 import com.example.newsapp.ui.common.theme.NewsAppTheme
 
 @Composable
 fun ArticlesCategoryLazyRow(
-    articleSelectedCategory: ArticleCategoryDisplayModel,
-    onArticleSelectedCategoryChange: (ArticleCategoryDisplayModel) -> Unit,
+    articleSelectedCategory: ArticleCategoryUi,
+    onArticleSelectedCategoryChange: (ArticleCategoryUi) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyRow(
@@ -30,7 +30,7 @@ fun ArticlesCategoryLazyRow(
         modifier = modifier,
     ) {
         items(
-            items = ArticleCategoryDisplayModel.entries,
+            items = ArticleCategoryUi.entries,
             key = { it.name }
         ) { category ->
             FilterChip(
@@ -68,7 +68,7 @@ fun ArticlesCategoryLazyRow(
 fun ArticlesCategoryLazyRowPreview() {
     NewsAppTheme() {
         ArticlesCategoryLazyRow(
-            articleSelectedCategory = ArticleCategoryDisplayModel.GENERAL,
+            articleSelectedCategory = ArticleCategoryUi.GENERAL,
             onArticleSelectedCategoryChange = {},
         )
     }

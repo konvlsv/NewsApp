@@ -1,15 +1,15 @@
 package com.example.newsapp.data.source.local.db
 
-import com.example.newsapp.data.source.local.models.ArticleLocalModel
+import com.example.newsapp.data.source.local.models.ArticleEntity
 
 object ArticleDao {
-    private var article: ArticleLocalModel? = null
+    private var article: ArticleEntity? = null
 
-    fun saveDetailArticle(article: ArticleLocalModel) {
+    fun saveDetailArticle(article: ArticleEntity) {
         this.article = article
     }
 
-    fun getDetailArticle(): ArticleLocalModel {
+    fun getDetailArticle(): ArticleEntity {
         return article ?: throw NullPointerException("Article is null")
     }
 }

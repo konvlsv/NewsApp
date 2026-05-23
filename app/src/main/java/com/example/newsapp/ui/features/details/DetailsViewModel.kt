@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.newsapp.App
 import com.example.newsapp.domain.exception.DomainException
 import com.example.newsapp.domain.usecase.GetDetailArticleUseCase
-import com.example.newsapp.ui.common.mapper.DisplayModelsMapper
+import com.example.newsapp.ui.common.mapper.UiModelsMapper
 import com.example.newsapp.domain.navigation.BrowserNavigator
 import com.example.newsapp.domain.share.ShareManager
 import com.example.newsapp.ui.state.ErrorState
@@ -21,7 +21,7 @@ import kotlin.coroutines.cancellation.CancellationException
 
 class DetailsViewModel(
     private val getDetailArticleUseCase: GetDetailArticleUseCase = App.instance.getDetailArticleUseCase,
-    private val mapper: DisplayModelsMapper = App.instance.displayModelsMapper,
+    private val mapper: UiModelsMapper = App.instance.uiModelsMapper,
     private val browserNavigator: BrowserNavigator = App.instance.browserNavigator,
     private val shareManager: ShareManager = App.instance.shareManager
 ) : ViewModel() {
@@ -48,7 +48,7 @@ class DetailsViewModel(
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             try {
-                val detailArticle = mapper.mapToArticleDisplayModel(getDetailArticleUseCase())
+                val detailArticle = mapper.toArticleUi(getDetailArticleUseCase())
                 _uiState.update {
                     UiState.Success(
                         data = DetailsState(

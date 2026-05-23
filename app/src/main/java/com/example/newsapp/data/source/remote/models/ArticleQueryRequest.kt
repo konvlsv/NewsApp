@@ -1,6 +1,6 @@
 package com.example.newsapp.data.source.remote.models
 
-data class ArticleQueryRemoteModel(
+data class ArticleQueryRequest(
     val query: String = "",
-    val category: ArticleCategoryRemoteModel,
+    val category: ArticleCategoryRequest,
 )

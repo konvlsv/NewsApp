@@ -1,12 +1,12 @@
 package com.example.newsapp.domain.usecase
 
-import com.example.newsapp.domain.models.ArticleDomainModel
+import com.example.newsapp.domain.models.Article
 import com.example.newsapp.domain.repository.ArticleRepository
 
 class GetDetailArticleUseCase(
     private val articleRepository: ArticleRepository
 ) {
-    suspend operator fun invoke(): ArticleDomainModel {
+    suspend operator fun invoke(): Article {
         return articleRepository.getDetailArticle()
     }
 }
