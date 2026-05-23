@@ -2,10 +2,10 @@ package com.example.newsapp.ui.navigation
 
 import kotlinx.serialization.Serializable
 
-sealed interface AppScreens {
+sealed interface Screens {
     @Serializable
-    data object NewsListScreen : AppScreens
+    data object Articles : Screens
 
     @Serializable
-    data object ArticleDetailsScreen : AppScreens
+    data object Details : Screens
 }

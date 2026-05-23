@@ -6,6 +6,6 @@ import com.example.newsapp.R
 
 val NavDestination?.titleRes: Int
     get() = when {
-        this?.hasRoute<AppScreens.ArticleDetailsScreen>() == true -> R.string.article_details_screen
+        this?.hasRoute<Screens.Details>() == true -> R.string.article_details_screen
         else -> R.string.news_list_screen
     }

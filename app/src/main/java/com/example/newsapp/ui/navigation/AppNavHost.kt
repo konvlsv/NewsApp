@@ -30,7 +30,7 @@ fun AppNavHost(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val backStackEntry by navController.currentBackStackEntryAsState()
     val canNavigateBack =
-        backStackEntry?.destination?.hasRoute<AppScreens.NewsListScreen>() == false
+        backStackEntry?.destination?.hasRoute<Screens.Articles>() == false
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -47,19 +47,19 @@ fun AppNavHost(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = AppScreens.NewsListScreen,
+            startDestination = Screens.Articles,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            composable<AppScreens.NewsListScreen> {
+            composable<Screens.Articles> {
                 ArticlesScreen(
                     onNavigateToArticleDetails = {
-                        navController.navigate(AppScreens.ArticleDetailsScreen)
+                        navController.navigate(Screens.Details)
                     },
                 )
             }
-            composable<AppScreens.ArticleDetailsScreen> {
+            composable<Screens.Details> {
                 DetailsScreen()
             }
         }
