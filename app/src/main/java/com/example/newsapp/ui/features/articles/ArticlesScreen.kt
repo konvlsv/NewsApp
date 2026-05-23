@@ -14,9 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.newsapp.ui.features.articles.component.ArticleCard
-import com.example.newsapp.ui.features.articles.component.ArticleSearchBar
-import com.example.newsapp.ui.features.articles.component.ArticlesCategoryLazyRow
+import com.example.newsapp.ui.features.articles.components.ArticleCard
+import com.example.newsapp.ui.features.articles.components.ArticleSearchBar
+import com.example.newsapp.ui.features.articles.components.ArticlesCategoryLazyRow
 import com.example.newsapp.ui.common.preview.getMockSuccessNewsUiState
 import com.example.newsapp.ui.state.UiState
 import com.example.newsapp.ui.common.theme.AppTheme

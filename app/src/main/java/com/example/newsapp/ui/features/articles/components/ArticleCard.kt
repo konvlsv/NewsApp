@@ -1,4 +1,4 @@
-package com.example.newsapp.ui.features.articles.component
+package com.example.newsapp.ui.features.articles.components
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
