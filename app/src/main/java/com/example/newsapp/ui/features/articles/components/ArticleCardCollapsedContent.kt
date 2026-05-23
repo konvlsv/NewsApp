@@ -30,11 +30,11 @@ import com.example.newsapp.ui.common.theme.NewsAppTheme
 
 @Composable
 fun ArticleCardCollapsedContent(
-    name: String,
+    sourceName: String,
     title: String,
     author: String,
     publishedAt: String,
-    urlToImage: String,
+    imageUrl: String,
     isExpanded: Boolean,
     onToggleArticleExpand: () -> Unit,
     modifier: Modifier = Modifier,
@@ -48,7 +48,7 @@ fun ArticleCardCollapsedContent(
             modifier = Modifier
                 .height(IntrinsicSize.Min),
         ) {
-            ArticleImage(urlToImage)
+            ArticleImage(imageUrl)
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -58,7 +58,7 @@ fun ArticleCardCollapsedContent(
                     .align(Alignment.TopStart)
             ) {
                 Text(
-                    text = name,
+                    text = sourceName,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.headlineSmall,
@@ -134,11 +134,11 @@ fun ArticleCardCollapsedContent(
 fun ArticleCardCollapsedPreview() {
     NewsAppTheme() {
         ArticleCardCollapsedContent(
-            name = getMockArticleUiList().random().sourceName,
+            sourceName = getMockArticleUiList().random().sourceName,
             title = getMockArticleUiList().random().title,
             author = getMockArticleUiList().random().author,
             publishedAt = getMockArticleUiList().random().publishedAt,
-            urlToImage = getMockArticleUiList().random().imageUrl,
+            imageUrl = getMockArticleUiList().random().imageUrl,
             onToggleArticleExpand = {},
             isExpanded = false,
         )
