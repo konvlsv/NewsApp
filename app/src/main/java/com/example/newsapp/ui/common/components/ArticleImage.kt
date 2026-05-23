@@ -13,12 +13,12 @@ import com.example.newsapp.R
 
 @Composable
 fun ArticleImage(
-    urlToImage: String,
+    imageUrl: String,
     modifier: Modifier = Modifier
 ) {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
-            .data(urlToImage)
+            .data(imageUrl)
             .crossfade(true)
             .build(),
         contentDescription = stringResource(R.string.article_picture),
