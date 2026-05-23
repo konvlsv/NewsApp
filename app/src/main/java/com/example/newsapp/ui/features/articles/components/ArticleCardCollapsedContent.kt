@@ -36,7 +36,7 @@ fun ArticleCardCollapsedContent(
     publishedAt: String,
     imageUrl: String,
     isExpanded: Boolean,
-    onToggleArticleExpand: () -> Unit,
+    onToggleExpand: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -73,7 +73,7 @@ fun ArticleCardCollapsedContent(
                             vertical = AppTheme.dimens.paddingSmall
                         )
                 )
-                IconButton(onClick = onToggleArticleExpand) {
+                IconButton(onClick = onToggleExpand) {
                     Icon(
                         painter = if (isExpanded) painterResource(R.drawable.ic_arrow_circle_up)
                         else painterResource(R.drawable.ic_arrow_circle_down),
@@ -139,7 +139,7 @@ fun ArticleCardCollapsedPreview() {
             author = getMockArticleUiList().first().author,
             publishedAt = getMockArticleUiList().first().publishedAt,
             imageUrl = getMockArticleUiList().first().imageUrl,
-            onToggleArticleExpand = {},
+            onToggleExpand = {},
             isExpanded = false,
         )
     }

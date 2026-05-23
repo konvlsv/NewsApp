@@ -53,17 +53,17 @@ class ArticlesViewModel(
             is ArticlesEvent.OnArticleSearchBarDeleteClick -> onArticleSearchBarDeleteClick()
             is ArticlesEvent.OnArticleSearchBarSearchClick -> onArticleSearchBarSearchClick()
             is ArticlesEvent.OnArticleSearchBarValueChange -> onArticleSearchBarValueChange(event.query)
-            is ArticlesEvent.OnShareClick -> shareArticle(event.article)
-            is ArticlesEvent.OnToggleArticleExpand -> onToggleArticleExpand(event.article)
-            is ArticlesEvent.OpenInBrowserClick -> openInBrowser(event.article)
-            is ArticlesEvent.OnNavigateToArticleDetails -> onNavigateToArticleDetails(event.article)
+            is ArticlesEvent.OnShare -> onShare(event.article)
+            is ArticlesEvent.OnToggleExpand -> onToggleExpand(event.article)
+            is ArticlesEvent.OnOpenInBrowser -> onOpenInBrowser(event.article)
+            is ArticlesEvent.OnNavigateToADetails -> onNavigateToDetails(event.article)
             is ArticlesEvent.OnArticleSelectedCategoryChange -> onArticleSelectedCategoryChange(
                 event.category
             )
         }
     }
 
-    private fun onNavigateToArticleDetails(article: ArticleUi) {
+    private fun onNavigateToDetails(article: ArticleUi) {
         viewModelScope.launch {
             try {
                 saveDetailArticle(article)
@@ -79,11 +79,11 @@ class ArticlesViewModel(
         saveDetailArticleUseCase(domainArticle)
     }
 
-    private fun shareArticle(article: ArticleUi) {
+    private fun onShare(article: ArticleUi) {
         shareArticleUseCase(article.title, article.description, article.articleUrl)
     }
 
-    private fun openInBrowser(article: ArticleUi) {
+    private fun onOpenInBrowser(article: ArticleUi) {
         openUrlUseCase(article.articleUrl)
     }
 
@@ -130,7 +130,7 @@ class ArticlesViewModel(
         loadArticles(true)
     }
 
-    private fun onToggleArticleExpand(clickedArticle: ArticleUi) {
+    private fun onToggleExpand(clickedArticle: ArticleUi) {
         _uiState.update { currentState ->
             if (currentState is UiState.Success) {
                 val updatedArticles = currentState.data.articles.map { article ->

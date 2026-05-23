@@ -22,10 +22,10 @@ import com.example.newsapp.ui.common.theme.NewsAppTheme
 @Composable
 fun ArticleCard(
     article: ArticleUi,
-    onNavigateToArticleDetails: (ArticleUi) -> Unit,
-    onShareClick: (ArticleUi) -> Unit,
-    onToggleArticleExpand: (ArticleUi) -> Unit,
-    openInBrowserClick: (ArticleUi) -> Unit,
+    onNavigateToDetails: (ArticleUi) -> Unit,
+    onShare: (ArticleUi) -> Unit,
+    onToggleExpand: (ArticleUi) -> Unit,
+    onOpenInBrowser: (ArticleUi) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -56,15 +56,15 @@ fun ArticleCard(
                 author = article.author,
                 publishedAt = article.publishedAt,
                 imageUrl = article.imageUrl,
-                onToggleArticleExpand = { onToggleArticleExpand(article) },
+                onToggleExpand = { onToggleExpand(article) },
                 isExpanded = article.isExpanded
             )
             if (article.isExpanded) {
                 ArticleCardExpandedContent(
                     description = article.description,
-                    onNavigateToArticleDetails = { onNavigateToArticleDetails(article) },
-                    onShareClick = { onShareClick(article) },
-                    openInBrowserClick = { openInBrowserClick(article) }
+                    onNavigateToDetails = { onNavigateToDetails(article) },
+                    onShare = { onShare(article) },
+                    onOpenInBrowser = { onOpenInBrowser(article) }
                 )
             }
         }
@@ -88,10 +88,10 @@ fun ArticleCardPreviewCollapsed() {
     NewsAppTheme() {
         ArticleCard(
             article = getMockArticleUiList().random(),
-            onShareClick = {},
-            onToggleArticleExpand = {},
-            onNavigateToArticleDetails = {},
-            openInBrowserClick = {}
+            onShare = {},
+            onToggleExpand = {},
+            onNavigateToDetails = {},
+            onOpenInBrowser = {}
         )
     }
 }
@@ -113,10 +113,10 @@ fun ArticleCardPreviewExpanded() {
     NewsAppTheme() {
         ArticleCard(
             article = getMockArticleUiList().random(),
-            onShareClick = {},
-            onToggleArticleExpand = {},
-            onNavigateToArticleDetails = {},
-            openInBrowserClick = {}
+            onShare = {},
+            onToggleExpand = {},
+            onNavigateToDetails = {},
+            onOpenInBrowser = {}
         )
     }
 }
