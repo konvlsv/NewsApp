@@ -35,7 +35,7 @@ fun ArticlesScreen(
     LaunchedEffect(viewModel.navigationEvent) {
         viewModel.navigationEvent.collect { target ->
             when (target) {
-                is ArticlesNavigationTarget.Details -> onNavigateToArticleDetails()
+                is ArticlesNavigationTarget.TargetToDetails -> onNavigateToArticleDetails()
             }
         }
     }
@@ -46,7 +46,7 @@ fun ArticlesScreen(
         }
 
         is UiState.Error -> {
-            ErrorScreen(message = currentState.message, modifier = modifier)
+            ErrorScreen(message = currentState.data.message, modifier = modifier)
         }
 
         is UiState.Success -> {

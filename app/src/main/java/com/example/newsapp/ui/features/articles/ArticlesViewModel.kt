@@ -26,10 +26,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
-sealed interface ArticlesNavigationTarget {
-    object Details : ArticlesNavigationTarget
-}
-
 class ArticlesViewModel(
     private val getTopHeadlinesUseCase: GetTopHeadlinesUseCase = App.instance.getTopHeadlinesUseCase,
     private val mapper: DisplayModelsMapper = App.instance.displayModelsMapper,
@@ -71,7 +67,7 @@ class ArticlesViewModel(
         viewModelScope.launch {
             try {
                 saveDetailArticle(article)
-                _navigationEvent.send(ArticlesNavigationTarget.Details)
+                _navigationEvent.send(ArticlesNavigationTarget.TargetToDetails)
             } catch (e: Exception) {
                 e.printStackTrace()
             }

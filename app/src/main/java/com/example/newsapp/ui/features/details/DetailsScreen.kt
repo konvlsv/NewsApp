@@ -43,19 +43,19 @@ fun DetailsScreen(
     modifier: Modifier = Modifier,
     viewModel: DetailsViewModel = viewModel()
 ) {
-    val state by viewModel.uiState.collectAsStateWithLifecycle()
-    when (state) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    when (val currentState = uiState) {
         is UiState.Loading -> {
             LoadingScreen()
         }
 
         is UiState.Error -> {
-            ErrorScreen(message = (state as UiState.Error).message)
+            ErrorScreen(message = currentState.data.message)
         }
 
         is UiState.Success -> {
             DetailsContent(
-                article = (state as UiState.Success).data.detail,
+                article = currentState.data.detail,
                 onOpenInBrowserClick = {
                     viewModel.openInBrowser(it.url)
                 },
