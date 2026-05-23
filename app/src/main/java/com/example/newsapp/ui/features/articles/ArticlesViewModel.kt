@@ -54,7 +54,7 @@ class ArticlesViewModel(
             is ArticlesEvent.OnArticleSearchBarSearchClick -> onArticleSearchBarSearchClick()
             is ArticlesEvent.OnArticleSearchBarValueChange -> onArticleSearchBarValueChange(event.query)
             is ArticlesEvent.OnShareClick -> shareArticle(event.article)
-            is ArticlesEvent.OnExpandOrCollapseCardClick -> onExpandOrCollapseCardClick(event.article)
+            is ArticlesEvent.OnToggleArticleExpand -> onToggleArticleExpand(event.article)
             is ArticlesEvent.OpenInBrowserClick -> openInBrowser(event.article)
             is ArticlesEvent.OnNavigateToArticleDetails -> onNavigateToArticleDetails(event.article)
             is ArticlesEvent.OnArticleSelectedCategoryChange -> onArticleSelectedCategoryChange(
@@ -130,7 +130,7 @@ class ArticlesViewModel(
         loadArticles(true)
     }
 
-    private fun onExpandOrCollapseCardClick(article: ArticleUi) {
+    private fun onToggleArticleExpand(article: ArticleUi) {
         _uiState.update { currentState ->
             if (currentState is UiState.Success) {
                 val newCards = currentState.data.expandedCards.toMutableSet()

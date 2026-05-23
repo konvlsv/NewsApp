@@ -18,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -36,8 +35,8 @@ fun ArticleCardCollapsedContent(
     author: String,
     publishedAt: String,
     urlToImage: String,
-    onExpandOrCollapseCardClick: () -> Unit,
-    onExpandOrCollapseCardIcon: Painter,
+    isCardExpanded: Boolean,
+    onToggleArticleExpand: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -66,7 +65,7 @@ fun ArticleCardCollapsedContent(
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier
                         .background(
-                            color = MaterialTheme.colorScheme.primaryContainer.copy(),
+                            color = MaterialTheme.colorScheme.primaryContainer,
                             shape = MaterialTheme.shapes.medium
                         )
                         .padding(
@@ -74,9 +73,10 @@ fun ArticleCardCollapsedContent(
                             vertical = AppTheme.dimens.paddingSmall
                         )
                 )
-                IconButton(onClick = { onExpandOrCollapseCardClick() }) {
+                IconButton(onClick = { onToggleArticleExpand() }) {
                     Icon(
-                        painter = onExpandOrCollapseCardIcon,
+                        painter = if (isCardExpanded) painterResource(R.drawable.ic_arrow_circle_up)
+                        else painterResource(R.drawable.ic_arrow_circle_down),
                         contentDescription = stringResource(R.string.expand_or_collapse_card),
                         tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
@@ -139,8 +139,8 @@ fun ArticleCardCollapsedPreview() {
             author = getMockArticleUiList().random().author,
             publishedAt = getMockArticleUiList().random().publishedAt,
             urlToImage = getMockArticleUiList().random().urlToImage,
-            onExpandOrCollapseCardClick = {},
-            onExpandOrCollapseCardIcon = painterResource(R.drawable.ic_arrow_circle_up),
+            onToggleArticleExpand = {},
+            isCardExpanded = false,
         )
     }
 }

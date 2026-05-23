@@ -13,9 +13,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.newsapp.R
 import com.example.newsapp.ui.common.models.ArticleUi
 import com.example.newsapp.ui.common.preview.getMockArticleUiList
 import com.example.newsapp.ui.common.theme.AppTheme
@@ -25,9 +23,9 @@ import com.example.newsapp.ui.common.theme.NewsAppTheme
 fun ArticleCard(
     article: ArticleUi,
     onNavigateToArticleDetails: (ArticleUi) -> Unit,
-    isCardExpanded: (ArticleUi) -> Boolean,
+    isCardExpanded: Boolean,
     onShareClick: (ArticleUi) -> Unit,
-    onExpandOrCollapseCardClick: (ArticleUi) -> Unit,
+    onToggleArticleExpand: (ArticleUi) -> Unit,
     openInBrowserClick: (ArticleUi) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -59,11 +57,10 @@ fun ArticleCard(
                 author = article.author,
                 publishedAt = article.publishedAt,
                 urlToImage = article.urlToImage,
-                onExpandOrCollapseCardClick = { onExpandOrCollapseCardClick(article) },
-                onExpandOrCollapseCardIcon = if (isCardExpanded(article)) painterResource(R.drawable.ic_arrow_circle_up)
-                else painterResource(R.drawable.ic_arrow_circle_down)
+                onToggleArticleExpand = { onToggleArticleExpand(article) },
+                isCardExpanded = isCardExpanded
             )
-            if (isCardExpanded(article)) {
+            if (isCardExpanded) {
                 ArticleCardExpandedContent(
                     description = article.description,
                     onNavigateToArticleDetails = { onNavigateToArticleDetails(article) },
@@ -93,8 +90,8 @@ fun ArticleCardPreviewCollapsed() {
         ArticleCard(
             article = getMockArticleUiList().random(),
             onShareClick = {},
-            onExpandOrCollapseCardClick = {},
-            isCardExpanded = { false },
+            onToggleArticleExpand = {},
+            isCardExpanded = false,
             onNavigateToArticleDetails = {},
             openInBrowserClick = {}
         )
@@ -119,8 +116,8 @@ fun ArticleCardPreviewExpanded() {
         ArticleCard(
             article = getMockArticleUiList().random(),
             onShareClick = {},
-            onExpandOrCollapseCardClick = {},
-            isCardExpanded = { true },
+            onToggleArticleExpand = {},
+            isCardExpanded = true,
             onNavigateToArticleDetails = {},
             openInBrowserClick = {}
         )

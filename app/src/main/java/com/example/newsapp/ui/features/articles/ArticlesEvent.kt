@@ -11,6 +11,6 @@ sealed interface ArticlesEvent {
     data class OnArticleSelectedCategoryChange(val category: ArticleCategoryUi) : ArticlesEvent
     data class OnNavigateToArticleDetails(val article: ArticleUi) : ArticlesEvent
     data class OnShareClick(val article: ArticleUi) : ArticlesEvent
-    data class OnExpandOrCollapseCardClick(val article: ArticleUi) : ArticlesEvent
+    data class OnToggleArticleExpand(val article: ArticleUi) : ArticlesEvent
     data class OpenInBrowserClick(val article: ArticleUi) : ArticlesEvent
 }
