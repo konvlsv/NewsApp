@@ -5,8 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.ExperimentalMaterial3Api
-import com.example.newsapp.ui.NewsApp
-import com.example.newsapp.ui.theme.NewsAppTheme
+import com.example.newsapp.ui.navigation.AppNavHost
+import com.example.newsapp.ui.common.theme.NewsAppTheme
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NewsAppTheme() {
-                NewsApp()
+                AppNavHost()
             }
         }
     }

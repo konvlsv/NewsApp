@@ -14,11 +14,11 @@ import com.example.newsapp.domain.repository.ArticleRepository
 import com.example.newsapp.domain.usecase.GetDetailArticleUseCase
 import com.example.newsapp.domain.usecase.GetTopHeadlinesUseCase
 import com.example.newsapp.domain.usecase.SaveDetailArticleUseCase
-import com.example.newsapp.ui.mapper.DisplayModelsMapper
-import com.example.newsapp.ui.navigation.BrowserNavigator
-import com.example.newsapp.ui.navigation.BrowserNavigatorImpl
-import com.example.newsapp.ui.navigation.ShareManager
-import com.example.newsapp.ui.navigation.ShareManagerImpl
+import com.example.newsapp.ui.common.mapper.DisplayModelsMapper
+import com.example.newsapp.domain.navigation.BrowserNavigator
+import com.example.newsapp.data.navigation.BrowserNavigatorImpl
+import com.example.newsapp.domain.share.ShareManager
+import com.example.newsapp.data.share.ShareManagerImpl
 
 class App : Application() {
 
