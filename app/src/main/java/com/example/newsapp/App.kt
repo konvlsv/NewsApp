@@ -19,6 +19,9 @@ import com.example.newsapp.domain.navigation.BrowserNavigator
 import com.example.newsapp.data.navigation.BrowserNavigatorImpl
 import com.example.newsapp.domain.share.ShareManager
 import com.example.newsapp.data.share.ShareManagerImpl
+import com.example.newsapp.domain.usecase.OpenUrlUseCase
+import com.example.newsapp.domain.usecase.ShareArticleUseCase
+import kotlin.getValue
 
 class App : Application() {
 
@@ -31,7 +34,6 @@ class App : Application() {
         LocalDataSourceImpl(articleDao = articleDao)
     }
     private val dataModelsMapper by lazy { DataModelsMapper }
-    val uiModelsMapper by lazy { UiModelsMapper }
     private val articleRepository: ArticleRepository by lazy {
         ArticleRepositoryImpl(
             remoteDataSource = remoteDataSource,
@@ -39,6 +41,18 @@ class App : Application() {
             mapper = dataModelsMapper
         )
     }
+    private val browserNavigator: BrowserNavigator by lazy {
+        BrowserNavigatorImpl(context = this)
+    }
+    private val shareManager: ShareManager by lazy {
+        ShareManagerImpl(context = this)
+    }
+
+    val uiModelsMapper by lazy { UiModelsMapper }
+
+    val openUrlUseCase: OpenUrlUseCase by lazy { OpenUrlUseCase(browserNavigator) }
+    val shareArticleUseCase: ShareArticleUseCase by lazy { ShareArticleUseCase(shareManager) }
+
     val getTopHeadlinesUseCase: GetTopHeadlinesUseCase by lazy {
         GetTopHeadlinesUseCase(
             articleRepository = articleRepository,
@@ -55,14 +69,6 @@ class App : Application() {
         SaveDetailArticleUseCase(
             articleRepository = articleRepository,
         )
-    }
-
-    val browserNavigator: BrowserNavigator by lazy {
-        BrowserNavigatorImpl(context = this)
-    }
-
-    val shareManager: ShareManager by lazy {
-        ShareManagerImpl(context = this)
     }
 
 

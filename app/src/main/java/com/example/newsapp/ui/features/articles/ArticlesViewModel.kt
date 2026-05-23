@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.App
 import com.example.newsapp.domain.exception.DomainException
-import com.example.newsapp.domain.navigation.BrowserNavigator
-import com.example.newsapp.domain.share.ShareManager
 import com.example.newsapp.domain.usecase.GetTopHeadlinesUseCase
+import com.example.newsapp.domain.usecase.OpenUrlUseCase
 import com.example.newsapp.domain.usecase.SaveDetailArticleUseCase
+import com.example.newsapp.domain.usecase.ShareArticleUseCase
 import com.example.newsapp.ui.common.mapper.UiModelsMapper
 import com.example.newsapp.ui.common.models.ArticleUi
 import com.example.newsapp.ui.features.articles.models.ArticleCategoryUi
@@ -30,8 +30,8 @@ class ArticlesViewModel(
     private val getTopHeadlinesUseCase: GetTopHeadlinesUseCase = App.instance.getTopHeadlinesUseCase,
     private val mapper: UiModelsMapper = App.instance.uiModelsMapper,
     private val saveDetailArticleUseCase: SaveDetailArticleUseCase = App.instance.saveDetailArticleUseCase,
-    private val shareManager: ShareManager = App.instance.shareManager,
-    private val browserNavigator: BrowserNavigator = App.instance.browserNavigator
+    private val openUrlUseCase: OpenUrlUseCase = App.instance.openUrlUseCase,
+    private val shareArticleUseCase: ShareArticleUseCase = App.instance.shareArticleUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState<ArticlesState>>(UiState.Loading)
@@ -80,11 +80,11 @@ class ArticlesViewModel(
     }
 
     private fun shareArticle(article: ArticleUi) {
-        shareManager.shareArticle(article.title, article.description, article.url)
+        shareArticleUseCase(article.title, article.description, article.url)
     }
 
     private fun openInBrowser(article: ArticleUi) {
-        browserNavigator.openUrl(article.url)
+        openUrlUseCase(article.url)
     }
 
 

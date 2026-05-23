@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.newsapp.App
 import com.example.newsapp.domain.exception.DomainException
 import com.example.newsapp.domain.usecase.GetDetailArticleUseCase
+import com.example.newsapp.domain.usecase.OpenUrlUseCase
+import com.example.newsapp.domain.usecase.ShareArticleUseCase
 import com.example.newsapp.ui.common.mapper.UiModelsMapper
-import com.example.newsapp.domain.navigation.BrowserNavigator
-import com.example.newsapp.domain.share.ShareManager
 import com.example.newsapp.ui.state.ErrorState
 import com.example.newsapp.ui.state.ErrorType
 import com.example.newsapp.ui.state.UiState
@@ -22,8 +22,8 @@ import kotlin.coroutines.cancellation.CancellationException
 class DetailsViewModel(
     private val getDetailArticleUseCase: GetDetailArticleUseCase = App.instance.getDetailArticleUseCase,
     private val mapper: UiModelsMapper = App.instance.uiModelsMapper,
-    private val browserNavigator: BrowserNavigator = App.instance.browserNavigator,
-    private val shareManager: ShareManager = App.instance.shareManager
+    private val openUrlUseCase: OpenUrlUseCase = App.instance.openUrlUseCase,
+    private val shareArticleUseCase: ShareArticleUseCase = App.instance.shareArticleUseCase,
 ) : ViewModel() {
 
     private var fetchJob: Job? = null
@@ -37,11 +37,11 @@ class DetailsViewModel(
     }
 
     fun openInBrowser(url: String) {
-        browserNavigator.openUrl(url)
+        openUrlUseCase(url)
     }
 
     fun shareArticle(title: String, description: String, url: String) {
-        shareManager.shareArticle(title, description, url)
+        shareArticleUseCase(title, description, url)
     }
 
     private fun loadArticle() {
