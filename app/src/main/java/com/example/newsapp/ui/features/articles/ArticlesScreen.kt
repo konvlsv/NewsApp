@@ -98,10 +98,10 @@ fun ArticlesContent(
             items(items = state.articles, key = { it.articleUrl }) { article ->
                 ArticleCard(
                     article = article,
-                    onNavigateToDetails = { onEvent(ArticlesEvent.OnNavigateToADetails(article)) },
-                    onShare = { onEvent(ArticlesEvent.OnShare(article)) },
-                    onToggleExpand = { onEvent(ArticlesEvent.OnToggleExpand(article)) },
-                    onOpenInBrowser = { onEvent(ArticlesEvent.OnOpenInBrowser(article)) },
+                    onNavigateToDetails = { onEvent(ArticlesEvent.OnNavigateToADetails(it)) },
+                    onShare = { onEvent(ArticlesEvent.OnShare(it)) },
+                    onToggleExpand = { onEvent(ArticlesEvent.OnToggleExpand(it)) },
+                    onOpenInBrowser = { onEvent(ArticlesEvent.OnOpenInBrowser(it)) },
                 )
             }
         }
