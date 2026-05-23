@@ -4,14 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.App
 import com.example.newsapp.domain.exception.DomainException
+import com.example.newsapp.domain.navigation.BrowserNavigator
+import com.example.newsapp.domain.share.ShareManager
 import com.example.newsapp.domain.usecase.GetTopHeadlinesUseCase
 import com.example.newsapp.domain.usecase.SaveDetailArticleUseCase
 import com.example.newsapp.ui.common.mapper.DisplayModelsMapper
-import com.example.newsapp.ui.features.articles.models.ArticleCategoryDisplayModel
 import com.example.newsapp.ui.common.models.ArticleDisplayModel
+import com.example.newsapp.ui.features.articles.models.ArticleCategoryDisplayModel
 import com.example.newsapp.ui.features.articles.models.ArticleQueryDisplayModel
-import com.example.newsapp.domain.navigation.BrowserNavigator
-import com.example.newsapp.domain.share.ShareManager
+import com.example.newsapp.ui.state.ErrorState
 import com.example.newsapp.ui.state.ErrorType
 import com.example.newsapp.ui.state.UiState
 import kotlinx.coroutines.Job
@@ -56,11 +57,13 @@ class ArticlesViewModel(
             is ArticlesActions.OnArticleSearchBarDeleteClick -> onArticleSearchBarDeleteClick()
             is ArticlesActions.OnArticleSearchBarSearchClick -> onArticleSearchBarSearchClick()
             is ArticlesActions.OnArticleSearchBarValueChange -> onArticleSearchBarValueChange(action.query)
-            is ArticlesActions.OnArticleSelectedCategoryChange -> onArticleSelectedCategoryChange(action.category)
             is ArticlesActions.OnShareClick -> shareArticle(action.article)
             is ArticlesActions.OnExpandOrCollapseCardClick -> onExpandOrCollapseCardClick(action.article)
             is ArticlesActions.OpenInBrowserClick -> openInBrowser(action.article)
             is ArticlesActions.OnNavigateToArticleDetails -> onNavigateToArticleDetails(action.article)
+            is ArticlesActions.OnArticleSelectedCategoryChange -> onArticleSelectedCategoryChange(
+                action.category
+            )
         }
     }
 
@@ -198,7 +201,12 @@ class ArticlesViewModel(
                     else -> ErrorType.GENERIC
                 }
                 _uiState.update {
-                    UiState.Error(message = e.message ?: "Unknown error", errorType = errorType)
+                    UiState.Error(
+                        data = ErrorState(
+                            message = e.message ?: "Unknown error",
+                            errorType = errorType
+                        )
+                    )
                 }
             }
         }

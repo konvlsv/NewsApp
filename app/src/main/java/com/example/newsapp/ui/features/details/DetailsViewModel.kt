@@ -3,10 +3,13 @@ package com.example.newsapp.ui.features.details
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.App
+import com.example.newsapp.domain.exception.DomainException
 import com.example.newsapp.domain.usecase.GetDetailArticleUseCase
 import com.example.newsapp.ui.common.mapper.DisplayModelsMapper
 import com.example.newsapp.domain.navigation.BrowserNavigator
 import com.example.newsapp.domain.share.ShareManager
+import com.example.newsapp.ui.state.ErrorState
+import com.example.newsapp.ui.state.ErrorType
 import com.example.newsapp.ui.state.UiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -55,8 +58,20 @@ class DetailsViewModel(
                 }
             } catch (e: Exception) {
                 if (e is CancellationException) return@launch
+                val errorType = when (e) {
+                    is DomainException.ServerException -> ErrorType.SERVER
+                    is DomainException.ParseException -> ErrorType.PARSING
+                    is DomainException.NetworkException -> ErrorType.NETWORK
+                    is DomainException.TimeoutException -> ErrorType.NETWORK
+                    else -> ErrorType.GENERIC
+                }
                 _uiState.update {
-                    UiState.Error(message = e.message ?: "Unknown error")
+                    UiState.Error(
+                        data = ErrorState(
+                            message = e.message ?: "Unknown error",
+                            errorType = errorType
+                        )
+                    )
                 }
             }
         }
