@@ -57,7 +57,7 @@ fun ArticleCardExpandedContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
-                onClick = { onNavigateToDetails() },
+                onClick = onNavigateToDetails,
                 shape = MaterialTheme.shapes.medium,
                 elevation = ButtonDefaults.buttonElevation(AppTheme.dimens.buttonElevation),
             ) {
