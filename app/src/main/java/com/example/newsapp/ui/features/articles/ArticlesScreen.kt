@@ -88,8 +88,8 @@ fun ArticlesContent(
 
             item(key = "categories") {
                 ArticlesCategoryLazyRow(
-                    articleSelectedCategory = state.articleQuery.category,
-                    onArticleSelectedCategoryChange = { category ->
+                    selectedCategory = state.articleQuery.category,
+                    onCategorySelected = { category ->
                         onEvent(ArticlesEvent.OnArticleSelectedCategoryChange(category))
                     }
                 )
