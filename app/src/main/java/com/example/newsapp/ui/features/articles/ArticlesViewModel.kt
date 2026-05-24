@@ -128,7 +128,7 @@ class ArticlesViewModel(
         _uiState.update { currentState ->
             if (currentState is UiState.Success) {
                 val updatedArticles = currentState.data.articles.map { article ->
-                    if (article.id == clickedArticle.id) {
+                    if (article.articleUrl == clickedArticle.articleUrl) {
                         article.copy(isExpanded = !article.isExpanded) // Переключаем флаг
                     } else {
                         article
