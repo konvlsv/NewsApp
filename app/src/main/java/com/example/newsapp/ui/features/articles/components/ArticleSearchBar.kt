@@ -26,18 +26,18 @@ import com.example.newsapp.ui.common.theme.NewsAppTheme
 
 @Composable
 fun ArticleSearchBar(
-    articleSearchBarSearchQuery: String,
-    onArticleSearchBarValueChange: (String) -> Unit,
-    onArticleSearchBarDeleteClick: () -> Unit,
-    onArticleSearchBarSearchClick: () -> Unit,
+    searchQuery: String,
+    onSearchQueryChange: (String) -> Unit,
+    onClear: () -> Unit,
+    onSearch: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     OutlinedTextField(
-        value = articleSearchBarSearchQuery,
-        onValueChange = { onArticleSearchBarValueChange(it) },
+        value = searchQuery,
+        onValueChange = onSearchQueryChange,
         placeholder = { Text(stringResource(R.string.search)) },
         singleLine = true,
         leadingIcon = {
@@ -48,9 +48,9 @@ fun ArticleSearchBar(
             )
         },
         trailingIcon = {
-            if (articleSearchBarSearchQuery.isNotEmpty()) {
+            if (searchQuery.isNotEmpty()) {
                 IconButton(onClick = {
-                    onArticleSearchBarDeleteClick()
+                    onClear()
                     focusManager.clearFocus()
                     keyboardController?.hide()
                 }) {
@@ -61,7 +61,7 @@ fun ArticleSearchBar(
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions(
             onSearch = {
-                onArticleSearchBarSearchClick()
+                onSearch()
                 focusManager.clearFocus()
                 keyboardController?.hide()
             }
@@ -87,12 +87,12 @@ fun ArticleSearchBar(
 )
 @Composable
 fun ArticleSearchBarPreview() {
-    NewsAppTheme() {
+    NewsAppTheme {
         ArticleSearchBar(
-            articleSearchBarSearchQuery = "asdasd",
-            onArticleSearchBarValueChange = {},
-            onArticleSearchBarDeleteClick = {},
-            onArticleSearchBarSearchClick = {}
+            searchQuery = "Preview",
+            onSearchQueryChange = {},
+            onClear = {},
+            onSearch = {}
         )
     }
 }

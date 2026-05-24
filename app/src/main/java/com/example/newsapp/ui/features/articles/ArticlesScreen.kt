@@ -74,12 +74,12 @@ fun ArticlesContent(
 
             item(key = "search_bar") {
                 ArticleSearchBar(
-                    articleSearchBarSearchQuery = state.articleQuery.query,
-                    onArticleSearchBarValueChange = { query ->
+                    searchQuery = state.articleQuery.query,
+                    onSearchQueryChange = { query ->
                         onEvent(ArticlesEvent.OnArticleSearchBarValueChange(query))
                     },
-                    onArticleSearchBarDeleteClick = { onEvent(ArticlesEvent.OnArticleSearchBarDeleteClick) },
-                    onArticleSearchBarSearchClick = { onEvent(ArticlesEvent.OnArticleSearchBarSearchClick) },
+                    onClear = { onEvent(ArticlesEvent.OnArticleSearchBarDeleteClick) },
+                    onSearch = { onEvent(ArticlesEvent.OnArticleSearchBarSearchClick) },
                     modifier = Modifier
                         .padding(horizontal = AppTheme.dimens.paddingLarge)
                         .padding(vertical = AppTheme.dimens.paddingLarge)
