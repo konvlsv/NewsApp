@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -19,8 +20,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.newsapp.ui.common.components.NewsTopAppBar
-import com.example.newsapp.ui.features.details.DetailsScreen
 import com.example.newsapp.ui.features.articles.ArticlesScreen
+import com.example.newsapp.ui.features.details.DetailsScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,7 +41,7 @@ fun AppNavHost(
             NewsTopAppBar(
                 title = stringResource(backStackEntry?.destination.titleRes),
                 canNavigateBack = canNavigateBack,
-                navigateUp = { navController.navigateUp() },
+                navigateUp = dropUnlessResumed { navController.navigateUp() },
                 scrollBehavior = scrollBehavior
             )
         },
