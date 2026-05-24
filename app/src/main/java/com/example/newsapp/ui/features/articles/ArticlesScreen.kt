@@ -92,7 +92,8 @@ fun ArticlesContent(
             item(key = "categories") {
                 ArticlesCategorySelector(
                     selectedCategory = state.articleQuery.category,
-                    onCategorySelected = { onEvent(ArticlesEvent.OnCategorySelected(it)) }
+                    onCategorySelected = { onEvent(ArticlesEvent.OnCategorySelected(it)) },
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
 
