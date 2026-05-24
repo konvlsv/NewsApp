@@ -50,51 +50,37 @@ class ArticlesViewModel(
     fun handleEvent(event: ArticlesEvent) {
         when (event) {
             is ArticlesEvent.OnRefresh -> onRefresh()
-            is ArticlesEvent.OnArticleSearchBarDeleteClick -> onArticleSearchBarDeleteClick()
-            is ArticlesEvent.OnArticleSearchBarSearchClick -> onArticleSearchBarSearchClick()
-            is ArticlesEvent.OnArticleSearchBarValueChange -> onArticleSearchBarValueChange(event.query)
+            is ArticlesEvent.OnClear -> onClear()
+            is ArticlesEvent.OnSearch -> onSearch()
+            is ArticlesEvent.OnSearchQueryChange -> onSearchQueryChange(event.query)
+            is ArticlesEvent.OnCategorySelected -> onCategorySelected(event.category)
             is ArticlesEvent.OnShare -> onShare(event.article)
             is ArticlesEvent.OnToggleExpand -> onToggleExpand(event.article)
             is ArticlesEvent.OnOpenInBrowser -> onOpenInBrowser(event.article)
             is ArticlesEvent.OnNavigateToADetails -> onNavigateToDetails(event.article)
-            is ArticlesEvent.OnArticleSelectedCategoryChange -> onArticleSelectedCategoryChange(
-                event.category
-            )
         }
     }
 
-    private fun onNavigateToDetails(article: ArticleUi) {
-        viewModelScope.launch {
-            try {
-                saveDetailArticle(article)
-                _navigationEvent.send(ArticlesNavigationTarget.TargetToDetails)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-    private suspend fun saveDetailArticle(article: ArticleUi) {
-        val domainArticle = mapper.toArticle(article) //
-        saveDetailArticleUseCase(domainArticle)
-    }
-
-    private fun onShare(article: ArticleUi) {
-        shareArticleUseCase(article.title, article.description, article.articleUrl)
-    }
-
-    private fun onOpenInBrowser(article: ArticleUi) {
-        openUrlUseCase(article.articleUrl)
-    }
-
-
-    private fun onArticleSelectedCategoryChange(category: ArticleCategoryUi) {
+    private fun onRefresh() {
         _uiState.update { currentState ->
             if (currentState is UiState.Success) {
                 currentState.copy(
                     data = currentState.data.copy(
                         isRefreshing = true,
-                        articleQuery = currentState.data.articleQuery.copy(category = category)
+                    )
+                )
+            } else currentState
+        }
+        loadArticles()
+    }
+
+    private fun onClear() {
+        _uiState.update { currentState ->
+            if (currentState is UiState.Success) {
+                currentState.copy(
+                    data = currentState.data.copy(
+                        isRefreshing = true,
+                        articleQuery = currentState.data.articleQuery.copy(query = "")
                     )
                 )
             } else currentState
@@ -102,7 +88,11 @@ class ArticlesViewModel(
         loadArticles(true)
     }
 
-    fun onArticleSearchBarValueChange(query: String) {
+    private fun onSearch() {
+        onRefresh()
+    }
+
+    fun onSearchQueryChange(query: String) {
         _uiState.update { currentState ->
             if (currentState is UiState.Success) {
                 currentState.copy(
@@ -116,18 +106,22 @@ class ArticlesViewModel(
         loadArticles(true)
     }
 
-    private fun onArticleSearchBarDeleteClick() {
+    private fun onCategorySelected(category: ArticleCategoryUi) {
         _uiState.update { currentState ->
             if (currentState is UiState.Success) {
                 currentState.copy(
                     data = currentState.data.copy(
                         isRefreshing = true,
-                        articleQuery = currentState.data.articleQuery.copy(query = "")
+                        articleQuery = currentState.data.articleQuery.copy(category = category)
                     )
                 )
             } else currentState
         }
         loadArticles(true)
+    }
+
+    private fun onShare(article: ArticleUi) {
+        shareArticleUseCase(article.title, article.description, article.articleUrl)
     }
 
     private fun onToggleExpand(clickedArticle: ArticleUi) {
@@ -145,21 +139,24 @@ class ArticlesViewModel(
         }
     }
 
-    private fun onArticleSearchBarSearchClick() {
-        onRefresh()
+    private fun onOpenInBrowser(article: ArticleUi) {
+        openUrlUseCase(article.articleUrl)
     }
 
-    private fun onRefresh() {
-        _uiState.update { currentState ->
-            if (currentState is UiState.Success) {
-                currentState.copy(
-                    data = currentState.data.copy(
-                        isRefreshing = true,
-                    )
-                )
-            } else currentState
+    private fun onNavigateToDetails(article: ArticleUi) {
+        viewModelScope.launch {
+            try {
+                saveDetailArticle(article)
+                _navigationEvent.send(ArticlesNavigationTarget.TargetToDetails)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
-        loadArticles()
+    }
+
+    private suspend fun saveDetailArticle(article: ArticleUi) {
+        val domainArticle = mapper.toArticle(article) //
+        saveDetailArticleUseCase(domainArticle)
     }
 
     private fun loadArticles(withDelay: Boolean = false) {

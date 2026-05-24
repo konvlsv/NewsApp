@@ -14,15 +14,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.newsapp.ui.common.components.ErrorScreen
+import com.example.newsapp.ui.common.components.LoadingScreen
+import com.example.newsapp.ui.common.preview.getMockSuccessNewsUiState
+import com.example.newsapp.ui.common.theme.AppTheme
+import com.example.newsapp.ui.common.theme.NewsAppTheme
 import com.example.newsapp.ui.features.articles.components.ArticleCard
 import com.example.newsapp.ui.features.articles.components.ArticleSearchBar
 import com.example.newsapp.ui.features.articles.components.ArticlesCategorySelector
-import com.example.newsapp.ui.common.preview.getMockSuccessNewsUiState
 import com.example.newsapp.ui.state.UiState
-import com.example.newsapp.ui.common.theme.AppTheme
-import com.example.newsapp.ui.common.theme.NewsAppTheme
-import com.example.newsapp.ui.common.components.ErrorScreen
-import com.example.newsapp.ui.common.components.LoadingScreen
 
 @Composable
 fun ArticlesScreen(
@@ -75,11 +75,9 @@ fun ArticlesContent(
             item(key = "search_bar") {
                 ArticleSearchBar(
                     searchQuery = state.articleQuery.query,
-                    onSearchQueryChange = { query ->
-                        onEvent(ArticlesEvent.OnArticleSearchBarValueChange(query))
-                    },
-                    onClear = { onEvent(ArticlesEvent.OnArticleSearchBarDeleteClick) },
-                    onSearch = { onEvent(ArticlesEvent.OnArticleSearchBarSearchClick) },
+                    onClear = { onEvent(ArticlesEvent.OnClear) },
+                    onSearch = { onEvent(ArticlesEvent.OnSearch) },
+                    onSearchQueryChange = { onEvent(ArticlesEvent.OnSearchQueryChange(it)) },
                     modifier = Modifier
                         .padding(horizontal = AppTheme.dimens.paddingLarge)
                         .padding(vertical = AppTheme.dimens.paddingLarge)
@@ -89,19 +87,17 @@ fun ArticlesContent(
             item(key = "categories") {
                 ArticlesCategorySelector(
                     selectedCategory = state.articleQuery.category,
-                    onCategorySelected = { category ->
-                        onEvent(ArticlesEvent.OnArticleSelectedCategoryChange(category))
-                    }
+                    onCategorySelected = { onEvent(ArticlesEvent.OnCategorySelected(it)) }
                 )
             }
 
             items(items = state.articles, key = { it.articleUrl }) { article ->
                 ArticleCard(
                     article = article,
-                    onNavigateToDetails = { onEvent(ArticlesEvent.OnNavigateToADetails(article)) },
                     onShare = { onEvent(ArticlesEvent.OnShare(article)) },
                     onToggleExpand = { onEvent(ArticlesEvent.OnToggleExpand(article)) },
                     onOpenInBrowser = { onEvent(ArticlesEvent.OnOpenInBrowser(article)) },
+                    onNavigateToDetails = { onEvent(ArticlesEvent.OnNavigateToADetails(article)) },
                 )
             }
         }
