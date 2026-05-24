@@ -34,7 +34,7 @@ fun ArticlesScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(viewModel.navigationEvent) {
+    LaunchedEffect(key1 = Unit) {
         viewModel.navigationEvent.collect { target ->
             when (target) {
                 is ArticlesNavigationTarget.TargetToDetails -> onNavigateToArticleDetails()
