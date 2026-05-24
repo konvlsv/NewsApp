@@ -4,6 +4,7 @@ import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -102,6 +103,9 @@ fun ArticlesContent(
                     onToggleExpand = { onEvent(ArticlesEvent.OnToggleExpand(article)) },
                     onOpenInBrowser = { onEvent(ArticlesEvent.OnOpenInBrowser(article)) },
                     onNavigateToDetails = { onEvent(ArticlesEvent.OnNavigateToADetails(article)) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = AppTheme.dimens.paddingLarge)
                 )
             }
         }
