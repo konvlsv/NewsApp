@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.newsapp.ui.common.components.ErrorScreen
 import com.example.newsapp.ui.common.components.LoadingScreen
@@ -100,10 +101,10 @@ fun ArticlesContent(
             items(items = state.articles, key = { it.articleUrl }) { article ->
                 ArticleCard(
                     article = article,
-                    onShare = { onEvent(ArticlesEvent.OnShare(article)) },
+                    onShare = dropUnlessResumed{ onEvent(ArticlesEvent.OnShare(article)) },
                     onToggleExpand = { onEvent(ArticlesEvent.OnToggleExpand(article)) },
-                    onOpenInBrowser = { onEvent(ArticlesEvent.OnOpenInBrowser(article)) },
-                    onNavigateToDetails = { onEvent(ArticlesEvent.OnNavigateToADetails(article)) },
+                    onOpenInBrowser = dropUnlessResumed{ onEvent(ArticlesEvent.OnOpenInBrowser(article)) },
+                    onNavigateToDetails = dropUnlessResumed{ onEvent(ArticlesEvent.OnNavigateToADetails(article)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = AppTheme.dimens.paddingLarge)
