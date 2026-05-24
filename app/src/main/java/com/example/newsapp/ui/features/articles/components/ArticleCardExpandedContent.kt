@@ -22,7 +22,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.compose.dropUnlessResumed
 import com.example.newsapp.R
 import com.example.newsapp.ui.common.preview.getMockArticleUiList
 import com.example.newsapp.ui.common.theme.AppTheme
@@ -58,7 +57,7 @@ fun ArticleCardExpandedContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
-                onClick = dropUnlessResumed { onNavigateToDetails() },
+                onClick = onNavigateToDetails,
                 shape = MaterialTheme.shapes.medium,
                 elevation = ButtonDefaults.buttonElevation(AppTheme.dimens.buttonElevation),
             ) {
@@ -68,14 +67,14 @@ fun ArticleCardExpandedContent(
                 )
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = dropUnlessResumed { onOpenInBrowser() }) {
+                IconButton(onClick = onOpenInBrowser) {
                     Icon(
                         painter = painterResource(R.drawable.ic_open_in_browser),
                         contentDescription = stringResource(R.string.open_in_browser),
                         tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
                 }
-                IconButton(onClick = dropUnlessResumed { onShare() }) {
+                IconButton(onClick = onShare) {
                     Icon(
                         painter = painterResource(R.drawable.ic_share),
                         contentDescription = stringResource(R.string.share),
