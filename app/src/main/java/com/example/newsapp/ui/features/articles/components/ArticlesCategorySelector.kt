@@ -19,7 +19,7 @@ import com.example.newsapp.ui.common.theme.AppTheme
 import com.example.newsapp.ui.common.theme.NewsAppTheme
 
 @Composable
-fun ArticlesCategoryLazyRow(
+fun ArticlesCategorySelector(
     selectedCategory: ArticleCategoryUi,
     onCategorySelected: (ArticleCategoryUi) -> Unit,
     modifier: Modifier = Modifier
@@ -65,9 +65,9 @@ fun ArticlesCategoryLazyRow(
     backgroundColor = 0xFF15130B
 )
 @Composable
-fun ArticlesCategoryLazyRowPreview() {
+fun ArticlesCategorySelectorPreview() {
     NewsAppTheme {
-        ArticlesCategoryLazyRow(
+        ArticlesCategorySelector(
             selectedCategory = ArticleCategoryUi.GENERAL,
             onCategorySelected = {},
         )

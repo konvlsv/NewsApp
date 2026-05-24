@@ -16,7 +16,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.newsapp.ui.features.articles.components.ArticleCard
 import com.example.newsapp.ui.features.articles.components.ArticleSearchBar
-import com.example.newsapp.ui.features.articles.components.ArticlesCategoryLazyRow
+import com.example.newsapp.ui.features.articles.components.ArticlesCategorySelector
 import com.example.newsapp.ui.common.preview.getMockSuccessNewsUiState
 import com.example.newsapp.ui.state.UiState
 import com.example.newsapp.ui.common.theme.AppTheme
@@ -87,7 +87,7 @@ fun ArticlesContent(
             }
 
             item(key = "categories") {
-                ArticlesCategoryLazyRow(
+                ArticlesCategorySelector(
                     selectedCategory = state.articleQuery.category,
                     onCategorySelected = { category ->
                         onEvent(ArticlesEvent.OnArticleSelectedCategoryChange(category))
