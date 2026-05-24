@@ -92,7 +92,7 @@ class ArticlesViewModel(
         onRefresh()
     }
 
-    fun onSearchQueryChange(query: String) {
+    private fun onSearchQueryChange(query: String) {
         _uiState.update { currentState ->
             if (currentState is UiState.Success) {
                 currentState.copy(
