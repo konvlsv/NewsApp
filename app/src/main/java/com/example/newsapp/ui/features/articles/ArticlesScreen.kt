@@ -2,6 +2,7 @@ package com.example.newsapp.ui.features.articles
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -70,7 +71,10 @@ fun ArticlesContent(
         onRefresh = { onEvent(ArticlesEvent.OnRefresh) },
         modifier = modifier.fillMaxSize()
     ) {
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(AppTheme.dimens.paddingMedium)
+        ) {
 
             item(key = "search_bar") {
                 ArticleSearchBar(
@@ -80,7 +84,7 @@ fun ArticlesContent(
                     onSearchQueryChange = { onEvent(ArticlesEvent.OnSearchQueryChange(it)) },
                     modifier = Modifier
                         .padding(horizontal = AppTheme.dimens.paddingLarge)
-                        .padding(vertical = AppTheme.dimens.paddingLarge)
+                        .padding(top = AppTheme.dimens.paddingLarge)
                 )
             }
 
