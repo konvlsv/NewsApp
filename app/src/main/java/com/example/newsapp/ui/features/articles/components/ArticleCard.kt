@@ -5,7 +5,6 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -49,19 +48,17 @@ fun ArticleCard(
                 vertical = AppTheme.dimens.paddingMedium
             )
     ) {
-        Column() {
-            ArticleCardCollapsedContent(
-                article = article,
-                onToggleExpand = onToggleExpand
+        ArticleCardCollapsedContent(
+            article = article,
+            onToggleExpand = onToggleExpand
+        )
+        if (article.isExpanded) {
+            ArticleCardExpandedContent(
+                description = article.description,
+                onNavigateToDetails = onNavigateToDetails,
+                onShare = onShare,
+                onOpenInBrowser = onOpenInBrowser
             )
-            if (article.isExpanded) {
-                ArticleCardExpandedContent(
-                    description = article.description,
-                    onNavigateToDetails = onNavigateToDetails,
-                    onShare = onShare,
-                    onOpenInBrowser = onOpenInBrowser
-                )
-            }
         }
     }
 }
@@ -82,7 +79,7 @@ fun ArticleCard(
 fun ArticleCardPreviewCollapsed() {
     NewsAppTheme() {
         ArticleCard(
-            article = getMockArticleUiList().random(),
+            article = getMockArticleUiList().first(),
             onShare = {},
             onToggleExpand = {},
             onNavigateToDetails = {},
@@ -107,7 +104,7 @@ fun ArticleCardPreviewCollapsed() {
 fun ArticleCardPreviewExpanded() {
     NewsAppTheme() {
         ArticleCard(
-            article = getMockArticleUiList().random(),
+            article = getMockArticleUiList().first().copy(isExpanded = true),
             onShare = {},
             onToggleExpand = {},
             onNavigateToDetails = {},
