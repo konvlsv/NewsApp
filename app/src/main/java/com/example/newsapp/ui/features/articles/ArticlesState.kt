@@ -8,9 +8,10 @@ data class ArticlesState(
     val articles: List<ArticleUi> = emptyList(),
     val isLoading: Boolean = false,
     val isRefreshing: Boolean = false,
-    val isError: Boolean = false,
     val searchQuery: String = "",
     val selectedCategory: ArticleCategoryUi = ArticleCategoryUi.GENERAL,
     val expandedArticleUrls: Set<String> = emptySet(),
     val errorState: ErrorState? = null,
-)
+){
+    val isError: Boolean get() = errorState != null
+}

@@ -16,6 +16,7 @@ import com.example.newsapp.ui.state.ErrorState
 import com.example.newsapp.ui.state.ErrorType
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,14 +39,13 @@ class ArticlesViewModel(
     private val _navigationEvent = Channel<ArticlesNavigationTarget>()
     val navigationEvent = _navigationEvent.receiveAsFlow()
 
-    private var viewModelJob: Job? = null
+    private var fetchJob: Job? = null
 
     init {
         _state.update { currentState ->
             currentState.copy(
                 isLoading = true,
                 errorState = null,
-                isError = false,
                 isRefreshing = false,
                 articles = emptyList(),
                 expandedArticleUrls = emptySet(),
@@ -53,7 +53,7 @@ class ArticlesViewModel(
                 selectedCategory = ArticleCategoryUi.GENERAL,
             )
         }
-        handleLoading("Failed to load articles")
+        executeSearchRequest(message = "Failed to load articles")
     }
 
     fun handleEvent(event: ArticlesEvent) {
@@ -71,59 +71,26 @@ class ArticlesViewModel(
     }
 
     private fun onRefresh() {
-        _state.update { currentState ->
-            currentState.copy(
-                isLoading = false,
-                errorState = null,
-                isError = false,
-                isRefreshing = true,
-            )
-        }
-        handleLoading("Failed to load articles")
+        executeSearchRequest(message = "Failed to load articles")
     }
 
     private fun onClear() {
-        _state.update { currentState ->
-            currentState.copy(
-                isLoading = false,
-                errorState = null,
-                isError = false,
-                isRefreshing = true,
-                searchQuery = "",
-            )
-        }
-        handleLoading("Failed to load articles")
+        _state.update { it.copy(searchQuery = "") }
+        executeSearchRequest(message = "Failed to load articles")
     }
 
     private fun onSearch() {
-        val query = _state.value.searchQuery.trim()
-        if (query.isBlank()) return
-        _state.update { currentState ->
-            currentState.copy(
-                isLoading = false,
-                errorState = null,
-                isError = false,
-                isRefreshing = true,
-            )
-        }
-        handleLoading("Failed to load articles")
+        executeSearchRequest(message = "Failed to load articles")
     }
 
     private fun onSearchQueryChange(query: String) {
         _state.update { it.copy(searchQuery = query) }
+        executeSearchRequest(message = "Failed to load articles", withDelay = true)
     }
 
     private fun onCategorySelected(category: ArticleCategoryUi) {
-        _state.update { currentState ->
-            currentState.copy(
-                isLoading = false,
-                errorState = null,
-                isError = false,
-                isRefreshing = true,
-                selectedCategory = category,
-            )
-        }
-        handleLoading("Failed to load articles")
+        _state.update { it.copy(selectedCategory = category) }
+        executeSearchRequest(message = "Failed to load articles")
     }
 
     private fun onShare(article: ArticleUi) {
@@ -147,8 +114,7 @@ class ArticlesViewModel(
     }
 
     private fun onNavigateToDetails(article: ArticleUi) {
-        viewModelJob?.cancel()
-        viewModelJob = viewModelScope.launch {
+        viewModelScope.launch {
             runCatching {
                 saveDetailArticleUseCase(mapper.toArticle(article))
             }.onSuccess {
@@ -160,9 +126,16 @@ class ArticlesViewModel(
         }
     }
 
-    private fun handleLoading(message: String) {
-        viewModelJob?.cancel()
-        viewModelJob = viewModelScope.launch {
+    private fun executeSearchRequest(message: String, withDelay: Boolean = false) {
+        fetchJob?.cancel()
+        fetchJob = viewModelScope.launch {
+            if (withDelay) delay(500)
+            _state.update { currentState ->
+                currentState.copy(
+                    errorState = null,
+                    isRefreshing = !currentState.isLoading
+                )
+            }
             runCatching {
                 getTopHeadlinesUseCase(getCurrentQuery())
             }.onSuccess { articles ->
@@ -188,7 +161,6 @@ class ArticlesViewModel(
                 isLoading = false,
                 isRefreshing = false,
                 errorState = null,
-                isError = false,
             )
         }
     }
@@ -206,7 +178,6 @@ class ArticlesViewModel(
         _state.update { currentState ->
             currentState.copy(
                 errorState = errorState,
-                isError = true,
                 isLoading = false,
                 isRefreshing = false,
             )

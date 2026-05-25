@@ -43,7 +43,7 @@ fun ArticlesScreen(
     }
 
     when {
-        state.isError -> {
+        state.isError && state.articles.isEmpty() -> {
             ErrorScreen(message = state.errorState?.message ?: "error", modifier = modifier)
         }
 
@@ -80,8 +80,8 @@ fun ArticlesContent(
             item(key = "search_bar") {
                 ArticleSearchBar(
                     searchQuery = state.searchQuery,
-                    onClear = { onEvent(ArticlesEvent.OnClear) },
-                    onSearch = { onEvent(ArticlesEvent.OnSearch) },
+                    onClear = dropUnlessResumed { onEvent(ArticlesEvent.OnClear) },
+                    onSearch = dropUnlessResumed { onEvent(ArticlesEvent.OnSearch) },
                     onSearchQueryChange = { onEvent(ArticlesEvent.OnSearchQueryChange(it)) },
                     modifier = Modifier
                         .padding(horizontal = AppTheme.dimens.paddingLarge)
@@ -101,10 +101,22 @@ fun ArticlesContent(
                 ArticleCard(
                     article = article,
                     isCardExpanded = article.articleUrl in state.expandedArticleUrls,
-                    onShare = dropUnlessResumed{ onEvent(ArticlesEvent.OnShare(article)) },
+                    onShare = dropUnlessResumed { onEvent(ArticlesEvent.OnShare(article)) },
                     onToggleExpand = { onEvent(ArticlesEvent.OnToggleExpand(article)) },
-                    onOpenInBrowser = dropUnlessResumed{ onEvent(ArticlesEvent.OnOpenInBrowser(article)) },
-                    onNavigateToDetails = dropUnlessResumed{ onEvent(ArticlesEvent.OnNavigateToADetails(article)) },
+                    onOpenInBrowser = dropUnlessResumed {
+                        onEvent(
+                            ArticlesEvent.OnOpenInBrowser(
+                                article
+                            )
+                        )
+                    },
+                    onNavigateToDetails = dropUnlessResumed {
+                        onEvent(
+                            ArticlesEvent.OnNavigateToADetails(
+                                article
+                            )
+                        )
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = AppTheme.dimens.paddingLarge)
