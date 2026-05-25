@@ -19,13 +19,12 @@ import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.newsapp.ui.common.components.ErrorScreen
 import com.example.newsapp.ui.common.components.LoadingScreen
-import com.example.newsapp.ui.common.preview.getMockSuccessNewsUiState
+import com.example.newsapp.ui.common.preview.getMockArticlesState
 import com.example.newsapp.ui.common.theme.AppTheme
 import com.example.newsapp.ui.common.theme.NewsAppTheme
 import com.example.newsapp.ui.features.articles.components.ArticleCard
 import com.example.newsapp.ui.features.articles.components.ArticleSearchBar
 import com.example.newsapp.ui.features.articles.components.ArticlesCategorySelector
-import com.example.newsapp.ui.state.UiState
 
 @Composable
 fun ArticlesScreen(
@@ -33,7 +32,7 @@ fun ArticlesScreen(
     viewModel: ArticlesViewModel = viewModel(),
     onNavigateToArticleDetails: () -> Unit,
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = viewModel.navigationEvent) {
         viewModel.navigationEvent.collect { target ->
@@ -43,18 +42,18 @@ fun ArticlesScreen(
         }
     }
 
-    when (val currentState = uiState) {
-        is UiState.Loading -> {
+    when {
+        state.isError -> {
+            ErrorScreen(message = state.errorState?.message ?: "error", modifier = modifier)
+        }
+
+        state.isLoading -> {
             LoadingScreen(modifier = modifier)
         }
 
-        is UiState.Error -> {
-            ErrorScreen(message = currentState.data.message, modifier = modifier)
-        }
-
-        is UiState.Success -> {
+        else -> {
             ArticlesContent(
-                state = currentState.data,
+                state = state,
                 modifier = modifier,
                 onEvent = viewModel::handleEvent
             )
@@ -80,7 +79,7 @@ fun ArticlesContent(
 
             item(key = "search_bar") {
                 ArticleSearchBar(
-                    searchQuery = state.articleQuery.query,
+                    searchQuery = state.searchQuery,
                     onClear = { onEvent(ArticlesEvent.OnClear) },
                     onSearch = { onEvent(ArticlesEvent.OnSearch) },
                     onSearchQueryChange = { onEvent(ArticlesEvent.OnSearchQueryChange(it)) },
@@ -92,7 +91,7 @@ fun ArticlesContent(
 
             item(key = "categories") {
                 ArticlesCategorySelector(
-                    selectedCategory = state.articleQuery.category,
+                    selectedCategory = state.selectedCategory,
                     onCategorySelected = { onEvent(ArticlesEvent.OnCategorySelected(it)) },
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -101,6 +100,7 @@ fun ArticlesContent(
             items(items = state.articles, key = { it.articleUrl }) { article ->
                 ArticleCard(
                     article = article,
+                    isCardExpanded = article.articleUrl in state.expandedArticleUrls,
                     onShare = dropUnlessResumed{ onEvent(ArticlesEvent.OnShare(article)) },
                     onToggleExpand = { onEvent(ArticlesEvent.OnToggleExpand(article)) },
                     onOpenInBrowser = dropUnlessResumed{ onEvent(ArticlesEvent.OnOpenInBrowser(article)) },
@@ -130,7 +130,7 @@ fun ArticlesContent(
 fun ArticlesContentPreview() {
     NewsAppTheme() {
         ArticlesContent(
-            state = getMockSuccessNewsUiState().data,
+            state = getMockArticlesState(),
             onEvent = {},
         )
     }

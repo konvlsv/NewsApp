@@ -32,6 +32,7 @@ import com.example.newsapp.ui.common.theme.NewsAppTheme
 @Composable
 fun ArticleCardCollapsedContent(
     article: ArticleUi,
+    isCardExpanded: Boolean,
     onToggleExpand: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -71,7 +72,7 @@ fun ArticleCardCollapsedContent(
                 )
                 IconButton(onClick = onToggleExpand) {
                     Icon(
-                        painter = if (article.isExpanded) painterResource(R.drawable.ic_arrow_circle_up)
+                        painter = if (isCardExpanded) painterResource(R.drawable.ic_arrow_circle_up)
                         else painterResource(R.drawable.ic_arrow_circle_down),
                         contentDescription = stringResource(R.string.expand_or_collapse_card),
                         tint = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -131,6 +132,7 @@ fun ArticleCardCollapsedPreview() {
     NewsAppTheme() {
         ArticleCardCollapsedContent(
             article = getMockArticleUiList().first(),
+            isCardExpanded = false,
             onToggleExpand = {},
         )
     }

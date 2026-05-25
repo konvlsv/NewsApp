@@ -1,19 +1,10 @@
 package com.example.newsapp.ui.common.preview
 
 import com.example.newsapp.ui.common.models.ArticleUi
-import com.example.newsapp.ui.features.articles.models.ArticleQueryUi
 import com.example.newsapp.ui.features.articles.ArticlesState
-import com.example.newsapp.ui.state.UiState
 import kotlin.random.Random
 
-fun getMockSuccessNewsUiState(): UiState.Success<ArticlesState> {
-    return UiState.Success(
-        data = ArticlesState(
-            articles = getMockArticleUiList(),
-            articleQuery = ArticleQueryUi(),
-        )
-    )
-}
+fun getMockArticlesState() = ArticlesState(articles = getMockArticleUiList())
 
 fun getMockArticleUiList(): List<ArticleUi> {
     val articles = mutableListOf<ArticleUi>()

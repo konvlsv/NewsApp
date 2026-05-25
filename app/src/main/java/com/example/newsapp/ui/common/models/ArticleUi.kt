@@ -10,5 +10,4 @@ data class ArticleUi(
     val title: String,
     val articleUrl: String,
     val imageUrl: String,
-    val isExpanded: Boolean = false,
 )

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.App
 import com.example.newsapp.domain.exception.DomainException
+import com.example.newsapp.domain.models.ArticleQuery
 import com.example.newsapp.domain.usecase.GetTopHeadlinesUseCase
 import com.example.newsapp.domain.usecase.OpenUrlUseCase
 import com.example.newsapp.domain.usecase.SaveDetailArticleUseCase
@@ -11,13 +12,10 @@ import com.example.newsapp.domain.usecase.ShareArticleUseCase
 import com.example.newsapp.ui.common.mapper.UiModelsMapper
 import com.example.newsapp.ui.common.models.ArticleUi
 import com.example.newsapp.ui.features.articles.models.ArticleCategoryUi
-import com.example.newsapp.ui.features.articles.models.ArticleQueryUi
 import com.example.newsapp.ui.state.ErrorState
 import com.example.newsapp.ui.state.ErrorType
-import com.example.newsapp.ui.state.UiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,17 +32,28 @@ class ArticlesViewModel(
     private val shareArticleUseCase: ShareArticleUseCase = App.instance.shareArticleUseCase,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<UiState<ArticlesState>>(UiState.Loading)
-    val uiState: StateFlow<UiState<ArticlesState>> = _uiState.asStateFlow()
+    private val _state = MutableStateFlow(ArticlesState())
+    val state: StateFlow<ArticlesState> = _state.asStateFlow()
 
     private val _navigationEvent = Channel<ArticlesNavigationTarget>()
     val navigationEvent = _navigationEvent.receiveAsFlow()
 
-    private var fetchJob: Job? = null
+    private var viewModelJob: Job? = null
 
     init {
-        _uiState.update { UiState.Loading }
-        loadArticles()
+        _state.update { currentState ->
+            currentState.copy(
+                isLoading = true,
+                errorState = null,
+                isError = false,
+                isRefreshing = false,
+                articles = emptyList(),
+                expandedArticleUrls = emptySet(),
+                searchQuery = "",
+                selectedCategory = ArticleCategoryUi.GENERAL,
+            )
+        }
+        handleLoading("Failed to load articles")
     }
 
     fun handleEvent(event: ArticlesEvent) {
@@ -62,80 +71,74 @@ class ArticlesViewModel(
     }
 
     private fun onRefresh() {
-        _uiState.update { currentState ->
-            if (currentState is UiState.Success) {
-                currentState.copy(
-                    data = currentState.data.copy(
-                        isRefreshing = true,
-                    )
-                )
-            } else currentState
+        _state.update { currentState ->
+            currentState.copy(
+                isLoading = false,
+                errorState = null,
+                isError = false,
+                isRefreshing = true,
+            )
         }
-        loadArticles()
+        handleLoading("Failed to load articles")
     }
 
     private fun onClear() {
-        _uiState.update { currentState ->
-            if (currentState is UiState.Success) {
-                currentState.copy(
-                    data = currentState.data.copy(
-                        isRefreshing = true,
-                        articleQuery = currentState.data.articleQuery.copy(query = "")
-                    )
-                )
-            } else currentState
+        _state.update { currentState ->
+            currentState.copy(
+                isLoading = false,
+                errorState = null,
+                isError = false,
+                isRefreshing = true,
+                searchQuery = "",
+            )
         }
-        loadArticles(true)
+        handleLoading("Failed to load articles")
     }
 
     private fun onSearch() {
-        onRefresh()
+        val query = _state.value.searchQuery.trim()
+        if (query.isBlank()) return
+        _state.update { currentState ->
+            currentState.copy(
+                isLoading = false,
+                errorState = null,
+                isError = false,
+                isRefreshing = true,
+            )
+        }
+        handleLoading("Failed to load articles")
     }
 
     private fun onSearchQueryChange(query: String) {
-        _uiState.update { currentState ->
-            if (currentState is UiState.Success) {
-                currentState.copy(
-                    data = currentState.data.copy(
-                        isRefreshing = true,
-                        articleQuery = currentState.data.articleQuery.copy(query = query)
-                    )
-                )
-            } else currentState
-        }
-        loadArticles(true)
+        _state.update { it.copy(searchQuery = query) }
     }
 
     private fun onCategorySelected(category: ArticleCategoryUi) {
-        _uiState.update { currentState ->
-            if (currentState is UiState.Success) {
-                currentState.copy(
-                    data = currentState.data.copy(
-                        isRefreshing = true,
-                        articleQuery = currentState.data.articleQuery.copy(category = category)
-                    )
-                )
-            } else currentState
+        _state.update { currentState ->
+            currentState.copy(
+                isLoading = false,
+                errorState = null,
+                isError = false,
+                isRefreshing = true,
+                selectedCategory = category,
+            )
         }
-        loadArticles(true)
+        handleLoading("Failed to load articles")
     }
 
     private fun onShare(article: ArticleUi) {
         shareArticleUseCase(article.title, article.description, article.articleUrl)
     }
 
-    private fun onToggleExpand(clickedArticle: ArticleUi) {
-        _uiState.update { currentState ->
-            if (currentState is UiState.Success) {
-                val updatedArticles = currentState.data.articles.map { article ->
-                    if (article.articleUrl == clickedArticle.articleUrl) {
-                        article.copy(isExpanded = !article.isExpanded) // Переключаем флаг
-                    } else {
-                        article
-                    }
-                }
-                currentState.copy(data = currentState.data.copy(articles = updatedArticles))
-            } else currentState
+    private fun onToggleExpand(article: ArticleUi) {
+        _state.update { current ->
+            val expandedUrls = current.expandedArticleUrls.toMutableSet()
+            if (article.articleUrl in expandedUrls) {
+                expandedUrls.remove(article.articleUrl)
+            } else {
+                expandedUrls.add(article.articleUrl)
+            }
+            current.copy(expandedArticleUrls = expandedUrls)
         }
     }
 
@@ -144,60 +147,69 @@ class ArticlesViewModel(
     }
 
     private fun onNavigateToDetails(article: ArticleUi) {
-        viewModelScope.launch {
-            try {
-                saveDetailArticle(article)
+        viewModelJob?.cancel()
+        viewModelJob = viewModelScope.launch {
+            runCatching {
+                saveDetailArticleUseCase(mapper.toArticle(article))
+            }.onSuccess {
                 _navigationEvent.send(ArticlesNavigationTarget.TargetToDetails)
-            } catch (e: Exception) {
-                e.printStackTrace()
+            }.onFailure { throwable ->
+                if (throwable is CancellationException) return@launch
+                handleException(throwable, "Failed navigate")
             }
         }
     }
 
-    private suspend fun saveDetailArticle(article: ArticleUi) {
-        val domainArticle = mapper.toArticle(article) //
-        saveDetailArticleUseCase(domainArticle)
+    private fun handleLoading(message: String) {
+        viewModelJob?.cancel()
+        viewModelJob = viewModelScope.launch {
+            runCatching {
+                getTopHeadlinesUseCase(getCurrentQuery())
+            }.onSuccess { articles ->
+                handleSuccess(mapper.toArticleUi(articles))
+            }.onFailure { throwable ->
+                if (throwable is CancellationException) return@launch
+                handleException(throwable, message)
+            }
+        }
     }
 
-    private fun loadArticles(withDelay: Boolean = false) {
-        fetchJob?.cancel()
-        val currentState = _uiState.value
-        val currentQuery =
-            (currentState as? UiState.Success)?.data?.articleQuery ?: ArticleQueryUi()
-        fetchJob = viewModelScope.launch {
-            try {
-                if (withDelay) delay(500)
-                val domainQuery = mapper.toArticleQuery(currentQuery)
-                val articles = getTopHeadlinesUseCase(domainQuery)
-                val displayArticles = mapper.toArticleUi(articles)
+    private fun getCurrentQuery(): ArticleQuery {
+        return ArticleQuery(
+            query = _state.value.searchQuery,
+            category = mapper.toArticleCategory(_state.value.selectedCategory)
+        )
+    }
 
-                _uiState.update {
-                    UiState.Success(
-                        data = ArticlesState(
-                            articles = displayArticles,
-                            articleQuery = currentQuery,
-                            isRefreshing = false
-                        )
-                    )
-                }
-            } catch (e: Exception) {
-                if (e is CancellationException) return@launch
-                val errorType = when (e) {
-                    is DomainException.ServerException -> ErrorType.SERVER
-                    is DomainException.ParseException -> ErrorType.PARSING
-                    is DomainException.NetworkException -> ErrorType.NETWORK
-                    is DomainException.TimeoutException -> ErrorType.NETWORK
-                    else -> ErrorType.GENERIC
-                }
-                _uiState.update {
-                    UiState.Error(
-                        data = ErrorState(
-                            message = e.message ?: "Unknown error",
-                            errorType = errorType
-                        )
-                    )
-                }
-            }
+    private fun handleSuccess(articles: List<ArticleUi>) {
+        _state.update { currentState ->
+            currentState.copy(
+                articles = articles,
+                isLoading = false,
+                isRefreshing = false,
+                errorState = null,
+                isError = false,
+            )
+        }
+    }
+
+    private fun handleException(throwable: Throwable, message: String) {
+        val message = throwable.message ?: message
+        val errorType = when (throwable) {
+            is DomainException.ServerException -> ErrorType.SERVER
+            is DomainException.ParseException -> ErrorType.PARSING
+            is DomainException.NetworkException -> ErrorType.NETWORK
+            is DomainException.TimeoutException -> ErrorType.NETWORK
+            else -> ErrorType.GENERIC
+        }
+        val errorState = ErrorState(message = message, errorType = errorType)
+        _state.update { currentState ->
+            currentState.copy(
+                errorState = errorState,
+                isError = true,
+                isLoading = false,
+                isRefreshing = false,
+            )
         }
     }
 }

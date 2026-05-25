@@ -20,6 +20,7 @@ import com.example.newsapp.ui.common.theme.NewsAppTheme
 @Composable
 fun ArticleCard(
     article: ArticleUi,
+    isCardExpanded: Boolean,
     onNavigateToDetails: () -> Unit,
     onShare: () -> Unit,
     onToggleExpand: () -> Unit,
@@ -45,9 +46,10 @@ fun ArticleCard(
     ) {
         ArticleCardCollapsedContent(
             article = article,
+            isCardExpanded = isCardExpanded,
             onToggleExpand = onToggleExpand
         )
-        if (article.isExpanded) {
+        if (isCardExpanded) {
             ArticleCardExpandedContent(
                 description = article.description,
                 onNavigateToDetails = onNavigateToDetails,
@@ -78,7 +80,8 @@ fun ArticleCardPreviewCollapsed() {
             onShare = {},
             onToggleExpand = {},
             onNavigateToDetails = {},
-            onOpenInBrowser = {}
+            onOpenInBrowser = {},
+            isCardExpanded = false
         )
     }
 }
@@ -99,11 +102,12 @@ fun ArticleCardPreviewCollapsed() {
 fun ArticleCardPreviewExpanded() {
     NewsAppTheme() {
         ArticleCard(
-            article = getMockArticleUiList().first().copy(isExpanded = true),
+            article = getMockArticleUiList().first(),
             onShare = {},
             onToggleExpand = {},
             onNavigateToDetails = {},
-            onOpenInBrowser = {}
+            onOpenInBrowser = {},
+            isCardExpanded = true
         )
     }
 }
