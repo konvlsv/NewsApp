@@ -44,7 +44,12 @@ fun ArticlesScreen(
 
     when {
         state.isError && state.articles.isEmpty() -> {
-            ErrorScreen(message = state.errorState?.message ?: "error", modifier = modifier)
+            ErrorScreen(
+                message = state.errorState?.message ?: "error",
+                isRefreshing = state.isRefreshing,
+                onRefresh = { viewModel.handleEvent(ArticlesEvent.OnRefresh) },
+                modifier = modifier
+            )
         }
 
         state.isLoading -> {

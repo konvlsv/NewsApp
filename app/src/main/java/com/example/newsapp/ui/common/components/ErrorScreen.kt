@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -12,16 +13,23 @@ import com.example.newsapp.ui.common.theme.NewsAppTheme
 
 @Composable
 fun ErrorScreen(
+    isRefreshing: Boolean,
+    onRefresh: () -> Unit,
     message: String,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-            .fillMaxSize()
+    PullToRefreshBox(
+        isRefreshing = isRefreshing,
+        onRefresh = onRefresh,
+        modifier = modifier.fillMaxSize()
     ) {
-        Text(text = message)
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Text(text = message)
+        }
     }
 }
 
@@ -29,6 +37,6 @@ fun ErrorScreen(
 @Composable
 fun ErrorScreenPreview() {
     NewsAppTheme() {
-        ErrorScreen(message = "Something went wrong")
+        ErrorScreen(message = "Something went wrong", isRefreshing = false, onRefresh = {})
     }
 }
