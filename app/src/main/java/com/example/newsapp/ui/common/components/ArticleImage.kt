@@ -8,6 +8,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import coil.compose.AsyncImage
+import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.example.newsapp.R
 
@@ -20,6 +21,10 @@ fun ArticleImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(imageUrl)
             .crossfade(true)
+            .size(coil.size.Size.ORIGINAL)
+            .lifecycle(androidx.lifecycle.compose.LocalLifecycleOwner.current)
+            .memoryCachePolicy(CachePolicy.ENABLED)
+            .diskCachePolicy(CachePolicy.ENABLED)
             .build(),
         contentDescription = stringResource(R.string.article_picture),
         placeholder = ColorPainter(Color.LightGray),
