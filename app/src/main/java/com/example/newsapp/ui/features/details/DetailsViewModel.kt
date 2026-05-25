@@ -8,9 +8,9 @@ import com.example.newsapp.domain.usecase.GetDetailArticleUseCase
 import com.example.newsapp.domain.usecase.OpenUrlUseCase
 import com.example.newsapp.domain.usecase.ShareArticleUseCase
 import com.example.newsapp.ui.common.mapper.UiModelsMapper
+import com.example.newsapp.ui.common.models.ArticleUi
 import com.example.newsapp.ui.state.ErrorState
 import com.example.newsapp.ui.state.ErrorType
-import com.example.newsapp.ui.state.UiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,52 +28,87 @@ class DetailsViewModel(
 
     private var fetchJob: Job? = null
 
-    private val _uiState = MutableStateFlow<UiState<DetailsState>>(UiState.Loading)
-    val uiState: StateFlow<UiState<DetailsState>> = _uiState.asStateFlow()
+    private val _state = MutableStateFlow<DetailsState>(DetailsState())
+    val state: StateFlow<DetailsState> = _state.asStateFlow()
 
     init {
-        _uiState.update { UiState.Loading }
+        _state.update { currentState ->
+            currentState.copy(
+                isLoading = true,
+                errorState = null,
+                isRefreshing = false,
+            )
+        }
         loadArticle()
     }
 
-    fun openInBrowser(url: String) {
-        openUrlUseCase(url)
+    fun handleEvent(event: DetailsEvent) {
+        when (event) {
+            is DetailsEvent.OnRefresh -> onRefresh()
+            is DetailsEvent.OnOpenInBrowser -> openInBrowser(event.article)
+            is DetailsEvent.OnShare -> shareArticle(event.article)
+        }
     }
 
-    fun shareArticle(title: String, description: String, url: String) {
-        shareArticleUseCase(title, description, url)
+    private fun onRefresh() {
+        loadArticle()
+    }
+
+    private fun openInBrowser(article: ArticleUi) {
+        openUrlUseCase(article.articleUrl)
+    }
+
+    private fun shareArticle(article: ArticleUi) {
+        shareArticleUseCase(article.title, article.description, article.articleUrl)
     }
 
     private fun loadArticle() {
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
-            try {
-                val detailArticle = mapper.toArticleUi(getDetailArticleUseCase())
-                _uiState.update {
-                    UiState.Success(
-                        data = DetailsState(
-                            detail = detailArticle
-                        )
-                    )
-                }
-            } catch (e: Exception) {
-                if (e is CancellationException) return@launch
-                val errorType = when (e) {
-                    is DomainException.ServerException -> ErrorType.SERVER
-                    is DomainException.ParseException -> ErrorType.PARSING
-                    is DomainException.NetworkException -> ErrorType.NETWORK
-                    is DomainException.TimeoutException -> ErrorType.NETWORK
-                    else -> ErrorType.GENERIC
-                }
-                _uiState.update {
-                    UiState.Error(
-                        data = ErrorState(
-                            message = e.message ?: "Unknown error",
-                            errorType = errorType
-                        )
-                    )
-                }
+            _state.update { currentState ->
+                currentState.copy(
+                    errorState = null,
+                    isRefreshing = !currentState.isLoading
+                )
             }
+            runCatching {
+                getDetailArticleUseCase()
+            }.onSuccess { article ->
+                handleSuccess(mapper.toArticleUi(article))
+            }.onFailure { throwable ->
+                if (throwable is CancellationException) return@launch
+                handleException(throwable, "Failed to load article")
+            }
+        }
+    }
+
+    private fun handleSuccess(article: ArticleUi) {
+        _state.update { currentState ->
+            currentState.copy(
+                article = article,
+                isLoading = false,
+                isRefreshing = false,
+                errorState = null,
+            )
+        }
+    }
+
+    private fun handleException(throwable: Throwable, message: String) {
+        val message = throwable.message ?: message
+        val errorType = when (throwable) {
+            is DomainException.ServerException -> ErrorType.SERVER
+            is DomainException.ParseException -> ErrorType.PARSING
+            is DomainException.NetworkException -> ErrorType.NETWORK
+            is DomainException.TimeoutException -> ErrorType.NETWORK
+            else -> ErrorType.GENERIC
+        }
+        val errorState = ErrorState(message = message, errorType = errorType)
+        _state.update { currentState ->
+            currentState.copy(
+                errorState = errorState,
+                isLoading = false,
+                isRefreshing = false,
+            )
         }
     }
 }
