@@ -94,7 +94,7 @@ class ArticlesViewModel(
     }
 
     private fun onShare(article: ArticleUi) {
-        shareArticleUseCase(article.title, article.description, article.articleUrl)
+        shareArticleUseCase.share(article.title, article.description, article.articleUrl)
     }
 
     private fun onToggleExpand(article: ArticleUi) {
@@ -110,7 +110,7 @@ class ArticlesViewModel(
     }
 
     private fun onOpenInBrowser(article: ArticleUi) {
-        openUrlUseCase(article.articleUrl)
+        openUrlUseCase.open(article.articleUrl)
     }
 
     private fun onNavigateToDetails(article: ArticleUi) {

@@ -55,11 +55,11 @@ class DetailsViewModel(
     }
 
     private fun openInBrowser(article: ArticleUi) {
-        openUrlUseCase(article.articleUrl)
+        openUrlUseCase.open(article.articleUrl)
     }
 
     private fun shareArticle(article: ArticleUi) {
-        shareArticleUseCase(article.title, article.description, article.articleUrl)
+        shareArticleUseCase.share(article.title, article.description, article.articleUrl)
     }
 
     private fun loadArticle() {
