@@ -3,10 +3,10 @@ package com.example.newsapp.domain.usecase
 import com.example.newsapp.domain.models.Article
 import com.example.newsapp.domain.repository.ArticleRepository
 
-class SaveDetailArticleUseCase(
+class SaveDetailsArticleUseCase(
     private val articleRepository: ArticleRepository
 ) {
     suspend operator fun invoke(article: Article) {
-        articleRepository.saveDetailArticle(article)
+        articleRepository.saveDetailsArticle(article)
     }
 }

@@ -5,11 +5,11 @@ import com.example.newsapp.data.source.local.models.ArticleEntity
 object ArticleDao {
     private var article: ArticleEntity? = null
 
-    fun saveDetailArticle(article: ArticleEntity) {
+    fun saveDetailsArticle(article: ArticleEntity) {
         this.article = article
     }
 
-    fun getDetailArticle(): ArticleEntity {
+    fun getDetailsArticle(): ArticleEntity {
         return article ?: throw NullPointerException("Article is null")
     }
 }

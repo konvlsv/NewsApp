@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.App
 import com.example.newsapp.domain.exception.DomainException
-import com.example.newsapp.domain.usecase.GetDetailArticleUseCase
+import com.example.newsapp.domain.usecase.GetDetailsArticleUseCase
 import com.example.newsapp.domain.usecase.OpenUrlUseCase
 import com.example.newsapp.domain.usecase.ShareArticleUseCase
 import com.example.newsapp.ui.common.mapper.UiModelsMapper
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
 class DetailsViewModel(
-    private val getDetailArticleUseCase: GetDetailArticleUseCase = App.instance.getDetailArticleUseCase,
+    private val getDetailsArticleUseCase: GetDetailsArticleUseCase = App.instance.getDetailsArticleUseCase,
     private val mapper: UiModelsMapper = App.instance.uiModelsMapper,
     private val openUrlUseCase: OpenUrlUseCase = App.instance.openUrlUseCase,
     private val shareArticleUseCase: ShareArticleUseCase = App.instance.shareArticleUseCase,
@@ -72,7 +72,7 @@ class DetailsViewModel(
                 )
             }
             runCatching {
-                getDetailArticleUseCase()
+                getDetailsArticleUseCase()
             }.onSuccess { article ->
                 handleSuccess(mapper.toArticleUi(article))
             }.onFailure { throwable ->

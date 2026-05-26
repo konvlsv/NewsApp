@@ -6,11 +6,11 @@ import com.example.newsapp.data.source.local.models.ArticleEntity
 class LocalDataSourceImpl(
     private val articleDao: ArticleDao
 ): LocalDataSource {
-    override suspend fun saveDetailArticle(article: ArticleEntity) {
-        articleDao.saveDetailArticle(article)
+    override suspend fun saveDetailsArticle(article: ArticleEntity) {
+        articleDao.saveDetailsArticle(article)
     }
 
-    override suspend fun getDetailArticle(): ArticleEntity {
-        return articleDao.getDetailArticle()
+    override suspend fun getDetailsArticle(): ArticleEntity {
+        return articleDao.getDetailsArticle()
     }
 }

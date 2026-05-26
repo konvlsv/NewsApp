@@ -37,11 +37,11 @@ class ArticleRepositoryImpl(
         }
     }
 
-    override suspend fun saveDetailArticle(article: Article) {
-        localDataSource.saveDetailArticle(mapper.toArticleEntity(article))
+    override suspend fun saveDetailsArticle(article: Article) {
+        localDataSource.saveDetailsArticle(mapper.toArticleEntity(article))
     }
 
-    override suspend fun getDetailArticle(): Article {
-        return mapper.toArticle(localDataSource.getDetailArticle())
+    override suspend fun getDetailsArticle(): Article {
+        return mapper.toArticle(localDataSource.getDetailsArticle())
     }
 }

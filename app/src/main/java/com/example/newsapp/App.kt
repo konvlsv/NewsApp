@@ -11,9 +11,9 @@ import com.example.newsapp.data.source.remote.RemoteDataSourceImpl
 import com.example.newsapp.data.source.remote.api.NewsApi
 import com.example.newsapp.data.source.remote.api.RetrofitClient
 import com.example.newsapp.domain.repository.ArticleRepository
-import com.example.newsapp.domain.usecase.GetDetailArticleUseCase
+import com.example.newsapp.domain.usecase.GetDetailsArticleUseCase
 import com.example.newsapp.domain.usecase.GetTopHeadlinesUseCase
-import com.example.newsapp.domain.usecase.SaveDetailArticleUseCase
+import com.example.newsapp.domain.usecase.SaveDetailsArticleUseCase
 import com.example.newsapp.ui.common.mapper.UiModelsMapper
 import com.example.newsapp.domain.navigation.BrowserNavigator
 import com.example.newsapp.data.navigation.BrowserNavigatorImpl
@@ -59,14 +59,14 @@ class App : Application() {
         )
     }
 
-    val getDetailArticleUseCase: GetDetailArticleUseCase by lazy {
-        GetDetailArticleUseCase(
+    val getDetailsArticleUseCase: GetDetailsArticleUseCase by lazy {
+        GetDetailsArticleUseCase(
             articleRepository = articleRepository,
         )
     }
 
-    val saveDetailArticleUseCase: SaveDetailArticleUseCase by lazy {
-        SaveDetailArticleUseCase(
+    val saveDetailsArticleUseCase: SaveDetailsArticleUseCase by lazy {
+        SaveDetailsArticleUseCase(
             articleRepository = articleRepository,
         )
     }

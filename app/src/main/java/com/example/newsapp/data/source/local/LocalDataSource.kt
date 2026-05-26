@@ -4,6 +4,6 @@ import com.example.newsapp.data.source.local.models.ArticleEntity
 
 interface LocalDataSource {
 
-    suspend fun saveDetailArticle(article: ArticleEntity)
-    suspend fun getDetailArticle(): ArticleEntity
+    suspend fun saveDetailsArticle(article: ArticleEntity)
+    suspend fun getDetailsArticle(): ArticleEntity
 }

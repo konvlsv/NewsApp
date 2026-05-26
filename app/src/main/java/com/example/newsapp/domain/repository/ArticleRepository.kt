@@ -6,6 +6,6 @@ import com.example.newsapp.domain.models.ArticleQuery
 interface ArticleRepository {
 
     suspend fun getTopHeadlines(query: ArticleQuery): List<Article>
-    suspend fun saveDetailArticle(article: Article)
-    suspend fun getDetailArticle(): Article
+    suspend fun saveDetailsArticle(article: Article)
+    suspend fun getDetailsArticle(): Article
 }

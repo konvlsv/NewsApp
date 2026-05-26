@@ -7,7 +7,7 @@ import com.example.newsapp.domain.exception.DomainException
 import com.example.newsapp.domain.models.ArticleQuery
 import com.example.newsapp.domain.usecase.GetTopHeadlinesUseCase
 import com.example.newsapp.domain.usecase.OpenUrlUseCase
-import com.example.newsapp.domain.usecase.SaveDetailArticleUseCase
+import com.example.newsapp.domain.usecase.SaveDetailsArticleUseCase
 import com.example.newsapp.domain.usecase.ShareArticleUseCase
 import com.example.newsapp.ui.common.mapper.UiModelsMapper
 import com.example.newsapp.ui.common.models.ArticleUi
@@ -28,7 +28,7 @@ import kotlin.coroutines.cancellation.CancellationException
 class ArticlesViewModel(
     private val getTopHeadlinesUseCase: GetTopHeadlinesUseCase = App.instance.getTopHeadlinesUseCase,
     private val mapper: UiModelsMapper = App.instance.uiModelsMapper,
-    private val saveDetailArticleUseCase: SaveDetailArticleUseCase = App.instance.saveDetailArticleUseCase,
+    private val saveDetailsArticleUseCase: SaveDetailsArticleUseCase = App.instance.saveDetailsArticleUseCase,
     private val openUrlUseCase: OpenUrlUseCase = App.instance.openUrlUseCase,
     private val shareArticleUseCase: ShareArticleUseCase = App.instance.shareArticleUseCase,
 ) : ViewModel() {
@@ -116,7 +116,7 @@ class ArticlesViewModel(
     private fun onNavigateToDetails(article: ArticleUi) {
         viewModelScope.launch {
             runCatching {
-                saveDetailArticleUseCase(mapper.toArticle(article))
+                saveDetailsArticleUseCase(mapper.toArticle(article))
             }.onSuccess {
                 _navigationEvent.send(ArticlesNavigationTarget.TargetToDetails)
             }.onFailure { throwable ->
