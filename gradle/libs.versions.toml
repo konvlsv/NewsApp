@@ -1,7 +1,7 @@
 [versions]
 # Системные и плагины
 agp = "9.1.0"
-kotlin = "2.2.10"
+kotlin = "2.2.0"
 secretsPlugin = "2.0.1"
 
 # Библиотеки Jetpack
@@ -17,6 +17,8 @@ retrofit = "3.0.0"
 coilCompose = "2.7.0"
 kotlinxSerializationJson = "1.11.0"
 kotlinxCoroutines = "1.11.0"
+ksp = "2.2.0-2.0.2"
+room = "2.8.4"
 
 # Тестирование
 junit = "4.13.2"
@@ -51,6 +53,12 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
+# База данных
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+
+
 # Остальное
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 
@@ -67,3 +75,4 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 google-maps-secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secretsPlugin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
