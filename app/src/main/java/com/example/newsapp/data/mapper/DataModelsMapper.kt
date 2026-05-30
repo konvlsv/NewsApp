@@ -12,7 +12,7 @@ object DataModelsMapper {
     fun toArticle(response: NewsApiResponseDto): List<Article> {
         return response.articles?.map { apiArticle ->
             Article(
-                id = apiArticle.source?.id ?: "",
+                id = apiArticle.source?.id?.toIntOrNull() ?: 0,
                 name = apiArticle.source?.name ?: "",
                 author = apiArticle.author ?: "",
                 content = apiArticle.content ?: "",

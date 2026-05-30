@@ -11,7 +11,7 @@ fun getMockArticleUiList(): List<ArticleUi> {
     repeat(100) { index ->
         articles.add(
             ArticleUi(
-                id = "id_$index",
+                id = index,
                 sourceName = "Chanel ${generateRandomText(1).removeSuffix(".")}",
                 author = "Author №${index + 1}",
                 content = generateRandomText(Random.nextInt(35, 55)),

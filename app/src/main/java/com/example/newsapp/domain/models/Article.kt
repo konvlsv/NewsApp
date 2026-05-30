@@ -1,7 +1,7 @@
 package com.example.newsapp.domain.models
 
 data class Article(
-    val id: String,
+    val id: Int,
     val name: String,
     val author: String,
     val content: String,

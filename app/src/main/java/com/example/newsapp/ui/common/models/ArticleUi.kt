@@ -1,7 +1,8 @@
 package com.example.newsapp.ui.common.models
 
+
 data class ArticleUi(
-    val id: String,
+    val id: Int,
     val sourceName: String,
     val author: String,
     val content: String,
@@ -10,4 +11,18 @@ data class ArticleUi(
     val title: String,
     val articleUrl: String,
     val imageUrl: String,
-)
+) {
+    companion object {
+        val EMPTY = ArticleUi(
+            id = 0,
+            sourceName = "",
+            author = "",
+            content = "",
+            description = "",
+            publishedAt = "",
+            title = "",
+            articleUrl = "",
+            imageUrl = "",
+        )
+    }
+}

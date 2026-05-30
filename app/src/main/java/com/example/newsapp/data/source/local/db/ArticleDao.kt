@@ -1,15 +1,18 @@
 package com.example.newsapp.data.source.local.db
 
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.example.newsapp.data.source.local.models.ArticleEntity
+import kotlinx.coroutines.flow.Flow
 
-object ArticleDao {
-    private var article: ArticleEntity? = null
+@Dao
+interface ArticleDao {
 
-    fun saveDetailsArticle(article: ArticleEntity) {
-        this.article = article
-    }
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertDetailArticle(article: ArticleEntity): Long
 
-    fun getDetailsArticle(): ArticleEntity {
-        return article ?: throw NullPointerException("Article is null")
-    }
+    @Query("SELECT * FROM articles WHERE id = :id")
+    fun getArticleById(id: Int): Flow<ArticleEntity>
 }

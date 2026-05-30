@@ -8,6 +8,8 @@ import com.example.newsapp.domain.exception.DomainException
 import com.example.newsapp.domain.models.Article
 import com.example.newsapp.domain.models.ArticleQuery
 import com.example.newsapp.domain.repository.ArticleRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlin.coroutines.cancellation.CancellationException
 
 class ArticleRepositoryImpl(
@@ -41,7 +43,7 @@ class ArticleRepositoryImpl(
         localDataSource.saveDetailsArticle(mapper.toArticleEntity(article))
     }
 
-    override suspend fun getDetailsArticle(): Article {
-        return mapper.toArticle(localDataSource.getDetailsArticle())
+    override fun getDetailsArticle(): Flow<Article> {
+        return localDataSource.getDetailsArticle().map { mapper.toArticle(it) }
     }
 }

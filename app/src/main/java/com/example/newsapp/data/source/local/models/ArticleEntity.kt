@@ -1,7 +1,12 @@
 package com.example.newsapp.data.source.local.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "articles")
 data class ArticleEntity(
-    val id: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
     val name: String,
     val author: String,
     val content: String,

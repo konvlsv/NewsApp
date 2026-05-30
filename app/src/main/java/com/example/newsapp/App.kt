@@ -2,26 +2,26 @@ package com.example.newsapp
 
 import android.app.Application
 import com.example.newsapp.data.mapper.DataModelsMapper
+import com.example.newsapp.data.navigation.BrowserNavigatorImpl
 import com.example.newsapp.data.repository.ArticleRepositoryImpl
+import com.example.newsapp.data.share.ShareManagerImpl
 import com.example.newsapp.data.source.local.LocalDataSource
 import com.example.newsapp.data.source.local.LocalDataSourceImpl
 import com.example.newsapp.data.source.local.db.ArticleDao
+import com.example.newsapp.data.source.local.db.ArticleDatabase
 import com.example.newsapp.data.source.remote.RemoteDataSource
 import com.example.newsapp.data.source.remote.RemoteDataSourceImpl
 import com.example.newsapp.data.source.remote.api.NewsApi
 import com.example.newsapp.data.source.remote.api.RetrofitClient
+import com.example.newsapp.domain.navigation.BrowserNavigator
 import com.example.newsapp.domain.repository.ArticleRepository
+import com.example.newsapp.domain.share.ShareManager
 import com.example.newsapp.domain.usecase.GetArticleDetailsUseCase
 import com.example.newsapp.domain.usecase.GetTopHeadlinesUseCase
-import com.example.newsapp.domain.usecase.SaveArticleDetailsUseCase
-import com.example.newsapp.ui.common.mapper.UiModelsMapper
-import com.example.newsapp.domain.navigation.BrowserNavigator
-import com.example.newsapp.data.navigation.BrowserNavigatorImpl
-import com.example.newsapp.domain.share.ShareManager
-import com.example.newsapp.data.share.ShareManagerImpl
 import com.example.newsapp.domain.usecase.OpenUrlUseCase
+import com.example.newsapp.domain.usecase.SaveArticleDetailsUseCase
 import com.example.newsapp.domain.usecase.ShareArticleUseCase
-import kotlin.getValue
+import com.example.newsapp.ui.common.mapper.UiModelsMapper
 
 class App : Application() {
 
@@ -29,7 +29,8 @@ class App : Application() {
     private val remoteDataSource: RemoteDataSource by lazy {
         RemoteDataSourceImpl(newsApi = newsApi)
     }
-    private val articleDao: ArticleDao by lazy { ArticleDao }
+    private val articleDatabase by lazy { ArticleDatabase.getDatabase(this) }
+    private val articleDao: ArticleDao by lazy { articleDatabase.articleDao() }
     private val localDataSource: LocalDataSource by lazy {
         LocalDataSourceImpl(articleDao = articleDao)
     }
